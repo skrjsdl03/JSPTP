@@ -10,7 +10,7 @@
 	href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 </head>
 <body>
-
+ 
 	<%@ include file="includes/header.jsp"%>
 
 	<!-- 여기부터 메인 컨텐츠 시작 -->
