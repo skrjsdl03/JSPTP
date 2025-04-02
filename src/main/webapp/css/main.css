@@ -1,0 +1,112 @@
+body {
+	font-family: 'Malgun Gothic', sans-serif;
+	background: linear-gradient(to bottom, #ffffff, #151825);
+	/* 메인 전용 그라데이션 */
+	height: 3240px;
+}
+
+/* 상위 네비 */
+.top-nav {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 60px;
+	padding: 0 30px;
+}
+
+.menu-btn {
+	font-size: 24px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	margin-left: -10px;
+}
+
+.nav-right a {
+	margin-left: 20px;
+	text-decoration: none;
+	color: black;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+/* 로고 */
+.logo-wrap {
+	display: flex;
+	justify-content: center;
+	margin: 10px 0 20px;
+	transform: translateY(-30px);
+}
+
+.logo-wrap a {
+	display: inline-block;
+}
+
+.logo-img {
+	width: 250px;
+	height: auto;
+	display: block;
+}
+
+/* 하위 네비 */
+.sub-nav ul {
+    display: flex;
+    justify-content: center;
+    gap: 40px; /* 항목 간 간격 */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sub-nav ul li a {
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    font-family: 'Malgun Gothic', sans-serif;
+    font-weight: bold;
+}
+
+.sub-nav ul li a:hover {
+    color: #015FC1;
+}
+
+/* 메인 컬렉션 */
+.main-collection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 80px;
+    padding: 20px 50px;
+    position: relative;
+}
+
+.collection-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateX(-10px);
+}
+
+.collection-title {
+    font-size: 38px;
+    font-weight: bold;
+    color: #BBBBBB;
+    margin-bottom: 50px;
+}
+
+.collection-img {
+    width: 480px;
+    height: auto;
+    margin-bottom: 45px;
+}
+
+.collection-right {
+    transform: translateX(120px);
+}
+
+.collection-video {
+    width: 720px;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
