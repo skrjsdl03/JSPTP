@@ -1,3 +1,5 @@
+<!-- main.jsp -->
+
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <!DOCTYPE html>
 <html lang="ko">
@@ -15,7 +17,7 @@
 	<section class="main-collection">
 		<div class="collection-left">
 			<h2 class="collection-title">2025 SS COLLECTION</h2>
-			<img src="images/maincloth1.png" alt="WL VARSITY JACKET"
+			<img src="images/main-cloth1.png" alt="WL VARSITY JACKET"
 				class="collection-img">
 		</div>
 		<div class="collection-right">
