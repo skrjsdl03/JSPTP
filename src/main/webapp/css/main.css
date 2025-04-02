@@ -3,7 +3,7 @@ body {
 	background: linear-gradient(to bottom, #ffffff, #151825);
 	/* 메인 전용 그라데이션 */
 	height: 3240px;
-	padding-top: 180px;
+	padding-top: 120px;
 }
 
 /* 상위 네비 */
@@ -40,24 +40,24 @@ body {
 	padding-top: 60px;
 	z-index: 1000;
 	background: rgba(176, 180, 193, 0.6);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-right: 1px solid rgba(255, 255, 255, 0.2); /* 은은한 구분선 */
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	border-right: 1px solid rgba(255, 255, 255, 0.2); /* 은은한 구분선 */
 }
 
 .sidebar a {
-  display: block;
-  padding: 4px 24px;
-  text-decoration: none;
-  color: #333;
-  font-weight: bold;
-  cursor: pointer;
-  letter-spacing: -0.5px;
-  line-height: 1.3;
+	display: block;
+	padding: 4px 24px;
+	text-decoration: none;
+	color: #333;
+	font-weight: bold;
+	cursor: pointer;
+	letter-spacing: -0.5px;
+	line-height: 1.3;
 }
 
 .sidebar a.group-gap {
-  margin-top: 25px;
+	margin-top: 25px;
 }
 
 .sidebar.open {
@@ -66,27 +66,27 @@ body {
 
 /* 오버레이: 사이드바가 열릴 때 나타남 */
 .overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent; /* 흐리게 하고 싶으면 rgba(0,0,0,0.3) */
-  z-index: 998;
-  display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: transparent; /* 흐리게 하고 싶으면 rgba(0,0,0,0.3) */
+	z-index: 998;
+	display: none;
 }
 
 .overlay.active {
-  display: block;
+	display: block;
 }
 
 .nav-right {
-  position: fixed;
-  top: 15px;
-  right: 30px;
-  z-index: 1001; /* 햄버거 버튼과 같은 레벨로 */
-  display: flex;
-  align-items: center;
+	position: fixed;
+	top: 15px;
+	right: 30px;
+	z-index: 1001; /* 햄버거 버튼과 같은 레벨로 */
+	display: flex;
+	align-items: center;
 }
 
 .nav-right a {
@@ -99,14 +99,14 @@ body {
 
 /* 로고 */
 .logo-wrap {
-  position: fixed;
-  top: 80px; /* 햄버거 버튼과 nav-right보다 아래로 */
-  left: 50%;
-  transform: translate(-50%, -30px);
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  margin: 0;
+	position: fixed;
+	top: 80px; /* 햄버거 버튼과 nav-right보다 아래로 */
+	left: 50%;
+	transform: translate(-50%, -30px);
+	z-index: 1000;
+	display: flex;
+	justify-content: center;
+	margin: 0;
 }
 
 .logo-wrap a {
@@ -114,7 +114,7 @@ body {
 }
 
 .logo-img {
-	width: 250px;
+	width: 150px;
 	height: auto;
 	display: block;
 }
@@ -214,4 +214,55 @@ body {
 	top: 50%;
 	transform: translateY(-50%);
 	z-index: 10;
+}
+
+/* footer */
+.footer-top {
+  display: flex;
+  flex-direction: row;          /* ← 세로가 아닌 가로 방향으로 정렬 */
+  justify-content: space-between;
+  flex-wrap: wrap;              /* 화면 작아지면 줄바꿈 가능 */
+  border-top: 1px solid #FFFFFF;
+  padding-bottom: 20px;
+  gap: 130px;                    /* 칼럼 간 간격 */
+}
+
+.footer {
+  background: transparent;
+  color: #FFFFFF;
+  padding: 40px 60px;
+  font-family: 'Malgun Gothic', sans-serif;
+  font-size: 13px;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.footer-col {
+  flex: 1;
+  min-width: 160px;
+}
+
+.footer-col h4 {
+  color: #015FC1;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-col ul li {
+  margin: 5px 0;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 12px;
+  color: #FFFFFF;
 }
