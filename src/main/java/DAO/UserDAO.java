@@ -4,19 +4,25 @@ import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.Vector;
 
+import DTO.UserAddrDTO;
 import DTO.UserDTO;
 
 public class UserDAO {
 	
 	private DBConnectionMgr pool;
 	
+	private final SimpleDateFormat SDF_DATE =
+			new SimpleDateFormat("yyyy - MM - dd");
+	
 	public UserDAO() {
 		pool = DBConnectionMgr.getInstance();
 	}
 	
 	//회원가입
-	public void insertUser(UserDTO user) {
+	public void insertUser(UserDTO user, UserAddrDTO addr) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
@@ -35,9 +41,66 @@ public class UserDAO {
 			pstmt.setInt(8, user.getUser_weight());
 			pstmt.setString(9, user.getUser_email());
 			pstmt.setString(10, user.getUser_phone());
-			pstmt.setString(11, user.getUser_email() == null ? "이메일 인증 미완료" : "정상");
+			pstmt.setString(11, user.getUser_email());
 			pstmt.setString(12, null);
 			pstmt.setString(13, user.getUser_marketing_state());
+			pstmt.executeUpdate();
+			insertAddr(addr, user.getUser_id(), "Y");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+	}
+	
+	//기본 배송지 여부 (배송지 추가 후 기본배송지로 할 경우, 기존에 기본 배송지가 있으면 N으로 변경)
+	public void isDefaultAddr(String id) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    String sql = null;
+	    try {
+	        con = pool.getConnection();
+	        sql = "select addr_id from user_address where user_id = ? and addr_isDefault = 'Y'";
+	        pstmt = con.prepareStatement(sql);
+	        pstmt.setString(1, id);
+	        rs = pstmt.executeQuery();
+	        if (rs.next()) {
+	            int addrId = rs.getInt("addr_id");
+	            rs.close();
+	            pstmt.close();
+
+	            sql = "update user_address set addr_isDefault = 'N' where addr_id = ?";
+	            pstmt = con.prepareStatement(sql);
+	            pstmt.setInt(1, addrId);
+	            pstmt.executeUpdate();
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(con, pstmt, rs);
+	    }
+	}
+
+	//주소 입력
+	public void insertAddr(UserAddrDTO addr, String id, String isDefault) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		try {
+			if(isDefault.equals("Y")) {
+				isDefaultAddr(id);
+			}
+			con = pool.getConnection();
+			sql = "insert user_address values (null, ?, ?, ?, ?, ?, now(), ?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, addr.getAddr_zipcode());
+			pstmt.setString(3, addr.getAddr_road());
+			pstmt.setString(4, addr.getAddr_detail());
+			pstmt.setString(5, isDefault);
+			pstmt.setString(6, (addr.getAddr_label() == null || addr.getAddr_label() == "") ? 
+											addr.getAddr_road() : addr.getAddr_label());
 			pstmt.executeUpdate();
 
 		} catch (Exception e) {
@@ -56,7 +119,7 @@ public class UserDAO {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "select id from user where id = ?";
+			sql = "select id from user where user_id = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
@@ -70,32 +133,53 @@ public class UserDAO {
 		return flag;
 	}
 	
-	//로그인 (1: 로그인 성공, 2: 로그인 시도, 3: 로그인 실패)
-	public int login(String id, String pwd) {
+	//로그인 (success : 로그인 성공), (fail : 로그인 실패), (none :  아이디 존재 X), (resign : 탈퇴 아이디 로그인)
+	public String login(String id, String pwd) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
-		int result = 0;
+		String result = null;
 		String log_type = null;
+		int cnt = 0;
 		try {
 			con = pool.getConnection();
 			if(idCheck(id)) {	//아이디 존재
-				sql = "select id from user where id = ? and pwd = ?";
-				pstmt = con.prepareStatement(sql);
-				pstmt.setString(1, id);
-				pstmt.setString(2, pwd);
-				rs = pstmt.executeQuery();
-				if(rs.next()) {	//아이디 O, 비밀번호 O  ->  로그인 로그 기록
-					result = 1;
-					log_type = "로그인";
-				} else {	//아이디 O, 비밀번호 X  ->  로그인 시도 로그 기록
-					result = 2;
-					log_type = "로그인 시도";
+				if(checkLock(id)) {	//계정 잠금 여부 Y
+					if(showAccountState(id).equals("탈퇴")) {
+						result = "resign";
+						return result;
+					}
+					log_type = "잠긴 계정 로그인 시도";
+					result = "lock";
+				} else {	//계정 잠금 여부 N
+					sql = "select id from user where user_id = ? and user_pwd = ?";
+					pstmt = con.prepareStatement(sql);
+					pstmt.setString(1, id);
+					pstmt.setString(2, pwd);
+					rs = pstmt.executeQuery();
+					if(rs.next()) {	//아이디 O, 비밀번호 O  ->  로그인 로그 기록
+						result = "success";
+						log_type = "로그인";
+						cnt = 0;
+						updateFailLogin(cnt, id); 	//로그인 실패 횟수 0으로 설정
+					} else {	//아이디 O, 비밀번호 X  ->  로그인 시도 로그 기록
+						result = "fail";
+						log_type = "로그인 시도";
+						cnt = showFailLogin(id);
+						if(cnt < 5) {
+							int cnt2 = cnt+1;
+							updateFailLogin(cnt2, id);
+							if(cnt2 == 5) {
+								updateLock("Y", id);
+								updateAccountState(id, "로그인 연속 실패로 인한 잠금");
+							}
+						}
+					}
 				}
 				insertLog(id, log_type);
 			} else {	//아이디 존재 X
-				result = 3;
+				result = "none";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -103,6 +187,134 @@ public class UserDAO {
 			pool.freeConnection(con, pstmt, rs);
 		}
 		return result;
+	}
+	
+	//계정상태 출력
+	public String showAccountState(String id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		String state = null;
+		try {
+			con = pool.getConnection();
+			sql = "select user_account_state from user where user_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				state = rs.getString(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return state;
+	}
+	
+	//계정상태 변경
+	public void updateAccountState(String id, String state) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		try {
+			con = pool.getConnection();
+			sql = "update user set user_account_state = ? where user_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, state);
+			pstmt.setString(2, id);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+	}
+	
+	//계정 잠금 여부 변경
+	public void updateLock(String state, String id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		try {
+			con = pool.getConnection();
+			sql = "update user set user_lock_state = ? where user_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, state);
+			pstmt.setString(2, id);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+	}
+	
+	//계정 잠금 여부 확인 (Y: true, N: false)
+	public boolean checkLock(String id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "select user_lock_state from user where user_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				if(rs.getString(1).equals("Y"))
+					flag = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return flag;
+	}
+	
+	//로그인 잠금 실패 횟수 출력
+	public int showFailLogin(String id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		int cnt = 0;
+		try {
+			con = pool.getConnection();
+			sql = "select user_fail_login from user where user_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				cnt = rs.getInt(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return cnt;
+	}
+	
+	//로그인 잠금 실패 횟수 수정
+	public void updateFailLogin(int cnt, String id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		try {
+			con = pool.getConnection();
+			sql = "update user set user_fail_login = ? where user_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, cnt);
+			pstmt.setString(2, id);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
 	}
 	
 	//로그아웃
@@ -125,6 +337,304 @@ public class UserDAO {
 			pstmt.setString(2, type);
 			pstmt.setString(3, ip.getHostAddress());
 			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+	}
+	
+	//아이디 찾기 (전화번호) -> 해당하는 아이디가 있으면 (아이디, 등급, 생성일 출력), 없으면 null 리턴
+	public Vector<UserDTO> findIdByPhone(String name, String phone) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<UserDTO> vlist = null;
+		try {
+			con = pool.getConnection();
+			sql = "select user_id, user_rank, created_at from user "
+					+ "where user_name = ? and user_phone = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, name);
+			pstmt.setString(2, phone);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				vlist = new Vector<UserDTO>();
+				UserDTO user = new UserDTO();
+				user.setUser_id(rs.getString(1));
+				user.setUser_rank(rs.getString(2));
+				user.setCreated_at(SDF_DATE.format(rs.getTimestamp(3)));
+				vlist.add(user);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return vlist;
+	}
+	
+	//아이디 찾기 (이메일) -> 해당하는 아이디가 있으면 (아이디, 등급, 생성일 출력), 없으면 null 리턴
+	public Vector<UserDTO> findIdByEmail(String name, String email) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<UserDTO> vlist = null;
+		try {
+			con = pool.getConnection();
+			sql = "select user_id, user_rank, created_at from user "
+					+ "where user_name = ? and user_email = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, name);
+			pstmt.setString(2, email);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				vlist = new Vector<UserDTO>();
+				UserDTO user = new UserDTO();
+				user.setUser_id(rs.getString(1));
+				user.setUser_rank(rs.getString(2));
+				user.setCreated_at(SDF_DATE.format(rs.getTimestamp(3)));
+				vlist.add(user);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return vlist;
+	}
+	
+	//비밀번호 찾기 (전화번호)
+	public boolean findPwdByPhone(String id, String name, String phone) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "select * from user where user_id = ? and user_name = ? and user_phone = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, name);
+			pstmt.setString(3, phone);
+			rs = pstmt.executeQuery();
+			if(rs.next()) 
+				flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return flag;
+	}
+	
+	//비밀번호 찾기 (이메일)
+	public boolean findPwdByEmail(String id, String name, String email) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "select * from user where user_id = ? and user_name = ? and user_email = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, name);
+			pstmt.setString(3, email);
+			rs = pstmt.executeQuery();
+			if(rs.next()) 
+				flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return flag;
+	}
+	
+	//비밀번호 변경
+	public void updatePwd(String id, String pwd) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		try {
+			con = pool.getConnection();
+			sql = "update user set user_pwd = ? where user_id = ?";
+			pstmt = con.prepareStatement(sql); 
+			pstmt.setString(1, pwd);
+			pstmt.setString(2, id);
+			pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+	}
+	
+	//회원 수정
+	
+	
+	//전체 배송지 출력 (기본 배송지가 가장 먼저 나오고 나머지 주소들은 생성일 순서대로 출력)
+	public Vector<UserAddrDTO> showAllAddr(String id){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<UserAddrDTO> vlist = new Vector<UserAddrDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from user_address where user_id = ? order by (addr_isDefault = 'Y') desc, created_at desc";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				vlist.add(new UserAddrDTO
+						(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), 
+								rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8)));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return vlist;
+	}
+	
+	//기본 배송지 출력
+	public UserAddrDTO showOneAddr(String id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		UserAddrDTO addr = null;
+		try {
+			con = pool.getConnection();
+			sql = "select * from user_address where user_id = ? and addr_isDefault = 'Y'";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				addr = new UserAddrDTO
+						(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), 
+								rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return addr;
+	}
+	
+	//기본배송지 제외 리스트 출력
+	public Vector<UserAddrDTO> showRestAddr(String id){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<UserAddrDTO> vlist = new Vector<UserAddrDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from user_address where user_id = ? and addr_isDefault = 'N' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				vlist.add(new UserAddrDTO
+						(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), 
+								rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8)));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return vlist;
+	}
+	
+	//배송지 수정
+	public void updateAddr(String id, int addr_id, UserAddrDTO addr) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		try {
+			if(addr.getAddr_isDefault().equals("Y"))
+				isDefaultAddr(id);
+			con = pool.getConnection();
+			sql = "update user_address set "
+					+ "addr_zipcode = ?, addr_road = ?, addr_detail = ?, addr_isDefault = ?, addr_label = ? where addr_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, addr.getAddr_zipcode());
+			pstmt.setString(2, addr.getAddr_road());
+			pstmt.setString(3, addr.getAddr_detail());
+			pstmt.setString(4, addr.getAddr_isDefault());
+			pstmt.setString(5, (addr.getAddr_label() == null || addr.getAddr_label() == "") ? 
+											addr.getAddr_road() : addr.getAddr_label());
+			pstmt.setInt(6, addr_id);
+			pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+	}
+	
+	//배송지 삭제 (기본 배송지 : false, 나머지 배송지 : true)
+	public boolean deleteAddr(int addr_id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "select addr_isDefault from user_address where addr_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, addr_id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				String isDefault = rs.getString(1);
+				rs.close();
+	            pstmt.close();
+	            
+	            if(isDefault.equals("Y"))
+	            	return false;
+	            else {
+	            	sql = "delete from user_address where addr_id = ?";
+	            	pstmt = con.prepareStatement(sql);
+	    			pstmt.setInt(1, addr_id);
+	    			if(pstmt.executeUpdate() == 1)
+	    				flag = true;
+	            }
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return flag;
+	}
+	
+	//회원 탈퇴
+	public void deleteUser(String id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		try {
+			con = pool.getConnection();
+			sql = "update user set user_account_state = ?, user_wd_date = now(), user_lock_state = ? where user_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, "탈퇴");
+			pstmt.setString(2, "Y");
+			pstmt.setString(3, id);
+			pstmt.executeUpdate();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
