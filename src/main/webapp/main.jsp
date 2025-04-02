@@ -1,5 +1,3 @@
-<!-- main.jsp -->
-
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <!DOCTYPE html>
 <html lang="ko">
@@ -8,6 +6,8 @@
 <title>에브리웨어 | everyWEAR</title>
 <link rel="stylesheet" type="text/css" href="css/main.css">
 <link rel="icon" type="image/png" href="images/logo-white.png">
+<link rel="stylesheet"
+	href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 </head>
 <body>
 
@@ -17,9 +17,34 @@
 	<section class="main-collection">
 		<div class="collection-left">
 			<h2 class="collection-title">2025 SS COLLECTION</h2>
-			<img src="images/main-cloth1.png" alt="WL VARSITY JACKET"
-				class="collection-img">
+
+			<!-- Swiper 슬라이드 시작 -->
+			<div class="swiper">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide">
+						<img src="images/main-cloth1.png" alt="WL VARSITY JACKET">
+					</div>
+					<div class="swiper-slide">
+						<img src="images/main-cloth2.png" alt="WL VARSITY JACKET 2">
+					</div>
+					<div class="swiper-slide">
+						<img src="images/main-cloth3.png" alt="WL VARSITY JACKET 3">
+					</div>
+					<div class="swiper-slide">
+						<img src="images/main-cloth4.png" alt="WL VARSITY JACKET">
+					</div>
+					<div class="swiper-slide">
+						<img src="images/main-cloth5.png" alt="WL VARSITY JACKET">
+					</div>
+				</div>
+
+				<!-- 화살표 버튼 -->
+				<div class="swiper-button-next"></div>
+				<div class="swiper-button-prev"></div>
+			</div>
+			<!-- Swiper 슬라이드 끝 -->
 		</div>
+
 		<div class="collection-right">
 			<video class="collection-video" controls autoplay muted loop>
 				<source src="videos/mainvideo-white.mp4" type="video/mp4">
@@ -27,18 +52,28 @@
 			</video>
 		</div>
 	</section>
-	<div class="slider-container">
-    <button class="arrow left-arrow">&#10094;</button>
 
-    <div class="slider-track" id="sliderTrack">
-        <img src="images/jacket1.png" class="slide">
-        <img src="images/jacket2.png" class="slide">
-        <img src="images/jacket3.png" class="slide">
-        <!-- 이미지 더 추가 가능 -->
-    </div>
+	<!-- Swiper 스크립트 -->
+	<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+	<script>
+		const swiper = new Swiper('.swiper', {
+			navigation : {
+				nextEl : '.swiper-button-next',
+				prevEl : '.swiper-button-prev',
+			},
+			autoplay : {
+				delay : 3000,
+				disableOnInteraction : false,
+			},
+			grabCursor : true,
+			loop : true,
+			slidesPerView : 1, // 한 번에 1장만 보이게
+			centeredSlides : false, // 가운데 정렬 X (필요 시 true로도 가능)
+			spaceBetween : 0,
+		});
+	</script>
 
-    <button class="arrow right-arrow">&#10095;</button>
-</div>
-	
+	<%@ include file="includes/footer.jsp"%>
+
 </body>
 </html>
