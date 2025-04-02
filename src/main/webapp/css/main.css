@@ -3,6 +3,7 @@ body {
 	background: linear-gradient(to bottom, #ffffff, #151825);
 	/* 메인 전용 그라데이션 */
 	height: 3240px;
+	padding-top: 180px;
 }
 
 /* 상위 네비 */
@@ -20,6 +21,72 @@ body {
 	border: none;
 	cursor: pointer;
 	margin-left: -10px;
+	position: fixed;
+	top: 15px;
+	left: 20px;
+	z-index: 1001;
+}
+
+/* 사이드바 스타일 */
+.sidebar {
+	height: 100%;
+	width: 500px;
+	position: fixed;
+	top: 0;
+	left: -500px;
+	background-color: #B0B4C1;
+	overflow-x: hidden;
+	transition: left 0.3s ease;
+	padding-top: 60px;
+	z-index: 1000;
+	background: rgba(176, 180, 193, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(255, 255, 255, 0.2); /* 은은한 구분선 */
+}
+
+.sidebar a {
+  display: block;
+  padding: 4px 24px;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  cursor: pointer;
+  letter-spacing: -0.5px;
+  line-height: 1.3;
+}
+
+.sidebar a.group-gap {
+  margin-top: 25px;
+}
+
+.sidebar.open {
+	left: 0;
+}
+
+/* 오버레이: 사이드바가 열릴 때 나타남 */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent; /* 흐리게 하고 싶으면 rgba(0,0,0,0.3) */
+  z-index: 998;
+  display: none;
+}
+
+.overlay.active {
+  display: block;
+}
+
+.nav-right {
+  position: fixed;
+  top: 15px;
+  right: 30px;
+  z-index: 1001; /* 햄버거 버튼과 같은 레벨로 */
+  display: flex;
+  align-items: center;
 }
 
 .nav-right a {
@@ -32,10 +99,14 @@ body {
 
 /* 로고 */
 .logo-wrap {
-	display: flex;
-	justify-content: center;
-	margin: 10px 0 20px;
-	transform: translateY(-30px);
+  position: fixed;
+  top: 80px; /* 햄버거 버튼과 nav-right보다 아래로 */
+  left: 50%;
+  transform: translate(-50%, -30px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  margin: 0;
 }
 
 .logo-wrap a {
@@ -50,63 +121,97 @@ body {
 
 /* 하위 네비 */
 .sub-nav ul {
-    display: flex;
-    justify-content: center;
-    gap: 40px; /* 항목 간 간격 */
-    list-style: none;
-    padding: 0;
-    margin: 0;
+	display: flex;
+	justify-content: center;
+	gap: 40px; /* 항목 간 간격 */
+	list-style: none;
+	padding: 0;
+	margin: 0;
 }
 
 .sub-nav ul li a {
-    text-decoration: none;
-    color: black;
-    font-size: 14px;
-    font-family: 'Malgun Gothic', sans-serif;
-    font-weight: bold;
-}
-
-.sub-nav ul li a:hover {
-    color: #015FC1;
+	text-decoration: none;
+	color: black;
+	font-size: 14px;
+	font-family: 'Malgun Gothic', sans-serif;
+	font-weight: bold;
 }
 
 /* 메인 컬렉션 */
 .main-collection {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 80px;
-    padding: 20px 50px;
-    position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 80px;
+	padding: 20px 50px;
+	position: relative;
+	flex-wrap: nowrap;
 }
 
 .collection-left {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transform: translateX(-10px);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	transform: translateX(-10px);
 }
 
 .collection-title {
-    font-size: 38px;
-    font-weight: bold;
-    color: #BBBBBB;
-    margin-bottom: 50px;
+	font-size: 38px;
+	font-weight: bold;
+	color: #BBBBBB;
+	margin-bottom: 50px;
 }
 
 .collection-img {
-    width: 480px;
-    height: auto;
-    margin-bottom: 45px;
+	width: 480px;
+	height: auto;
+	margin-bottom: 45px;
 }
 
 .collection-right {
-    transform: translateX(120px);
+	transform: translateX(120px);
 }
 
 .collection-video {
-    width: 720px;
-    height: auto;
-    border-radius: 6px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+	width: 720px;
+	height: auto;
+	border-radius: 6px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 메인 옷 스와이퍼 */
+.swiper {
+	width: 100%;
+	max-width: 500px;
+	height: auto;
+	position: relative; /* 기준점 */
+}
+
+.swiper-slide img {
+	width: 100%;
+	height: auto;
+	object-fit: cover;
+}
+
+/* 화살표 색상 + 크기 커스터마이징 */
+.swiper-button-next::after, .swiper-button-prev::after {
+	color: #BBBBBB;
+	font-size: 24px; /* 보기 좋은 크기로 조정 */
+}
+
+/* 화살표 위치 조정 */
+.swiper-button-prev {
+	position: absolute !important;
+	left: -60px !important;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 10;
+}
+
+.swiper-button-next {
+	position: absolute !important;
+	right: -60px !important;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 10;
 }
