@@ -1,214 +1,159 @@
 /* login.css */
 
-/* 전체 레이아웃 */
 body {
-    font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #ffffff;
-    margin: 0;
-    position: relative;
+  font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* 상단 정렬로 변경 */
+  align-items: center;
+  min-height: 100vh;
+  background-color: #ffffff;
+  margin: 0;
 }
 
+.login-container {
+  text-align: center;
+  width: 350px;
+  margin-top: 40px; /* 기존보다 더 상단으로 조정 */
+}
 
-/* 뒤로가기 버튼 */
 .back-btn-wrap {
-	position: absolute;
-	top: 20px;
-	left: 20px;
-	z-index: 10;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
 }
 
 .back-btn {
-	font-size: 24px;
-	text-decoration: none;
-	color: black;
-	background: none;
-	border: none;
-	cursor: pointer;
+  font-size: 24px;
+  text-decoration: none;
+  color: black;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .logo-wrap {
-	text-align: center;
-	margin-top: 40px;
-	margin-bottom: 20px;
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 20px;
 }
 
 .logo-img {
-	width: 250px;
-}
-
-/* 로그인 폼 컨테이너 */
-.login-container {
-    text-align: center;
-    width: 350px;
-    margin-top: 100px;
-}
-
-input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-/* placeholder 스타일 */
-input::placeholder {
-    color: #aaa;
-    transition: opacity 0.3s ease;
-}
-
-input:focus::placeholder {
-    opacity: 0;
-}
-
-.login-container {
-    width: 350px;
-    margin-top: 100px;
-    text-align: center;
-    box-sizing: border-box;
-}
-
-/* 입력창 스타일 */
-input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
+  width: 150px;
 }
 
 label {
-    display: block;
-    text-align: left;
-    font-weight: bold;
-    font-size: 13px;
-    margin-bottom: 5px;
-    margin-top: 15px;
+  display: block;
+  text-align: left;
+  font-weight: bold;
+  margin: 10px 0 5px;
 }
 
-/* 비밀번호 찾기 */
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box; /* ✅ padding 포함한 정확한 너비 계산 */
+}
+
+/* 입력창 placeholder 기본 스타일 */
+input::placeholder {
+  color: #aaa;
+  transition: opacity 0.2s ease;
+}
+
+/* 포커스되면 placeholder 투명하게 */
+input:focus::placeholder {
+  opacity: 0;
+}
+
 .forgot-password {
-    display: block;
-    text-align: right;
-    font-size: 12px;
-    color: #007bff;
-    text-decoration: none;
-    margin-bottom: 15px;
+  display: block;
+  text-align: right;
+  font-size: 12px;
+  color: #007bff;
+  text-decoration: none;
+  margin-bottom: 15px;
 }
 
-/* 로그인 버튼 */
 .login-btn {
-    width: 100%;
-    padding: 10px;
-    background: black;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  background: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
-/* 구분선 */
 .divider {
-    margin: 20px 0;
-    font-size: 14px;
-    color: gray;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.divider::before,
-.divider::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: #ccc;
-    margin: 0 10px;
-}
-
-/* 소셜 로그인 버튼 */
-.social-login {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.social-btn {
+  margin: 20px 0;
+  font-size: 14px;
+  color: gray;
   position: relative;
+  text-align: center;
+}
+
+.divider::before, .divider::after {
+  content: "";
+  display: inline-block;
+  width: 40%;
+  height: 1px;
+  background-color: #ccc;
+  vertical-align: middle;
+  margin: 0 5px;
+}
+
+.social-login button {
+  width: 100%;
+  margin: 5px 0;
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 10px;
-  width: 100%;
-  max-width: 350px;
-  height: 48px;
-  margin: 8px 0;
-  padding: 0 20px 0 60px; /* 왼쪽 공간 확보 */
+  padding-left: 24px;
+  border-radius: 10px;
   border: none;
-  border-radius: 12px;
-  background-color: #f5fafc;
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
   cursor: pointer;
-  box-sizing: border-box;
-  transition: background-color 0.2s ease;
+  font-size: 14px;
+  background: #f7fafc;
+  text-align: left;
 }
 
-.social-btn img {
-  position: absolute;
-  left: 20px; /* 버튼 내부 좌측 위치 */
+.social-login img {
   width: 20px;
   height: 20px;
+  margin-right: 10px;
 }
 
-
-
-
-/* 비회원 조회 */
 .guest-order {
-    display: block;
-    margin: 10px 0;
-    color: gray;
-    text-decoration: none;
+  display: block;
+  margin: 10px 0;
+  color: gray;
+  text-decoration: none;
+  font-size: 14px;
 }
 
-/* 회원가입 안내 */
 .signup-section {
-    margin-top: 15px;
-    font-size: 14px;
+  margin-top: 15px;
+  font-size: 14px;
 }
 
 .signup-section a {
-    color: black;
-    font-weight: bold;
-    text-decoration: none;
+  color: black;
+  font-weight: bold;
+  text-decoration: none;
 }
 
-/* 푸터 */
 footer {
-    position: absolute;
-    bottom: 10px;
-    text-align: center;
-    width: 100%;
-    color: gray;
-    font-size: 12px;
+  text-align: center;
+  width: 100%;
+  color: gray;
+  font-size: 12px;
+  margin-top: auto;
+  padding: 10px 0;
 }
