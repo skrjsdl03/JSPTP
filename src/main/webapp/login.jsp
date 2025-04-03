@@ -1,20 +1,46 @@
 <!-- login.jsp -->
-
+<%@page import="DAO.UserDAO"%>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%
+		String errorMessage = "";
+		String error = request.getParameter("error");
+		int fail = 0;
+		
+		try{
+			fail = Integer.parseInt(request.getParameter("fail"));
+		} catch(Exception e){}
+		
+		if ("noUser".equals(error)) {
+		    errorMessage = "아이디가 존재하지 않습니다.";
+		} else if ("wrong".equals(error)) {
+		    errorMessage = "비밀번호가 틀렸습니다 ( " + fail + " / 5 )";
+		} else if("resign".equals(error)){
+			errorMessage = "이미 탈퇴한 계정입니다.";
+		} else if("human".equals(error)){
+			errorMessage = "6개월 이상 접속하지 않아 휴먼계정으로 전환되었습니다.";
+		} else if("lock".equals(error)){
+			errorMessage = "5회 이상 로그인 실패로 인해 계정이 잠금상태가 되었습니다.";
+		}
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>로그인 | everyWEAR</title>
 <link rel="stylesheet" type="text/css" href="css/login.css?v=2">
+  <link rel="stylesheet" type="text/css" href="css/header.css">
   <link rel="icon" type="image/png" href="images/logo-white.png">
 </head>
 <body>
+<script>
+	function google(){
+		
+	}
+</script>
 
 <%@ include file="includes/loginHeader.jsp" %>
-
 <div class="login-container">
-<form action="loginProcess.jsp" method="post" autocomplete="off">
+<form action="login" method="post" autocomplete="off">
   <label for="userId">ID</label>
   <input type="text" id="userId" name="userId" placeholder="아이디를 입력하세요" required>
 
@@ -30,15 +56,35 @@
 
   <button type="submit" class="login-btn">Login</button>
 </form>
-
+    <% if (!errorMessage.isEmpty()) { %>
+        <p style="font-size: 12px; color: red;"><%= errorMessage %><br>
+        <%if("human".equals(error) || "lock".equals(error)){ %>
+        	<a href="#" style="font-size: 10px;">잠긴 계정 풀기</a>
+        <%} %>
+            </p>
+    <% } else{%>
+    	<p style="font-size: 12px;">&nbsp;</p>
+    <%} %>
 
   <div class="divider">Or</div>
 
+    <%
+        String clientId = System.getenv("GOOGLE_CLIENT_ID");
+        String redirectUri = "http://everywear.ddns.net/JSPTP/GoogleLoginServlet";
+        String scope = "openid email profile";
+        String authUrl = "https://accounts.google.com/o/oauth2/v2/auth"
+                       + "?scope=" + scope
+                       + "&access_type=online"
+                       + "&response_type=code"
+                       + "&redirect_uri=" + redirectUri
+                       + "&client_id=" + clientId;
+    %>
+
   <div class="social-login">
-    <button class="social-btn google">
+    <a class="social-btn google" href="<%=authUrl %>">
       <img src="images/Google.png" alt="Google">
       <span>Sign in with Google</span>
-    </button>
+    </a>
     <button class="social-btn kakao">
       <img src="images/kakao.png" alt="KakaoTalk">
       <span>Sign in with KakaoTalk</span>

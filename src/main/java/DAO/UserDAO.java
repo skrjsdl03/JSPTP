@@ -51,6 +51,27 @@ public class UserDAO {
 			pool.freeConnection(con, pstmt);
 		}
 	}
+	
+	//소셜 회원가입
+	public void insertSocialUser(String email, String name, String type) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		try {
+			con = pool.getConnection();
+			sql = "insert into user (user_id, user_name, user_type, created_at) values (?, ?, ?, now())";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, email);
+			pstmt.setString(2, name);
+			pstmt.setString(3, type);
+			pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+	}
 
 	//아이디 중복 체크
 	public boolean idCheck(String id) {
@@ -61,7 +82,7 @@ public class UserDAO {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "select id from user where user_id = ?";
+			sql = "select user_id from user where user_id = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
@@ -75,14 +96,14 @@ public class UserDAO {
 		return flag;
 	}
 	
-	//로그인 (success : 로그인 성공), (fail : 로그인 실패), (none :  아이디 존재 X), (resign : 탈퇴 아이디 로그인)
+	//로그인 (success : 로그인 성공), (fail : 로그인 실패), (none :  아이디 존재 X), (resign : 탈퇴 아이디 로그인), (human : 휴먼 계정), (lock : 5회이상 실패로 인한 잠금)
 	public String login(String id, String pwd) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
-		String result = null;
-		String log_type = null;
+		String result = "";
+		String log_type = "";
 		int cnt = 0;
 		try {
 			con = pool.getConnection();
@@ -91,11 +112,14 @@ public class UserDAO {
 					if(showAccountState(id).equals("탈퇴")) {
 						result = "resign";
 						return result;
+					} else if(showAccountState(id).equals("휴먼")){
+						result = "human";
+						return result;
 					}
 					log_type = "잠긴 계정 로그인 시도";
 					result = "lock";
 				} else {	//계정 잠금 여부 N
-					sql = "select id from user where user_id = ? and user_pwd = ?";
+					sql = "select user_id from user where user_id = ? and user_pwd = ?";
 					pstmt = con.prepareStatement(sql);
 					pstmt.setString(1, id);
 					pstmt.setString(2, pwd);
@@ -137,7 +161,7 @@ public class UserDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
-		String state = null;
+		String state = "";
 		try {
 			con = pool.getConnection();
 			sql = "select user_account_state from user where user_id = ?";
