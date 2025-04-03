@@ -1,24 +1,16 @@
+<!-- memberEditBasic.jsp -->
+
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%
-  String userId = (String) session.getAttribute("userId"); // 로그인한 유저의 아이디 (세션에서 가져옴)
-  String iconSrc = "images/fav-icon.png"; // 기본 아이콘
-
-  if (userId == null) {
-    userId = "guest@everywear.com"; // 예외 처리
-  } else if (userId.contains("naver.com")) {
-    iconSrc = "images/Naver.png";
-  } else if (userId.contains("gmail.com")) {
-    iconSrc = "images/Google.png";
-  } else if (userId.contains("kakao.com")) {
-    iconSrc = "images/kakao.png";
-  }
+  String userId = (String) session.getAttribute("userId");
+  if (userId == null) userId = "guest@everywear.com";
 %>
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>회원 정보 수정 | everyWEAR</title>
+  <link rel="stylesheet" href="css/header.css">
   <link rel="stylesheet" href="css/memberEdit.css">
   <link rel="icon" type="image/png" href="images/logo-white.png">
 </head>
@@ -48,38 +40,40 @@
 
   <div class="edit-content">
     <form>
-    
- <div class="form-group">
+      <!-- ID -->
+      <div class="form-group">
         <label>ID *</label>
-        <div class="id-box with-icon">
-          <img src="<%= iconSrc %>" alt="소셜 아이콘" class="social-icon">
+        <div class="id-box">
           <span class="id-text"><%= userId %></span>
         </div>
       </div>
-      
+
+      <!-- PW -->
+      <div class="form-group">
+        <label>비밀번호 *</label>
+        <input type="password" placeholder="비밀번호를 입력하세요" required>
+      </div>
+
       <!-- 이름 -->
-<div class="form-group">
-  <label>이름 *</label>
-  <input type="text" value="정시영" placeholder="이름을 입력하세요" required>
-</div>
+      <div class="form-group">
+        <label>이름 *</label>
+        <input type="text" value="정시영" placeholder="이름을 입력하세요" required>
+      </div>
 
       <!-- 휴대전화 -->
-		<div class="form-group">
-  <label>휴대전화 *</label>
-  <div class="phone-group">
-    <input type="text" value="010" readonly>
-    <input type="text" id="phone2" value="1234">
-    <input type="text" id="phone3" value="5678">
-    <button type="button" class="btn-change" onclick="showVerification()">인증</button>
-  </div>
-
-  <!-- 인증번호 입력 영역 (처음엔 숨김) -->
-  <div id="verifyBox" class="verify-group" style="display:none;">
-    <input type="text" id="verifyCode" placeholder="인증번호 입력">  
-    <button type="button" class="btn white">재전송</button>
-    <button type="button" class="btn-change">확인</button>
-  </div>
-</div>
+      <div class="form-group">
+        <label>휴대전화 *</label>
+        <div class="phone-group">
+          <input type="text" value="010" readonly>
+          <input type="text" id="phone2" value="1234">
+          <input type="text" id="phone3" value="5678">
+          <button type="button" class="btn-change" onclick="showVerification()">인증</button>
+        </div>
+        <div id="verifyBox" class="verify-group" style="display:none;">
+          <input type="text" id="verifyCode" placeholder="인증번호 입력">
+          <button type="button" class="btn-change">확인</button>
+        </div>
+      </div>
 
       <!-- 이메일 -->
       <div class="form-group">
@@ -87,14 +81,14 @@
         <input type="email" value="donguei123@naver.com">
       </div>
 
-           <!-- 성별 -->
+      <!-- 성별 -->
       <div class="form-group">
         <label>성별 *</label>
         <label><input type="radio" name="gender" checked> 남자</label>
         <label><input type="radio" name="gender"> 여자</label>
       </div>
 
-            <!-- 키 & 몸무게 -->
+      <!-- 키 & 몸무게 -->
       <div class="form-group">
         <label>키 & 몸무게</label>
         <div class="hw-group">
@@ -103,18 +97,14 @@
         </div>
       </div>
 
-            <!-- 생년월일 -->
+      <!-- 생년월일 -->
       <div class="form-group">
         <label>생년월일 *</label>
         <div class="birth-group">
           <select name="birthYear" required>
             <option value="">년도 선택</option>
-            <option>1998</option>
-            <option>1999</option>
-            <option>2000</option>
-            <option>2001</option>
-            <option>2002</option>
-            <option>2003</option>
+            <option>1998</option><option>1999</option><option>2000</option>
+            <option>2001</option><option>2002</option><option>2003</option>
           </select>년
           <select name="birthMonth" required>
             <option value="">월</option>
@@ -131,10 +121,8 @@
         </div>
       </div>
 
-            <!-- 버튼들 -->
-      <button type="submit" class="submit-btn">회원 정보 수정</button>     
+      <button type="submit" class="submit-btn">회원 정보 수정</button>
       <a href="withdraw.jsp" class="withdraw-link">회원탈퇴</a>
-      
     </form>
   </div>
 </div>
@@ -144,7 +132,7 @@
 <script>
   function showVerification() {
     document.getElementById('verifyBox').style.display = 'flex';
-  } 
+  }
 </script>
 
 </body>
