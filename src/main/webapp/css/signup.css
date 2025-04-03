@@ -68,6 +68,30 @@ input:focus::placeholder {
   opacity: 0;
 }
 
+.email-input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.email-input-group input,
+.email-input-group select {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  height: 42px;
+}
+
+.email-input-group .at-symbol {
+  font-size: 14px;
+  color: #444;
+  margin-top: 2px;
+}
+
 /* 기본 입력 필드 */
 input[type="text"],
 input[type="password"],
@@ -192,6 +216,7 @@ input#address2 {
 .signup-btn:hover {
   background-color: #222;
 }
+
 
 /* 푸터 */
 footer {

@@ -59,6 +59,26 @@ input[type="text"] {
   box-sizing: border-box; /* ✅ padding 포함한 정확한 너비 계산 */
 }
 
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-family: 'Malgun Gothic', sans-serif;
+}
+
+/* placeholder 투명도 효과도 password에 적용 */
+input[type="password"]::placeholder {
+  color: #aaa;
+  transition: opacity 0.2s ease;
+}
+
+input[type="password"]:focus::placeholder {
+  opacity: 0;
+}
+
 /* 입력창 placeholder 기본 스타일 */
 input::placeholder {
   color: #aaa;
@@ -69,6 +89,28 @@ input::placeholder {
 input:focus::placeholder {
   opacity: 0;
 }
+
+.find-links {
+  text-align: right;
+  margin-bottom: 15px;
+  font-size: 13px;
+}
+
+.find-links a {
+  color: #000000 !important;
+  text-decoration: none !important;
+}
+
+
+.find-links a:hover {
+  text-decoration: none;
+  color: #000000;
+}
+
+.divider-bar {
+  color: #ccc;
+}
+
 
 .forgot-password {
   display: block;

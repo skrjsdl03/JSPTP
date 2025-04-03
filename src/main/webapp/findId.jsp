@@ -44,25 +44,20 @@
       </div>
     </div>
 
-    <!-- 이메일 입력창 -->
-<div id="emailInputGroup" class="email-input-group" style="display: none;">
-  <label for="emailId">이메일로 찾기</label>
-  <div class="email-input-wrap">
-    <input type="text" id="emailId" placeholder="이메일 아이디 입력" required>
-    <span>@</span>
-    <select id="emailDomain" required>
-      <option value="">선택</option>
-      <option value="gmail.com">gmail.com</option>
-      <option value="naver.com">naver.com</option>
-      <option value="daum.net">daum.net</option>
-      <option value="hanmail.net">hanmail.net</option>
-      <option value="nate.com">nate.com</option>
-    </select>
-  </div>
-
-  <!-- 실제 서버로 보낼 숨은 필드 -->
-  <input type="hidden" id="email" name="email">
+<!-- 이메일 -->
+<label for="emailId">이메일로 찾기</label>
+<div class="email-input-group">
+  <input type="text" id="emailId" placeholder="이메일 아이디 입력">
+  <span class="at-symbol">@</span>
+  <select id="emailDomain">
+    <option value="">선택</option>
+    <option value="gmail.com">gmail.com</option>
+    <option value="naver.com">naver.com</option>
+    <option value="daum.net">daum.net</option>
+    <option value="nate.com">nate.com</option>
+  </select>
 </div>
+<input type="hidden" id="email" name="email">
 
     <!-- 인증 버튼 -->
     <div id="authBtnBox">
