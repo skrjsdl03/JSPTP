@@ -17,7 +17,7 @@
 <div class="find-id-container">
   <h2>아이디 찾기</h2>
 
-  <form id="findIdForm">
+  <form id="findPwdForm">
 
     <!-- 인증 방식 -->
     <label>본인확인 인증</label>
@@ -44,20 +44,23 @@
       </div>
     </div>
 
-<!-- 이메일 -->
-<label for="emailId">이메일로 찾기</label>
-<div class="email-input-group">
-  <input type="text" id="emailId" placeholder="이메일 아이디 입력">
-  <span class="at-symbol">@</span>
-  <select id="emailDomain">
-    <option value="">선택</option>
-    <option value="gmail.com">gmail.com</option>
-    <option value="naver.com">naver.com</option>
-    <option value="daum.net">daum.net</option>
-    <option value="nate.com">nate.com</option>
-  </select>
-</div>
-<input type="hidden" id="email" name="email">
+    <!-- 이메일 입력창 -->
+    <div id="emailInputGroup" class="email-input-group" style="display: none;">
+      <label for="emailId">이메일로 찾기</label>
+      <div class="email-input-wrap">
+        <input type="text" id="emailId" placeholder="이메일 아이디 입력" required>
+        <span>@</span>
+        <select id="emailDomain" required>
+          <option value="">선택</option>
+          <option value="gmail.com">gmail.com</option>
+          <option value="naver.com">naver.com</option>
+          <option value="daum.net">daum.net</option>
+          <option value="hanmail.net">hanmail.net</option>
+          <option value="nate.com">nate.com</option>
+        </select>
+      </div>
+      <input type="hidden" id="email" name="email">
+    </div>
 
     <!-- 인증 버튼 -->
     <div id="authBtnBox">
@@ -68,7 +71,6 @@
     <div id="verifyBox" style="display:none;">
       <label for="verifyCode">인증번호</label>
       <input type="text" id="verifyCode" name="verifyCode" placeholder="인증번호를 입력하세요">
-
       <div class="verify-btn-group">
         <button type="button" class="btn white">재전송</button>
         <button type="submit" class="btn black">확인</button>
@@ -80,13 +82,12 @@
 
 <footer>2025©everyWEAR</footer>
 
-<!-- 스크립트: 이메일 주소 조합 및 인증 방식 전환 -->
 <script>
   const emailId = document.getElementById("emailId");
   const emailDomain = document.getElementById("emailDomain");
   const emailFull = document.getElementById("email");
 
-  const form = document.getElementById("findIdForm");
+  const form = document.getElementById("findPwdForm");
   form.addEventListener("submit", function(e) {
     if (emailRadio.checked) {
       const id = emailId.value.trim();
@@ -99,43 +100,27 @@
       emailFull.value = `${id}@${domain}`;
     }
   });
-</script>
 
-<script>
-  // 인증 버튼 클릭 시 인증번호 입력창 보이기
   function showVerification() {
     document.getElementById('authBtnBox').style.display = 'none';
     document.getElementById('verifyBox').style.display = 'block';
   }
 
-  // 요소 가져오기
   const phoneRadio = document.getElementById("phone");
   const emailRadio = document.getElementById("email");
   const phoneInputGroup = document.getElementById("phoneInputGroup");
   const emailInputGroup = document.getElementById("emailInputGroup");
-  const authBtnBox = document.getElementById("authBtnBox");
-  const verifyBox = document.getElementById("verifyBox");
 
-  // 라디오 버튼 변경 시 실행
   phoneRadio.addEventListener("change", toggleAuthInput);
   emailRadio.addEventListener("change", toggleAuthInput);
 
   function toggleAuthInput() {
-    // 입력창 전환
-    if (phoneRadio.checked) {
-      phoneInputGroup.style.display = "block";
-      emailInputGroup.style.display = "none";
-    } else if (emailRadio.checked) {
-      phoneInputGroup.style.display = "none";
-      emailInputGroup.style.display = "block";
-    }
-
-    // ✅ 인증 상태 초기화
-    verifyBox.style.display = "none";
-    authBtnBox.style.display = "block";
+    phoneInputGroup.style.display = phoneRadio.checked ? "block" : "none";
+    emailInputGroup.style.display = emailRadio.checked ? "block" : "none";
+    document.getElementById('verifyBox').style.display = 'none';
+    document.getElementById('authBtnBox').style.display = 'block';
   }
 
-  // 페이지 로드시 초기 세팅
   window.addEventListener("DOMContentLoaded", toggleAuthInput);
 </script>
 
