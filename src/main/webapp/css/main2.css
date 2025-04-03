@@ -269,6 +269,81 @@ body {
 	color: #FFFFFF;
 }
 
+/* middle slide */
+.slider-container {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	padding: 260px 40px;
+	background: transparent;
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+.slider {
+	display: flex;
+	gap: 50px; /* 옆 슬라이드랑 간격 살짝 넓혀줌 */
+	transition: transform 0.3s ease-in-out;
+	align-items: flex-start;
+}
+
+.slide {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start; /* 👈 이미지 왼쪽 정렬 */
+	width: 300px;
+	height: 400px;
+	box-sizing: border-box;
+	padding: 0;
+	background: transparent;
+	flex-shrink: 0;
+}
+
+.slide img {
+	height: 100%; /* 슬라이드 높이에 딱 맞게 */
+	width: auto; /* 가로는 유동적으로 */
+	object-fit: contain;
+	display: block;
+}
+
+.caption {
+	margin-top: 10px;
+	padding-left: 5px;
+	text-align: left;
+	font-size: 15px;
+	font-family: sans-serif;
+	color: #000;
+}
+
+.arrow {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	font-size: 32px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	z-index: 10;
+	color: #555;
+	padding: 10px;
+}
+
+.arrow.left {
+	left: 100px; /* 중앙으로 조금 더 이동 */
+}
+
+.arrow.right {
+	right: 100px; /* 중앙으로 조금 더 이동 */
+}
+
+.arrow:hover {
+	color: #015FC1;
+}
+
 .bottom-image-section {
 	position: relative;
 	width: 100%;
