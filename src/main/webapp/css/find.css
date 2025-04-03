@@ -92,23 +92,43 @@ input[type="text"] {
   font-size: 14px;
 }
 
-.email-input-wrap {
+.email-input-group {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 6px;
   margin-bottom: 16px;
 }
 
-.email-input-wrap input,
-.email-input-wrap select {
-  flex: 1;
+.email-input-group input {
+  width: 160px;
   padding: 10px;
   font-size: 14px;
-  border-radius: 8px;
   border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f7fbff;
   box-sizing: border-box;
 }
+
+.email-input-group select {
+  width: 160px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  background-color: #fff;
+  appearance: none; /* 브라우저 기본 화살표 제거 */
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='12' viewBox='0 0 24 24' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+}
+
+.email-input-group .at-symbol {
+  font-size: 14px;
+  color: #333;
+}
+
 
 #authBtnBox {
   margin-bottom: 10px;
