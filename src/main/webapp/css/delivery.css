@@ -1,5 +1,6 @@
 @charset "UTF-8";
-@charset "UTF-8";body {
+
+body {
   font-family: 'Malgun Gothic', sans-serif;
   background-color: #fff;
   margin: 0;
@@ -8,8 +9,11 @@
 .top-nav {
   position: relative;
   width: 100%;
-  height: 80px;
+  height: auto; /* ✅ 고정 height 제거 */
+  padding-top: 20px; /* ✅ 여백 추가 */
+  padding-bottom: 10px;
   display: flex;
+  flex-direction: column;  /* ✅ 로고와 MYPAGE 아래로 쌓이게 */
   align-items: center;
   justify-content: center;
 }
@@ -28,18 +32,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 10px;
+  justify-content: center;
+  margin-top: 30px;      /* 상단 여백 확보 */
+  margin-bottom: 10px;   /* 로고와 MYPAGE 사이 간격 */
 }
 
 .logo-img {
   width: 110px;
   height: auto;
+  margin-bottom: 8px;    /* ✅ 로고와 MYPAGE 사이 간격 */
 }
 
 .mypage-title {
   font-size: 12px;
   font-weight: bold;
-  margin-top: 2px;
+  text-align: center;
 }
 
 .nav-right {
@@ -79,10 +86,25 @@
   pointer-events: none;      /* ✅ 클릭 불가 */
 }
 
+/* 사이드바 + 배송지 폼을 가로로 정렬 */
+.delivery-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 60px;
+  padding: 0 40px;
+  margin-top: 0;  /* 여백 제거 */
+}
+
+/* 본문 콘텐츠 wrapper */
+.delivery-content {
+  flex: 1;
+  max-width: 750px;
+  margin-top: 40px;
+}
+
 .delivery-box {
-  max-width: 680px;
-  margin: 30px auto;
-  padding: 0 20px;
+  margin-top: 10px;   /* ✅ 기존보다 위로 올라오도록 조정 */
 }
 
 .delivery-top {
@@ -98,14 +120,17 @@
   margin-bottom: 8px;
 }
 
+/* 기존 input 디자인은 유지 */
 .input-tag,
 .input-zipcode,
 .input-full {
   border: 1px solid #e2e2e2;
   background-color: #f7fbff;
   border-radius: 10px;
-  padding: 8px 12px;
+  padding: 10px 12px;
   font-size: 13px;
+  color: #333;
+  box-sizing: border-box;
 }
 
 .input-tag {
@@ -121,23 +146,51 @@
   min-width: 250px;
 }
 
-.btn-search {
-  background-color: #f2f2f2;
-  border: none;
-  border-radius: 10px;
-  padding: 8px 12px;
-  font-size: 13px;
-  cursor: pointer;
+input[readonly] {
+  pointer-events: none;
+  background-color: #f7fbff;
+  color: #333;
 }
 
-.btn-edit {
-  color: #007bff;
+.btn-search:disabled {
+  background-color: #eee;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* 주소 검색 버튼 스타일 (이미지처럼 작고 깔끔하게) */
+.btn-search {
+  background-color: #f7fbff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 6px 12px;
   font-size: 13px;
-  text-decoration: none;
-  line-height: 32px;
+  color: black;
+  cursor: pointer;
+  height: 38px;
+  box-sizing: border-box;
+}
+
+.action-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin-left: auto;
 }
 
+.btn-edit {
+  color: #015FC1;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-delete {
+  color: #ccc;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+}
 
 .sidebar {
   width: 180px;
