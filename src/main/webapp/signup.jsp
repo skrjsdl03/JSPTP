@@ -66,6 +66,32 @@
     </div>
     <input type="text" id="address1" name="address1" placeholder="기본 주소" required>
     <input type="text" id="address2" name="address2" placeholder="나머지 주소">
+    
+	<!-- 휴대전화 -->
+	<label for="phone">휴대전화 *</label>
+	<div class="phone-input-group">
+	  <input type="text" id="phone1" value="010" readonly style="color: #000;">
+	  <span>-</span>
+	  <input type="text" id="phone2" maxlength="4" required>
+	  <span>-</span>
+	  <input type="text" id="phone3" maxlength="4" required>
+	</div>
+	
+	<!-- 인증 버튼 -->
+	<div id="authBtnBox">
+	  <button type="button" class="btn black" onclick="showVerification()">인증</button>
+	</div>
+	
+	<!-- 인증번호 입력 영역 -->
+	<div id="verifyBox" style="display: none;">
+	  <label for="verifyCode">인증번호</label>
+	  <input type="text" id="verifyCode" name="verifyCode" placeholder="인증번호를 입력하세요">
+	
+	  <div class="verify-btn-group">
+	    <button type="button" class="btn white">재전송</button>
+	    <button type="submit" class="btn black">확인</button>
+	  </div>
+	</div>
 
     <!-- 성별 -->
     <label>성별 *</label>
@@ -86,10 +112,6 @@
       <input type="number" name="weight" placeholder="몸무게 (kg)">
     </div>
 
-    <!-- 휴대전화 -->
-    <label for="phone">휴대전화 *</label>
-    <input type="text" id="phone" name="phone" placeholder="전화번호를 입력하세요" required>
-
     <!-- 약관 동의 -->
     <div class="terms">
       <label><input type="checkbox" required> 만 14세 이상입니다. (필수)</label><br>
@@ -104,7 +126,7 @@
 
 <footer>2025©everyWEAR</footer>
 
-<!-- ✅ Script 영역 -->
+<!-- Script 영역 -->
 <script>
   // 비밀번호 일치 확인
   const passwordInput = document.getElementById("password");
@@ -158,6 +180,12 @@
 
     return true;
   }
+  
+  function showVerification() {
+    document.getElementById('authBtnBox').style.display = 'none';
+    document.getElementById('verifyBox').style.display = 'block';
+  }
+
 </script>
 
 </body>

@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 /* 전체 폰트와 기본 설정 */
 body {
   font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
@@ -10,29 +12,29 @@ body {
 }
 
 .back-btn-wrap {
-	position: absolute;
-	top: 20px;
-	left: 20px;
-	z-index: 10;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
 }
 
 .back-btn {
-	font-size: 24px;
-	text-decoration: none;
-	color: black;
-	background: none;
-	border: none;
-	cursor: pointer;
+  font-size: 24px;
+  text-decoration: none;
+  color: black;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .logo-wrap {
-	text-align: center;
-	margin-top: 30px;
-	margin-bottom: 20px;
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 20px;
 }
 
 .logo-img {
-	width: 150px;
+  width: 150px;
 }
 
 /* 회원가입 컨테이너 */
@@ -63,11 +65,11 @@ input::placeholder {
   transition: opacity 0.2s ease;
 }
 
-/* 포커스되면 placeholder 투명하게 */
 input:focus::placeholder {
   opacity: 0;
 }
 
+/* 이메일 */
 .email-input-group {
   display: flex;
   align-items: center;
@@ -123,19 +125,30 @@ input[type="number"] {
   box-sizing: border-box;
 }
 
-/* 검색 버튼도 높이 맞춤 */
+/* 주소 검색 버튼 */
 .search-btn {
   height: 40px;
   padding: 0 14px;
   background-color: black;
   color: white;
+  font-size: 14px;
+  font-weight: bold;
   border: none;
   border-radius: 8px;
-  font-size: 14px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-/* 기본 주소 & 나머지 주소 */
+.search-btn:hover {
+  background-color: #222;
+}
+
+.search-btn:disabled {
+  background-color: #ccc;
+  color: #eee;
+  cursor: not-allowed;
+}
+
 input#address1,
 input#address2 {
   width: 100%;
@@ -151,7 +164,7 @@ input#address2 {
 #pwCheckMsg {
   font-size: 13px;
   margin-top: 4px;
-  height: 18px; /* 공간 확보 */
+  height: 18px;
 }
 
 .match {
@@ -162,18 +175,17 @@ input#address2 {
   color: red;
 }
 
+/* 성별 */
 .gender-group {
   display: flex;
-  gap: 16px; /* ← 라디오 버튼 사이 간격 (살짝 좁게) */
+  gap: 16px;
   align-items: center;
   font-size: 14px;
 }
 
-/* 라디오 버튼과 텍스트 사이 간격 줄이기 */
 .gender-group input[type="radio"] {
-  margin-right: 4px; /* 기존보다 더 타이트하게 */
+  margin-right: 4px;
 }
-
 
 /* 키 & 몸무게 */
 .hw-group {
@@ -217,6 +229,70 @@ input#address2 {
   background-color: #222;
 }
 
+/* ✅ 휴대전화 인증 */
+.phone-input-group {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.phone-input-group input {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.phone-input-group span {
+  font-size: 14px;
+}
+
+.phone-input-group input[readonly] {
+  color: #000;
+  pointer-events: none;      /* 커서 비활성화 */
+}
+
+
+.verify-btn-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.btn.black {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: bold;
+}
+
+.btn.white {
+  background-color: white;
+  border: 1px solid #ccc;
+  color: black;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: bold;
+}
+
+#verifyCode {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-top: 8px;
+}
 
 /* 푸터 */
 footer {
