@@ -174,6 +174,44 @@ input#address2 {
   margin-right: 4px; /* 기존보다 더 타이트하게 */
 }
 
+/* 생년월일 */
+.birth-wrapper {
+    display: flex;
+    flex : 1;
+    align-items: center;
+    gap: 10px; /* 입력 필드와 라벨 간 간격 */
+}
+
+.birth-container {
+    display: flex;
+    flex : 1;
+    align-items: center;
+    gap: 8px; /* 입력 필드 간 간격 */
+}
+
+.birth-input {
+    position: relative;
+    display: flex; /* ✅ 가로 정렬 */
+    align-items: center;
+}
+
+.birth-input input {
+    width: 60px;
+    height: 32px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 15px; /* 둥글게 */
+    background-color: #f7fafd;
+    font-size: 16px;
+    padding-right: 18px; /* 오른쪽 공간 확보 */
+}
+
+.birth-input span {
+    position: absolute;
+    right: 8px; /* 년, 월, 일 위치 조정 */
+    font-size: 14px;
+    color: #555;
+}
 
 /* 키 & 몸무게 */
 .hw-group {
