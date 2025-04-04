@@ -72,7 +72,7 @@ public class UserDAO {
 			pool.freeConnection(con, pstmt);
 		}
 	}
-
+	
 	//아이디 중복 체크
 	public boolean idCheck(String id) {
 		Connection con = null;
@@ -95,6 +95,34 @@ public class UserDAO {
 		}
 		return flag;
 	}
+	
+	// 소셜회원 중복체크
+	public boolean isSocialUserExists(String id, String type) {
+	    Connection conn = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    boolean exists = false;
+
+	    try {
+	        conn = pool.getConnection(); // 기존 UserDAO에 정의된 DB 연결 메서드 사용
+	        String sql = "SELECT 1 FROM user WHERE user_id = ? AND user_type = ?";
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, id);
+	        pstmt.setString(2, type);
+	        rs = pstmt.executeQuery();
+	        if (rs.next()) {
+	            exists = true; // 사용자 존재
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(conn, pstmt, rs);
+	    }
+	    System.out.println("id = " + id + ", type = " + type);
+	    System.out.println("exists = " + exists);
+	    return exists;
+	}
+
 	
 	//로그인 (success : 로그인 성공), (fail : 로그인 실패), (none :  아이디 존재 X), (resign : 탈퇴 아이디 로그인), (human : 휴먼 계정), (lock : 5회이상 실패로 인한 잠금)
 	public String login(String id, String pwd) {
