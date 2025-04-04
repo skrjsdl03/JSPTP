@@ -79,16 +79,29 @@
                        + "&redirect_uri=" + redirectUri
                        + "&client_id=" + clientId;
     %>
+    
+    
+    <%
+//         String clientId_k = System.getenv("KAKAO_CLIENT_ID");
+    	String clientId_k = System.getenv("KAKAO_CLIENT_ID");
+        String redirectUri_k = "http://everywear.ddns.net/JSPTP/KakaoLoginServlet";
+        String authUrl_k = "https://kauth.kakao.com/oauth/authorize?response_type=code"
+                	   + "&client_id=" + clientId_k
+                       + "&redirect_uri=" + redirectUri_k;
+    %>
+    
 
   <div class="social-login">
-    <a class="social-btn google" href="<%=authUrl %>">
+    <a class="social-btn google" href="<%=authUrl%>">
       <img src="images/Google.png" alt="Google">
       <span>Sign in with Google</span>
     </a>
-    <button class="social-btn kakao">
-      <img src="images/kakao.png" alt="KakaoTalk">
-      <span>Sign in with KakaoTalk</span>
-    </button>
+    <br>
+    <a class="social-btn kakao" href="<%=authUrl_k%>">
+      <img src="images/kakao.png" alt="Kakao">
+      <span>Sign in with Kakao</span>
+    </a>
+    
     <button class="social-btn naver">
       <img src="images/Naver.png" alt="Naver">
       <span>Sign in with Naver</span>
