@@ -1,6 +1,9 @@
 <!-- signup.jsp -->
 
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%
+		String social = request.getParameter("social");
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -17,8 +20,9 @@
 <div class="signup-container">
   <h2>회원가입</h2>
 
-  <form action="signupProcess.jsp" method="post" onsubmit="return handleEmailSubmit()">
+  <form action="signup" method="post" onsubmit="return handleEmailSubmit()">
 
+<%if(social == null){ %>
     <!-- 아이디 -->
     <label for="userId">아이디 *</label>
     <input type="text" id="userId" name="userId" placeholder="아이디를 입력하세요" required>
@@ -32,7 +36,7 @@
     <input type="password" id="confirmPassword" name="confirmPassword" placeholder="비밀번호를 다시 입력하세요" required>
 
     <div id="pwCheckMsg"></div>
-
+<%} %>
     <!-- 이름 -->
     <label for="name">이름 *</label>
     <input type="text" id="name" name="name" placeholder="이름을 입력하세요" required>
@@ -77,8 +81,15 @@
     </div>
 
     <!-- 생년월일 -->
-    <label for="birth">생년월일 *</label>
-    <input type="date" id="birth" name="birth" required>
+    <label for="birth">생년월일 <span class="required">*</span></label>
+    <div class="birth-container">
+        <input type="text" id="year" maxlength="4" placeholder="년">
+        <span class="birth-label">년</span>
+        <input type="text" id="month" maxlength="2" placeholder="월">
+        <span class="birth-label">월</span>
+        <input type="text" id="day" maxlength="2" placeholder="일">
+        <span class="birth-label">일</span>
+    </div>
 
     <!-- 키 & 몸무게 -->
     <div class="hw-group">
@@ -158,6 +169,12 @@
 
     return true;
   }
+  
+  document.querySelectorAll('.birth-container input').forEach(input => {
+      input.addEventListener('input', (e) => {
+          e.target.value = e.target.value.replace(/[^0-9]/g, ''); // 숫자만 입력 가능
+      });
+  });
 </script>
 
 </body>
