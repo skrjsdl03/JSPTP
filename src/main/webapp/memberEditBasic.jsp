@@ -48,11 +48,37 @@
         </div>
       </div>
 
-      <!-- PW -->
-      <div class="form-group">
-        <label>비밀번호 *</label>
-        <input type="password" placeholder="비밀번호를 입력하세요" required>
-      </div>
+      <!-- 기존 비밀번호 -->
+		<div class="form-group">
+		  <label>기존 비밀번호</label>
+		  <div class="phone-group"> <!-- 휴대전화 입력 스타일을 재활용 -->
+		    <input type="password" value="********" readonly class="readonly-password">
+		    <button type="button" class="btn-change" onclick="togglePasswordChange()">변경</button>
+		  </div>
+		</div>
+		
+		<!-- 새 비밀번호 입력 영역 (처음엔 숨김) -->
+		<div id="newPwBox" style="display: none; margin-top: 20px;">
+		  
+		<!-- 새 비밀번호 -->
+		<div class="form-group">
+		  <label>새 비밀번호</label>
+		  <input type="password" id="newPassword" onkeyup="checkPasswordMatch()" placeholder="새 비밀번호 입력">
+		
+		  <!-- 안내 문구 아래 마진 추가! -->
+		  <small class="guide-text" style="color: #888; display: block; margin-top: 5px; margin-bottom: 12px;">
+		    영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 8자~16자
+		  </small>
+		</div>
+		
+		  <!-- 새 비밀번호 확인 -->
+		  <div class="form-group">
+		    <label>새 비밀번호 확인</label>
+		    <input type="password" id="confirmPassword" onkeyup="checkPasswordMatch()" placeholder="새 비밀번호 재입력">
+		    <div id="passwordMatchMsg" class="msg" style="margin-top: 8px;"></div>
+		  </div>
+		
+		</div>
 
       <!-- 이름 -->
       <div class="form-group">
@@ -69,10 +95,14 @@
           <input type="text" id="phone3" value="5678">
           <button type="button" class="btn-change" onclick="showVerification()">인증</button>
         </div>
-        <div id="verifyBox" class="verify-group" style="display:none;">
-          <input type="text" id="verifyCode" placeholder="인증번호 입력">
-          <button type="button" class="btn-change">확인</button>
-        </div>
+        
+        <!-- 인증번호 입력 영역 (처음엔 숨김) -->
+		<div id="verifyBox" class="verify-group" style="display:none;">
+		  <input type="text" id="verifyCode" placeholder="인증번호 입력">
+		  <button type="button" class="btn white">재전송</button>
+		  <button type="button" class="btn-change">확인</button>
+		</div>
+
       </div>
 
       <!-- 이메일 -->
@@ -133,6 +163,31 @@
   function showVerification() {
     document.getElementById('verifyBox').style.display = 'flex';
   }
+  
+  function togglePasswordChange() {
+	  const pwBox = document.getElementById('newPwBox');
+	  pwBox.style.display = pwBox.style.display === 'none' ? 'block' : 'none';
+	}
+
+	function checkPasswordMatch() {
+	  const pw = document.getElementById('newPassword').value;
+	  const confirm = document.getElementById('confirmPassword').value;
+	  const msg = document.getElementById('passwordMatchMsg');
+
+	  if (!pw || !confirm) {
+	    msg.innerText = '';
+	    return;
+	  }
+
+	  if (pw === confirm) {
+	    msg.style.color = 'green';
+	    msg.innerText = '비밀번호가 일치합니다.';
+	  } else {
+	    msg.style.color = 'red';
+	    msg.innerText = '비밀번호가 일치하지 않습니다.';
+	  }
+	}
+
 </script>
 
 </body>

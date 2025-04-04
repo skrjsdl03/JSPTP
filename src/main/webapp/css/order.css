@@ -1,0 +1,189 @@
+@charset "UTF-8";
+
+body {
+  font-family: 'Malgun Gothic', sans-serif;
+  background-color: #fff;
+  margin: 0;
+}
+
+.top-nav {
+  position: relative;
+  width: 100%;
+  height: auto;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-btn {
+  position: absolute;
+  left: 20px;
+  top: 28px;
+  font-size: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.logo-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.logo-img {
+  width: 110px;
+  height: auto;
+  margin-bottom: 8px;
+}
+
+.mypage-title {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.nav-right {
+  position: absolute;
+  right: 30px;
+  top: 32px;
+  display: flex;
+  gap: 16px;
+}
+
+.nav-right a {
+  font-size: 10px;
+  font-weight: bold;
+  text-decoration: none;
+  color: black;
+}
+
+/* 주문 내역 전용 컨테이너 - 사이드바 왼쪽 정렬 */
+.order-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 60px;
+  padding: 0 40px;
+  margin-top: 0;
+}
+
+.order-content {
+  flex: 1;
+  max-width: 750px;
+  margin: 40px auto 0 auto; /* 수직 여백 + 수평 중앙 정렬 */
+}
+
+/* 필터 드롭다운 우측 상단 배치 */
+.order-filter {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 10px 30px 20px 0;
+}
+
+/* 필터 드롭다운 */
+.order-filter select {
+  font-size: 13px;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: white;
+  cursor: pointer;
+}
+
+/* 리스트형 주문 아이템 (간격 없이, 하단 경계선만) */
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* 주문 아이템 구조 - 박스 대신 경계선 사용 */
+.order-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 5px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* 이미지 스타일 */
+.order-row img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  margin-right: 16px;
+}
+
+/* 상품 정보 */
+.order-info {
+  flex: 1;
+}
+
+.item-name {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.item-option,
+.item-count {
+  font-size: 13px;
+  color: #666;
+}
+
+/* 주문 정보 (우측 정렬) */
+.order-meta {
+  text-align: right;
+  font-size: 13px;
+}
+
+.order-date {
+  margin-bottom: 4px;
+  color: #666;
+}
+
+/* 상태별 컬러 */
+.order-status.shipping { color: #015FC1; }
+.order-status.cancel { color: #E63946; }
+.order-status.done { color: #2CA02C; }
+
+/* 페이지네이션 */
+.simple-pagination {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 40px 0 20px;
+  font-size: 14px;
+}
+
+.page-link {
+  text-decoration: none;
+  color: #333;
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+.page-link.active {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.page-link:hover {
+  text-decoration: underline;
+}
+
+footer {
+  text-align: center;
+  font-size: 12px;
+  color: #aaa;
+  padding: 20px 0;
+}

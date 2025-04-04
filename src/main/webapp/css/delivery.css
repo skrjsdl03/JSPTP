@@ -9,11 +9,11 @@ body {
 .top-nav {
   position: relative;
   width: 100%;
-  height: auto; /* ✅ 고정 height 제거 */
-  padding-top: 20px; /* ✅ 여백 추가 */
+  height: auto; /* 고정 height 제거 */
+  padding-top: 20px; /* 여백 추가 */
   padding-bottom: 10px;
   display: flex;
-  flex-direction: column;  /* ✅ 로고와 MYPAGE 아래로 쌓이게 */
+  flex-direction: column;  /* 로고와 MYPAGE 아래로 쌓이게 */
   align-items: center;
   justify-content: center;
 }
@@ -40,7 +40,7 @@ body {
 .logo-img {
   width: 110px;
   height: auto;
-  margin-bottom: 8px;    /* ✅ 로고와 MYPAGE 사이 간격 */
+  margin-bottom: 8px;    /* 로고와 MYPAGE 사이 간격 */
 }
 
 .mypage-title {
@@ -75,36 +75,35 @@ body {
   padding-bottom: 10px;
   border-bottom: 1px solid #888;
   display: inline-block;
-  width: 90%;  /* ✅ 경계선 길이 늘림 */
+  width: 90%;  /* 경계선 길이 늘림 */
 }
 
 .readonly-field {
-  color: #000;               /* ✅ 검정 텍스트 */
+  color: #000;               /* 검정 텍스트 */
   background-color: transparent;
   border: none;
   outline: none;
-  pointer-events: none;      /* ✅ 클릭 불가 */
+  pointer-events: none;      /* 클릭 불가 */
 }
 
-/* 사이드바 + 배송지 폼을 가로로 정렬 */
-.delivery-container {
+.page-container {
   display: flex;
+  flex-direction: row; /* 가로 정렬 */
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 60px;
   padding: 0 40px;
-  margin-top: 0;  /* 여백 제거 */
+  margin-top: 0;
 }
 
-/* 본문 콘텐츠 wrapper */
-.delivery-content {
+.page-content {
   flex: 1;
   max-width: 750px;
-  margin-top: 40px;
+  margin: 40px auto 0;
 }
 
 .delivery-box {
-  margin-top: 10px;   /* ✅ 기존보다 위로 올라오도록 조정 */
+  margin-top: 10px;   /* 기존보다 위로 올라오도록 조정 */
 }
 
 .delivery-top {

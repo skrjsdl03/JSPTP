@@ -145,7 +145,7 @@ form {
 input[type="text"],
 input[type="email"],
 input[type="number"],
-input[type="password"],  /* ✅ 비밀번호 필드 추가 */
+input[type="password"],  /* 비밀번호 필드 추가 */
 select {
   padding: 10px;
   font-size: 14px;
@@ -159,7 +159,7 @@ select {
 input[type="text"],
 input[type="number"],
 select {
-  color: #000; /* ✅ 이름 입력 필드 텍스트 검정색 */
+  color: #000; /* 이름 입력 필드 텍스트 검정색 */
 }
 
 input::placeholder {
@@ -273,6 +273,14 @@ input:focus::placeholder {
 .withdraw-link:hover {
   color: #ccc;         /* 색상 유지 */
   text-decoration: underline;
+}
+
+.guide-text {
+  color: #888;
+  font-size: 13px;
+  margin-top: 5px;
+  margin-bottom: 12px; /* 이 부분이 핵심! */
+  display: block;
 }
 
 footer {

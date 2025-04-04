@@ -15,7 +15,7 @@
 
 <%@ include file="includes/mypageHeader.jsp" %>
 
-  <div class="delivery-container">
+<div class="page-container">
     <div class="sidebar">
   <div class="user-box">
     <p class="username">정시영 님</p>
@@ -36,90 +36,49 @@
 </div>
 
   <!-- 배송지 폼을 위로 올리기 위한 래퍼 추가 -->
-  <div class="delivery-content">
+ <div class="order-content">
     <div class="delivery-title-wrap">
       <h2 class="delivery-title">배송지 관리</h2>
     </div>
 
-<!-- 기본 배송지-->
-<div class="delivery-box">
-  <div class="delivery-top">
-    <label><input type="radio" name="selected" checked> 기본 배송지</label>
-  </div>
-  <div class="delivery-inputs">
-    <input type="text" id="alias" class="input-tag" value="회사" readonly>
-    <input type="text" id="zipcode" class="input-zipcode" value="47340" readonly>
-    <button id="searchAddressBtn" class="btn-search" disabled>주소 검색</button>
-  </div>
-  <div class="delivery-inputs">
-    <input type="text" id="address1" class="input-full" value="부산광역시 부산진구 엄광로 176" readonly>
-    <input type="text" id="address2" class="input-full" value="동의대학교 중앙도서관" readonly>
-    <a href="#" class="btn-edit" onclick="enableBasicEdit()">수정</a>
-  </div>
-</div>
-
-<hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
-
-<!-- 다른 배송지 1 -->
-<div class="delivery-box">
-  <div class="delivery-top">
-    <label><input type="radio" name="selected" onclick="promoteToDefault(this)"> 다른 배송지</label>
-  </div>
-  <div class="delivery-inputs">
-    <input type="text" class="input-tag" value="학교" readonly>
-    <input type="text" class="input-zipcode" value="12345" readonly>
-    <button class="btn-search" disabled>주소 검색</button>
-  </div>
-  <div class="delivery-inputs">
-    <input type="text" class="input-full" value="부산광역시 부산진구 양정로 99" readonly>
-    <input type="text" class="input-full" value="컴퓨터공학관 202호" readonly>
-    <div class="action-group">
-      <a href="#" class="btn-edit" onclick="enableEdit(this)">수정</a>
-      <a href="#" class="btn-delete" onclick="deleteAddress(this)">삭제</a>
+   <!-- 기본 배송지 -->
+    <div class="delivery-box">
+      <div class="delivery-top">
+        <label><input type="radio" name="selected" checked> 기본 배송지</label>
+      </div>
+      <div class="delivery-inputs">
+        <input type="text" class="input-tag" value="회사" readonly>
+        <input type="text" class="input-zipcode" value="47340" readonly>
+        <button class="btn-search" disabled>주소 검색</button>
+      </div>
+      <div class="delivery-inputs">
+        <input type="text" class="input-full" value="부산광역시 부산진구 엄광로 176" readonly>
+        <input type="text" class="input-full" value="동의대학교 중앙도서관" readonly>
+        <a href="#" class="btn-edit" onclick="enableBasicEdit()">수정</a>
+      </div>
     </div>
-  </div>
-</div>
 
-<!-- 다른 배송지 2 -->
-<div class="delivery-box">
-  <div class="delivery-top">
-    <label><input type="radio" name="selected" onclick="promoteToDefault(this)"> 다른 배송지</label>
-  </div>
-  <div class="delivery-inputs">
-    <input type="text" class="input-tag" value="집" readonly>
-    <input type="text" class="input-zipcode" value="67890" readonly>
-    <button class="btn-search" disabled>주소 검색</button>
-  </div>
-  <div class="delivery-inputs">
-    <input type="text" class="input-full" value="서울특별시 강남구 테헤란로 100" readonly>
-    <input type="text" class="input-full" value="101동 202호" readonly>
-    <div class="action-group">
-      <a href="#" class="btn-edit" onclick="enableEdit(this)">수정</a>
-      <a href="#" class="btn-delete" onclick="deleteAddress(this)">삭제</a>
+    <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
+
+    <!-- 다른 배송지 예시 -->
+    <div class="delivery-box">
+      <div class="delivery-top">
+        <label><input type="radio" name="selected"> 다른 배송지</label>
+      </div>
+      <div class="delivery-inputs">
+        <input type="text" class="input-tag" value="학교" readonly>
+        <input type="text" class="input-zipcode" value="12345" readonly>
+        <button class="btn-search" disabled>주소 검색</button>
+      </div>
+      <div class="delivery-inputs">
+        <input type="text" class="input-full" value="부산광역시 부산진구 양정로 99" readonly>
+        <input type="text" class="input-full" value="컴퓨터공학관 202호" readonly>
+        <div class="action-group">
+          <a href="#" class="btn-edit" onclick="enableEdit(this)">수정</a>
+          <a href="#" class="btn-delete" onclick="deleteAddress(this)">삭제</a>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-
-<!-- 다른 배송지 3 -->
-<div class="delivery-box">
-  <div class="delivery-top">
-    <label><input type="radio" name="selected" onclick="promoteToDefault(this)"> 다른 배송지</label>
-  </div>
-  <div class="delivery-inputs">
-    <input type="text" class="input-tag" value="친구집" readonly>
-    <input type="text" class="input-zipcode" value="54321" readonly>
-    <button class="btn-search" disabled>주소 검색</button>
-  </div>
-  <div class="delivery-inputs">
-    <input type="text" class="input-full" value="대구광역시 수성구 동대구로 120" readonly>
-    <input type="text" class="input-full" value="아파트 3단지 305호" readonly>
-    <div class="action-group">
-      <a href="#" class="btn-edit" onclick="enableEdit(this)">수정</a>
-      <a href="#" class="btn-delete" onclick="deleteAddress(this)">삭제</a>
-    </div>
-  </div>
-</div>
-
 
 
     </div>
@@ -184,9 +143,8 @@
       radioInput.setAttribute("onclick", "promoteToDefault(this)");
 
       // 라벨 수정
-      currentDefault.querySelector(".delivery-top label").innerHTML = `
-        <input type="radio" name="selected" onclick="promoteToDefault(this)"> 다른 배송지
-      `;
+      currentDefault.querySelector(".delivery-top label").innerHTML = 
+    	  `<input type="radio" name="selected" onclick="promoteToDefault(this)"> 다른 배송지`;
 
       // 삭제 버튼이 없다면 추가
       const btnGroup = currentDefault.querySelector('.btn-group');
@@ -204,9 +162,8 @@
 
     // 선택한 박스를 기본 배송지로 승격
     radio.checked = true;
-    selectedBox.querySelector(".delivery-top label").innerHTML = `
-      <input type="radio" name="selected" checked> 기본 배송지
-    `;
+    selectedBox.querySelector(".delivery-top label").innerHTML = 
+    	`<input type="radio" name="selected" checked> 기본 배송지`;
 
     // 삭제 버튼 제거
     const deleteBtn = selectedBox.querySelector(".btn-delete");
@@ -230,7 +187,6 @@
     });
   });
 </script>
-
 
 </body>
 </html>
