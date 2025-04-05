@@ -32,11 +32,7 @@
   <link rel="icon" type="image/png" href="images/logo-white.png">
 </head>
 <body>
-<script>
-	function google(){
-		
-	}
-</script>
+
 
 <%@ include file="includes/loginHeader.jsp" %>
 <div class="login-container">

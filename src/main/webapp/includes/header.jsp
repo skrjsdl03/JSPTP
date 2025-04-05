@@ -1,4 +1,7 @@
 <!-- header.jsp -->
+<%
+		String id = (String)session.getAttribute("id");
+%>
 
 <!-- 상위 네비 -->
 <header class="top-nav">
@@ -19,9 +22,15 @@
 		</script>
 		
 	</div>
+	<%if(id==null){ %>
 	<div class="nav-right">
-		<a href="#">LOGIN</a> <a href="#">CART</a>
+		<a href="login.jsp">LOGIN</a> <a href="#">CART</a>
 	</div>
+	<%}else{ %>
+	<div class="nav-right">
+		<a href="logout.jsp">LOGOUT</a> <a href="#">CART</a>
+	</div>
+	<%} %>
 	
 	<!-- 사이드바 메뉴 -->
 	<div id="sidebar" class="sidebar">

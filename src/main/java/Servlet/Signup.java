@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import DAO.GmailSend;
 import DAO.UserDAO;
 import DTO.UserAddrDTO;
 import DTO.UserDTO;
@@ -95,7 +96,31 @@ public class Signup extends HttpServlet {
 		
 		userDao.insertUser(user, userAddr);
 		
-//		response.sendRedirect("login.jsp");
+		GmailSend mail = new GmailSend();
+		String title = "Welcome to everyWEAR 👟";
+		String content = "<html><body>"
+			    + "지금, 당신의 스타일이 달라집니다.<br><br>"
+			    + "<strong>everyWEAR에 오신 걸 진심으로 환영합니다 🎉</strong><br><br>"
+			    + "회원가입이 완료되었어요!<br>"
+			    + "앞으로 everyWEAR만의 감각적인 스타일과 특별한 혜택을<br>"
+			    + "가장 먼저 만나보실 수 있습니다.<br><br>"
+			    + "매주 업데이트되는 유니섹스 아이템,<br>"
+			    + "회원 전용 할인과 이벤트,<br>"
+			    + "그리고 당신만을 위한 스타일 큐레이션까지!<br><br>"
+			    + "매일의 옷장을 더 설레게 만들 새로운 선택들.<br>"
+			    + "이제, everyWEAR와 함께 시작해보세요 🖤<br><br>"
+			    + "🖤 감각적인 유니섹스 신상품<br>"
+			    + "🖤 전용 할인 쿠폰 및 시즌 이벤트<br>"
+			    + "🖤 나만을 위한 스타일 추천 서비스<br><br>"
+			    + "당신의 일상에 스타일을 더하는 브랜드,<br>"
+			    + "<strong>everyWEAR</strong>가 함께하겠습니다.<br><br>"
+			    + "Stay trendy,<br>"
+			    + "<strong>everyWEAR</strong>"
+			    + "</body></html>";
+		
+		mail.send(title, content, email);
+		
+		response.sendRedirect("login.jsp");
 	}
 
 }

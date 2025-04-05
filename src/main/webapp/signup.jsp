@@ -124,12 +124,17 @@
 <div class="signup-container">
   <h2>회원가입</h2>
 
-  <form action="signup" method="post" onsubmit="return handleEmailSubmit()">
+  <form action="signup" method="post" id="register" onsubmit="return handleEmailSubmit()">
 
 <%if(social == null){ %>
     <!-- 아이디 -->
     <label for="userId">아이디 <span style="color: red;">*</span></label>
-    <input type="text" id="userId" name="userId" placeholder="아이디를 입력하세요" required>
+    <div class="address-group">
+	    <input type="text" id="userId" name="userId" placeholder="아이디를 입력하세요" required>
+		<button type="button" class="search-btn" onclick="checkId()">중복 체크</button>
+	</div>
+	<div id="checkResult" style="font-size: 0.9em; margin-top: 5px;"></div>
+		
 
     <!-- 비밀번호 -->
     <label for="password">비밀번호 <span style="color: red;">*</span></label>
@@ -266,7 +271,7 @@
     <a href="#">자세히</a>
   </div>
 </div>
-    <button type="submit" class="signup-btn">회원가입</button>
+    <button type="button" class="signup-btn" onclick="register()">회원가입</button>
   </form>
 </div>
 
@@ -274,6 +279,61 @@
 
 <!-- ✅ Script 영역 -->
 <script>
+let isIdChecked = false;  // 중복확인 여부 저장
+
+function register(){
+	const pwd = document.getElementById("password").value.trim();
+	const pwd_ck = document.getElementById("confirmPassword").value.trim();
+	  if (!isIdChecked) {
+		    alert("아이디 중복 확인을 먼저 해주세요!");
+		    return;
+	  }
+	  
+	  
+}
+
+	//아이디 중복 체크
+function checkId() {
+	  const userIdInput = document.getElementById("userId");
+	  const userId = userIdInput.value;
+	  const resultDiv = document.getElementById("checkResult");
+
+	  if (userId === "") {
+	    resultDiv.innerText = "아이디를 입력하세요.";
+	    resultDiv.style.color = "red";
+	    return;
+	  }
+
+	  fetch("checkId?userId=" + encodeURIComponent(userId))
+	    .then(response => response.text())
+	    .then(data => {
+	      resultDiv.innerText = data;
+
+	      if (data.includes("사용 중")) {
+	        // 이미 사용 중인 아이디
+	        resultDiv.style.color = "red";
+	        isIdChecked = false;
+	      } else if (data.includes("사용 가능")) {
+	        // 사용 가능한 아이디
+	        resultDiv.style.color = "green";
+	        isIdChecked = true;
+	      } else {
+	        // 기타 메시지
+	        resultDiv.style.color = "black";
+	        isIdChecked = false;
+	      }
+	    })
+	    .catch(error => {
+	      resultDiv.innerText = "서버 에러가 발생했습니다.";
+	      resultDiv.style.color = "red";
+	      console.error("에러:", error);
+	    });
+    }
+document.getElementById("userId").addEventListener("input", () => {
+	  isIdChecked = false;
+	  document.getElementById("checkResult").innerText = ""; // 결과 초기화
+	});
+
   // 비밀번호 일치 확인
   const passwordInput = document.getElementById("password");
   const confirmPasswordInput = document.getElementById("confirmPassword");
