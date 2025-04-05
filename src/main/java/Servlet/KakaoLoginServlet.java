@@ -69,12 +69,11 @@ public class KakaoLoginServlet extends HttpServlet {
 			    response.sendRedirect("main.jsp");
 			} else {
 			    // 첫 가입
-			    userDao.insertSocialUser(email, nickname, "Kakao");
 			    session.setAttribute("id", email);
 			    session.setAttribute("userType", "Kakao");
 			    System.out.println("첫 회원가입");
 			    // 소셜로그인 전용 회원가입 화면으로 이동할 것.
-			    response.sendRedirect("main.jsp");
+			    response.sendRedirect("signup.jsp?social=Kakao");
 			}
 
 			

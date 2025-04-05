@@ -77,17 +77,18 @@
                        + "&access_type=online"
                        + "&response_type=code"
                        + "&redirect_uri=" + redirectUri
-                       + "&client_id=" + clientId;
+                       + "&client_id=" + clientId
+                       + "&prompt=select_account";
     %>
     
     
     <%
-//         String clientId_k = System.getenv("KAKAO_CLIENT_ID");
-    	String clientId_k = System.getenv("KAKAO_CLIENT_ID");
+	    String clientId_k = System.getenv("KAKAO_CLIENT_ID");
         String redirectUri_k = "http://everywear.ddns.net/JSPTP/KakaoLoginServlet";
         String authUrl_k = "https://kauth.kakao.com/oauth/authorize?response_type=code"
                 	   + "&client_id=" + clientId_k
-                       + "&redirect_uri=" + redirectUri_k;
+                       + "&redirect_uri=" + redirectUri_k
+                       + "&prompt=select_account";
     %>
     
 

@@ -28,7 +28,7 @@ public class UserDAO {
 		try {
 			con = pool.getConnection();
 			sql = "insert user values "
-					+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, now(), ?, ?, ?, 0, 'N', ?, 0, '그린')";
+					+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, now(), ?, 'N', ?, 0, 'N', ?, ?, '그린')";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, user.getUser_id());
 			pstmt.setString(2, user.getUser_pwd());
@@ -40,9 +40,9 @@ public class UserDAO {
 			pstmt.setInt(8, user.getUser_weight());
 			pstmt.setString(9, user.getUser_email());
 			pstmt.setString(10, user.getUser_phone());
-			pstmt.setString(11, user.getUser_email());
-			pstmt.setString(12, null);
-			pstmt.setString(13, user.getUser_marketing_state());
+			pstmt.setString(11, null);
+			pstmt.setString(12, user.getUser_marketing_state());
+			pstmt.setInt(13, user.getUser_point());
 			pstmt.executeUpdate();
 			insertAddr(addr, user.getUser_id(), "Y");
 		} catch (Exception e) {
@@ -52,18 +52,16 @@ public class UserDAO {
 		}
 	}
 	
-	//소셜 회원가입
-	public void insertSocialUser(String email, String name, String type) {
+	//추천인 적립금
+	public void updatePoint(String id) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
 		try {
 			con = pool.getConnection();
-			sql = "insert into user (user_id, user_name, user_type, created_at) values (?, ?, ?, now())";
+			sql = "update user set user_point = user_point + 3000 where user_id = ?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, email);
-			pstmt.setString(2, name);
-			pstmt.setString(3, type);
+			pstmt.setString(1, id);
 			pstmt.executeUpdate();
 
 		} catch (Exception e) {

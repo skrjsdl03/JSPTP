@@ -65,11 +65,10 @@ public class GoogleLoginServlet extends HttpServlet {
                 response.sendRedirect("main.jsp");
             } else {
                 // 첫 가입
-                userDao.insertSocialUser(email, name, "Google");
                 session.setAttribute("id", email);
                 session.setAttribute("userType", "Google");
                 System.out.println("첫 가입");
-                response.sendRedirect("main.jsp");
+                response.sendRedirect("signup.jsp?social=Google");
             }
 
         } catch (Exception e) {

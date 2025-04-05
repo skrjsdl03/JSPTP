@@ -164,14 +164,14 @@ input#address2 {
 
 .gender-group {
   display: flex;
-  gap: 16px; /* ← 라디오 버튼 사이 간격 (살짝 좁게) */
+  gap: 12px; /* ← 라디오 버튼 사이 간격 (살짝 좁게) */
   align-items: center;
   font-size: 14px;
 }
 
 /* 라디오 버튼과 텍스트 사이 간격 줄이기 */
 .gender-group input[type="radio"] {
-  margin-right: 4px; /* 기존보다 더 타이트하게 */
+  margin-right: 2px; /* 기존보다 더 타이트하게 */
 }
 
 /* 생년월일 */
@@ -222,18 +222,6 @@ input#address2 {
 
 .hw-group input {
   flex: 1;
-}
-
-/* 약관 영역 */
-.terms {
-  margin-top: 20px;
-  font-size: 13px;
-}
-
-.terms label {
-  display: block;
-  margin: 4px 0;
-  font-weight: normal;
 }
 
 /* 회원가입 버튼 */

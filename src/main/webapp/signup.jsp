@@ -1,5 +1,5 @@
 <!-- signup.jsp -->
-
+<%@ page import="DAO.PhoneSMS" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%
 		String social = request.getParameter("social");
@@ -13,7 +13,111 @@
   <link rel="icon" type="image/png" href="images/logo-white.png">
   <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
+<style>
+  .terms-section {
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .term-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .term-item label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+  }
+
+  .term-item a {
+    color: blue;
+    text-decoration: underline;
+    white-space: nowrap;
+    font-size: 13px;
+  }
+  
+ .phone-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 4px;
+    margin-bottom: 10px;
+  }
+
+.phone-group input {
+  width: 109px;
+  height: 42px;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f7fbff;
+  text-align: center;
+  font-size: 15px;
+}
+
+
+  .verify-btn {
+    margin-top: 5px;
+    width: 100%;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .auth-box {
+    margin-top: 15px;
+  }
+
+.auth-box input {
+  height: 42px;
+  padding: 0 12px;
+  font-size: 15px;
+  border-radius: 10px;
+  border: 1px solid #dcdcdc;
+  background-color: #f7fbff;
+}
+
+
+  .auth-btns {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    gap: 10px;
+  }
+
+  .resend-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #dcdcdc;
+    background-color: white;
+    cursor: pointer;
+  }
+
+  .confirm-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+</style>
 <body>
+
 
 <%@ include file="includes/loginHeader.jsp" %>
 
@@ -24,21 +128,21 @@
 
 <%if(social == null){ %>
     <!-- 아이디 -->
-    <label for="userId">아이디 *</label>
+    <label for="userId">아이디 <span style="color: red;">*</span></label>
     <input type="text" id="userId" name="userId" placeholder="아이디를 입력하세요" required>
 
     <!-- 비밀번호 -->
-    <label for="password">비밀번호 *</label>
+    <label for="password">비밀번호 <span style="color: red;">*</span></label>
     <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
 
     <!-- 비밀번호 확인 -->
-    <label for="confirmPassword">비밀번호 확인 *</label>
+    <label for="confirmPassword">비밀번호 확인 <span style="color: red;">*</span></label>
     <input type="password" id="confirmPassword" name="confirmPassword" placeholder="비밀번호를 다시 입력하세요" required>
 
     <div id="pwCheckMsg"></div>
 <%} %>
     <!-- 이름 -->
-    <label for="name">이름 *</label>
+    <label for="name">이름 <span style="color: red;">*</span></label>
     <input type="text" id="name" name="name" placeholder="이름을 입력하세요" required>
 
     <!-- 이메일 -->
@@ -63,7 +167,7 @@
     <input type="text" id="referrer" name="referrer" placeholder="추천인 아이디를 입력하세요">
 
     <!-- 주소 -->
-    <label for="address">주소 *</label>
+    <label for="address">주소 <span style="color: red;">*</span></label>
     <div class="address-group">
       <input type="text" id="zipcode" name="zipcode" placeholder="우편번호" readonly>
       <button type="button" class="search-btn" onclick="execDaumPostcode()">주소 검색</button>
@@ -71,44 +175,97 @@
     <input type="text" id="address1" name="address1" placeholder="기본 주소" required>
     <input type="text" id="address2" name="address2" placeholder="나머지 주소">
 
-    <!-- 성별 -->
-    <label>성별 *</label>
+<!--     성별
+    <label >성별 <span style="color: red;">*</span></label>
     <div class="gender-group">
       <input type="radio" id="male" name="gender" value="남자" required>
       <label for="male">남자</label>
       <input type="radio" id="female" name="gender" value="여자">
       <label for="female">여자</label>
-    </div>
+    </div> -->
+    
+    <div>
+	    <table class="gender-hw">
+	    	<tr>
+	    		<td width="70px"><label >성별 <span style="color: red;">*</span></label></td>
+	    		<td width="70px"></td>
+	    		<td width="130px"><label>키(선택사항)</label></td>
+	    		<td width="130px"><label>몸무게(선택사항)</label></td>
+	    	</tr>
+	    	<tr>
+	    		<td><input type="radio" id="male" name="gender" value="남자" required><span style="font-size: 15px">남자</span></td>
+	    		<td><input type="radio" id="female" name="gender" value="여자"><span style="font-size: 15px">여자</span></td>
+	    		<td><input type="text" id="height" name="height" maxlength="3" placeholder="키 (cm)"></td>
+	    		<td><input type="text"  id="weight" name="weight" maxlength="3" placeholder="몸무게 (kg)"></td>
+	    	</tr>
+	    </table>
+	</div>
+<!--         키 & 몸무게
+        <label>(선택사항)</label>
+    <div class="hw-group">
+      <input type="text" name="height" maxlength="3" placeholder="키 (cm)">
+      <input type="text" name="weight" maxlength="3" placeholder="몸무게 (kg)">
+    </div> -->
 
     <!-- 생년월일 -->
-    <label for="birth">생년월일 <span class="required">*</span></label>
+    <label for="birth">생년월일 <span class="required" style="color: red;">*</span></label>
     <div class="birth-container">
-        <input type="text" id="year" maxlength="4" placeholder="년">
+        <input type="text" name="year" id="year" maxlength="4" placeholder="년" required>
         <span class="birth-label">년</span>
-        <input type="text" id="month" maxlength="2" placeholder="월">
+        <input type="text" name="month" id="month" maxlength="2" placeholder="월" required>
         <span class="birth-label">월</span>
-        <input type="text" id="day" maxlength="2" placeholder="일">
+        <input type="text" name="day" id="day" maxlength="2" placeholder="일" required>
         <span class="birth-label">일</span>
     </div>
 
-    <!-- 키 & 몸무게 -->
-    <div class="hw-group">
-      <input type="number" name="height" placeholder="키 (cm)">
-      <input type="number" name="weight" placeholder="몸무게 (kg)">
-    </div>
+	<!-- 휴대전화 -->
+	<label for="phone1">휴대전화 <span style="color: red;">*</span></label>
+	<div class="phone-group">
+	  <input type="text" id="phone1" name="phone1" maxlength="3" value="010" readonly>
+	  <span>-</span>
+	  <input type="text" id="phone2" name="phone2" maxlength="4" placeholder="1234" required>
+	  <span>-</span>
+	  <input type="text" id="phone3" name="phone3" maxlength="4" placeholder="5678" required>
+	</div>
+	<button type="button" id="sendCodeBtn" class="verify-btn" onclick="showAuthBox()">인증</button>
+	
+	<!-- 인증번호 입력 박스 (초기에는 숨김) -->
+	<div id="authBox" class="auth-box" style="display: none;">
+	  <label for="authCode">인증번호</label>
+	  <input type="text" id="authCode" placeholder="인증번호를 입력하세요">
+	  <div class="auth-btns">
+	    <button type="button" class="resend-btn" onclick="showAuthBox()">재전송</button>
+	    <button type="button" class="confirm-btn" onclick="checkCode()">확인</button>
+	  </div>
+	</div>
+	
+	<!-- 최종 전송용 hidden input -->
+	<input type="hidden" id="phone" name="phone">
 
-    <!-- 휴대전화 -->
-    <label for="phone">휴대전화 *</label>
-    <input type="text" id="phone" name="phone" placeholder="전화번호를 입력하세요" required>
 
     <!-- 약관 동의 -->
-    <div class="terms">
-      <label><input type="checkbox" required> 만 14세 이상입니다. (필수)</label><br>
-      <label><input type="checkbox" required> 에브리웨어 이용 약관 (필수)</label><br>
-      <label><input type="checkbox"> 마케팅 수신 동의 (선택)</label><br>
-      <label><input type="checkbox"> 광고성 정보 수신 동의 (선택)</label><br>
-    </div>
+<div class="terms-section">
+  <h3>약관 동의</h3>
 
+  <div class="term-item">
+    <label><input type="checkbox" id="checkAll"> 약관 전체 동의하기(선택 동의 포함)</label>
+  </div>
+
+  <div class="term-item">
+    <label><input type="checkbox" class="term-check" required> 만 14세 이상입니다. (필수)</label>
+    <a href="#">자세히</a>
+  </div>
+
+  <div class="term-item">
+    <label><input type="checkbox" class="term-check" required> 에브리웨어 이용 약관 (필수)</label>
+    <a href="#">자세히</a>
+  </div>
+
+  <div class="term-item">
+    <label><input type="checkbox" name = "marketing" class="term-check"> 광고성 정보 수신 동의 (선택)</label>
+    <a href="#">자세히</a>
+  </div>
+</div>
     <button type="submit" class="signup-btn">회원가입</button>
   </form>
 </div>
@@ -158,23 +315,109 @@
   // 이메일 조합 후 hidden 필드에 입력
   function handleEmailSubmit() {
     const emailId = document.getElementById("emailId").value.trim();
-    const emailDomain = document.getElementById("emailDomain").value;
-    const emailFull = document.getElementById("email");
+    const emailDomain = document.getElementById("emailDomain").value.trim();
 
+    console.log(emailId);
+    console.log(emailDomain);
     if (emailId && emailDomain) {
-      emailFull.value = `${emailId}@${emailDomain}`;
+    	document.getElementById("email").value = emailId + "@" + emailDomain;
     } else {
-      emailFull.value = "";
+    	document.getElementById("email").value = null;
     }
-
     return true;
   }
   
+  	function showAuthBox() {
+		    // 휴대전화 번호 결합
+		  const p1 = document.getElementById('phone1').value.trim();
+		  const p2 = document.getElementById('phone2').value.trim();
+		  const p3 = document.getElementById('phone3').value.trim();
+		  console.log("p1:", p1, typeof p1);
+		  console.log("p2:", p2, typeof p2);
+		  console.log("p3:", p3, typeof p3);
+		  const p = p1+p2+p3;
+		  
+		  console.log("전화번호:", p); // 디버깅용
+		    if (!p.match(/^010\d{4}\d{4}$/)) {
+		      alert("전화번호 형식이 올바르지 않습니다.");
+		      return;
+		    }
+		    // 인증 버튼 숨기고 인증번호 입력창 보이기
+		    document.getElementById("sendCodeBtn").style.display = "none";
+		    document.getElementById("authBox").style.display = "block";
+		    
+		    fetch("sendSMS.jsp?phone=" + encodeURIComponent(p))
+		      .then(res => res.json())
+		      .then(data => {
+		        if (data.result === "success") {
+		          alert("인증번호가 전송되었습니다.");
+		          document.getElementById("authBox").style.display = "block";
+		        } else {
+		          alert("전송 실패");
+		        }
+		      });
+	  }
+  		
+	function checkCode(){
+		const writeCode = document.getElementById('authCode').value.trim();
+		 fetch("verifyCode.jsp?code=" + encodeURIComponent(writeCode))
+		    .then(res => res.json())
+		    .then(data => {
+		      if (data.result === "success") {
+		        alert("확인되었습니다.");
+			    document.getElementById("authBox").style.display = "none";
+			    document.getElementById("phone2").readOnly = true;
+			    document.getElementById("phone3").readOnly = true;
+		      } else {
+		        alert("인증번호가 틀렸습니다.");
+		      }
+		    });
+	}
+
+	  // 숫자만 입력되게
+	  ['phone2', 'phone3', 'authCode'].forEach(id => {
+	    document.getElementById(id).addEventListener('input', (e) => {
+	      e.target.value = e.target.value.replace(/[^0-9]/g, '');
+	    });
+	  });
+
+  
+  /* 생년월일 숫자만 입력 가능 */
   document.querySelectorAll('.birth-container input').forEach(input => {
       input.addEventListener('input', (e) => {
           e.target.value = e.target.value.replace(/[^0-9]/g, ''); // 숫자만 입력 가능
       });
   });
+  
+  /* 신체정보 숫자만 입력 가능 */
+	  ['height', 'weight'].forEach(id => {
+	    document.getElementById(id).addEventListener('input', (e) => {
+	      e.target.value = e.target.value.replace(/[^0-9]/g, '');
+	    });
+	  });
+  
+  
+  /* 약관 전체 동의 */
+  const checkAll = document.getElementById("checkAll");
+  const termChecks = document.querySelectorAll(".term-check");
+
+  // 전체 동의 체크/해제
+  checkAll.addEventListener("change", function () {
+    termChecks.forEach(chk => chk.checked = this.checked);
+  });
+
+  // 개별 체크 해제 시 전체 동의 체크 해제
+  termChecks.forEach(chk => {
+    chk.addEventListener("change", function () {
+      if (!this.checked) {
+        checkAll.checked = false;
+      } else {
+        const allChecked = Array.from(termChecks).every(chk => chk.checked);
+        checkAll.checked = allChecked;
+      }
+    });
+  });
+
 </script>
 
 </body>
