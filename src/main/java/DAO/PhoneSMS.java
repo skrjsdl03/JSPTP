@@ -9,11 +9,12 @@ import net.nurigo.java_sdk.exceptions.CoolsmsException;
 
 public class PhoneSMS {
 
-	public static void main(String[] args) {
+	public static String sendSMS(String phoneNumber) {
 		
         //발급받은 key, secret 작성
         String api_key = "NCSTTZTXXEAAU823";
 	String api_secret = "S46JYZXLNURBVNA9KVUMAW3L6QXLTRPW";
+	
 		
         //인증 번호 출력 코드
 		String code = "";
@@ -27,7 +28,7 @@ public class PhoneSMS {
 		
 		HashMap<String, String> params = new HashMap<String, String>();
 		
-		params.put("to", "01072103293");			//송신자 번호('-' 없이 작성)
+		params.put("to", phoneNumber);			//송신자 번호('-' 없이 작성)
 		params.put("from", "01033989352");			//발송자 번호('-' 작성)
 		params.put("type", "SMS");
         
@@ -43,5 +44,6 @@ public class PhoneSMS {
 			System.out.println(e.getMessage());
 			System.out.println(e.getCode());
 		}
+		return code;
 	}
 }

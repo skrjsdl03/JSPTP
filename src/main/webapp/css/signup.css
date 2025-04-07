@@ -1,5 +1,3 @@
-@charset "UTF-8";
-
 /* 전체 폰트와 기본 설정 */
 body {
   font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
@@ -12,29 +10,29 @@ body {
 }
 
 .back-btn-wrap {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 10;
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	z-index: 10;
 }
 
 .back-btn {
-  font-size: 24px;
-  text-decoration: none;
-  color: black;
-  background: none;
-  border: none;
-  cursor: pointer;
+	font-size: 24px;
+	text-decoration: none;
+	color: black;
+	background: none;
+	border: none;
+	cursor: pointer;
 }
 
 .logo-wrap {
-  text-align: center;
-  margin-top: 30px;
-  margin-bottom: 20px;
+	text-align: center;
+	margin-top: 30px;
+	margin-bottom: 20px;
 }
 
 .logo-img {
-  width: 150px;
+	width: 150px;
 }
 
 /* 회원가입 컨테이너 */
@@ -65,11 +63,11 @@ input::placeholder {
   transition: opacity 0.2s ease;
 }
 
+/* 포커스되면 placeholder 투명하게 */
 input:focus::placeholder {
   opacity: 0;
 }
 
-/* 이메일 */
 .email-input-group {
   display: flex;
   align-items: center;
@@ -125,30 +123,19 @@ input[type="number"] {
   box-sizing: border-box;
 }
 
-/* 주소 검색 버튼 */
+/* 검색 버튼도 높이 맞춤 */
 .search-btn {
   height: 40px;
   padding: 0 14px;
   background-color: black;
   color: white;
-  font-size: 14px;
-  font-weight: bold;
   border: none;
   border-radius: 8px;
+  font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
-.search-btn:hover {
-  background-color: #222;
-}
-
-.search-btn:disabled {
-  background-color: #ccc;
-  color: #eee;
-  cursor: not-allowed;
-}
-
+/* 기본 주소 & 나머지 주소 */
 input#address1,
 input#address2 {
   width: 100%;
@@ -164,7 +151,7 @@ input#address2 {
 #pwCheckMsg {
   font-size: 13px;
   margin-top: 4px;
-  height: 18px;
+  height: 18px; /* 공간 확보 */
 }
 
 .match {
@@ -175,16 +162,55 @@ input#address2 {
   color: red;
 }
 
-/* 성별 */
 .gender-group {
   display: flex;
-  gap: 16px;
+  gap: 12px; /* ← 라디오 버튼 사이 간격 (살짝 좁게) */
   align-items: center;
   font-size: 14px;
 }
 
+/* 라디오 버튼과 텍스트 사이 간격 줄이기 */
 .gender-group input[type="radio"] {
-  margin-right: 4px;
+  margin-right: 2px; /* 기존보다 더 타이트하게 */
+}
+
+/* 생년월일 */
+.birth-wrapper {
+    display: flex;
+    flex : 1;
+    align-items: center;
+    gap: 10px; /* 입력 필드와 라벨 간 간격 */
+}
+
+.birth-container {
+    display: flex;
+    flex : 1;
+    align-items: center;
+    gap: 8px; /* 입력 필드 간 간격 */
+}
+
+.birth-input {
+    position: relative;
+    display: flex; /* ✅ 가로 정렬 */
+    align-items: center;
+}
+
+.birth-input input {
+    width: 60px;
+    height: 32px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 15px; /* 둥글게 */
+    background-color: #f7fafd;
+    font-size: 16px;
+    padding-right: 18px; /* 오른쪽 공간 확보 */
+}
+
+.birth-input span {
+    position: absolute;
+    right: 8px; /* 년, 월, 일 위치 조정 */
+    font-size: 14px;
+    color: #555;
 }
 
 /* 키 & 몸무게 */
@@ -196,18 +222,6 @@ input#address2 {
 
 .hw-group input {
   flex: 1;
-}
-
-/* 약관 영역 */
-.terms {
-  margin-top: 20px;
-  font-size: 13px;
-}
-
-.terms label {
-  display: block;
-  margin: 4px 0;
-  font-weight: normal;
 }
 
 /* 회원가입 버튼 */
@@ -229,70 +243,6 @@ input#address2 {
   background-color: #222;
 }
 
-/* ✅ 휴대전화 인증 */
-.phone-input-group {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.phone-input-group input {
-  flex: 1;
-  padding: 10px;
-  font-size: 14px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  text-align: center;
-}
-
-.phone-input-group span {
-  font-size: 14px;
-}
-
-.phone-input-group input[readonly] {
-  color: #000;
-  pointer-events: none;      /* 커서 비활성화 */
-}
-
-
-.verify-btn-group {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.btn.black {
-  background-color: black;
-  color: white;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  width: 100%;
-  font-weight: bold;
-}
-
-.btn.white {
-  background-color: white;
-  border: 1px solid #ccc;
-  color: black;
-  padding: 10px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  width: 100%;
-  font-weight: bold;
-}
-
-#verifyCode {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
-  margin-top: 8px;
-}
 
 /* 푸터 */
 footer {

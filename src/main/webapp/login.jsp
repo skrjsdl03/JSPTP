@@ -29,14 +29,10 @@
   <title>로그인 | everyWEAR</title>
 <link rel="stylesheet" type="text/css" href="css/login.css?v=2">
   <link rel="stylesheet" type="text/css" href="css/header.css">
-  <link rel="icon" type="image/png" href="images/logo-white.png">
+  <link rel="icon" type="image/png" href="images/fav-icon.png">
 </head>
 <body>
-<script>
-	function google(){
-		
-	}
-</script>
+
 
 <%@ include file="includes/loginHeader.jsp" %>
 <div class="login-container">
@@ -77,18 +73,32 @@
                        + "&access_type=online"
                        + "&response_type=code"
                        + "&redirect_uri=" + redirectUri
-                       + "&client_id=" + clientId;
+                       + "&client_id=" + clientId
+                       + "&prompt=select_account";
     %>
+    
+    
+    <%
+	    String clientId_k = System.getenv("KAKAO_CLIENT_ID");
+        String redirectUri_k = "http://everywear.ddns.net/JSPTP/KakaoLoginServlet";
+        String authUrl_k = "https://kauth.kakao.com/oauth/authorize?response_type=code"
+                	   + "&client_id=" + clientId_k
+                       + "&redirect_uri=" + redirectUri_k
+                       + "&prompt=select_account";
+    %>
+    
 
   <div class="social-login">
-    <a class="social-btn google" href="<%=authUrl %>">
+    <a class="social-btn google" href="<%=authUrl%>">
       <img src="images/Google.png" alt="Google">
       <span>Sign in with Google</span>
     </a>
-    <button class="social-btn kakao">
-      <img src="images/kakao.png" alt="KakaoTalk">
-      <span>Sign in with KakaoTalk</span>
-    </button>
+    <br>
+    <a class="social-btn kakao" href="<%=authUrl_k%>">
+      <img src="images/kakao.png" alt="Kakao">
+      <span>Sign in with Kakao</span>
+    </a>
+    
     <button class="social-btn naver">
       <img src="images/Naver.png" alt="Naver">
       <span>Sign in with Naver</span>

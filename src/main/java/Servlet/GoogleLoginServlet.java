@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.*;
 import java.net.*;
+
 import org.json.JSONObject;
 
 import DAO.UserDAO;
@@ -12,7 +13,7 @@ import DAO.UserDAO;
 @WebServlet("/GoogleLoginServlet")
 public class GoogleLoginServlet extends HttpServlet {
     private static final String CLIENT_ID = System.getenv("GOOGLE_CLIENT_ID");
-    private static final String CLIENT_SECRET = System.getenv("GOOGLE_CLIENT_SECRET"); // 환경 변수로 저장 추천
+    private static final String CLIENT_SECRET = System.getenv("GOOGLE_CLIENT_SECRET");
     private static final String REDIRECT_URI = "http://everywear.ddns.net/JSPTP/GoogleLoginServlet";
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -36,7 +37,6 @@ public class GoogleLoginServlet extends HttpServlet {
             String tokenResponse = sendPostRequest(tokenURL, params);
             JSONObject tokenJson = new JSONObject(tokenResponse);
             String accessToken = tokenJson.getString("access_token");
-            String idToken = tokenJson.getString("id_token"); // 🔹 id_token 추가
 
             // 2. 사용자 정보 요청
             String userInfoResponse = sendGetRequest("https://www.googleapis.com/oauth2/v2/userinfo", accessToken);
@@ -44,28 +44,33 @@ public class GoogleLoginServlet extends HttpServlet {
             String email = userJson.getString("email");
             String name = userJson.getString("name");
 
-			/*
-			 * // 3. 세션 저장 (로그인 처리) HttpSession session = request.getSession();
-			 * session.setAttribute("userEmail", email); session.setAttribute("userName",
-			 * name);
-			 */
-            
             HttpSession session = request.getSession();
-            String id = (String)session.getAttribute("id");
-            if(email.equals(id)) {	//이미 로그인 했을 때
-            	response.sendRedirect("main.jsp");
-            } else {	//로그인 상태가 아닐때
-                UserDAO userDao = new UserDAO();
-                if(userDao.idCheck(email)) {	//이미 회원가입 한적 있을 떄
-                    response.sendRedirect("main.jsp");
-                } else {	//처음 가입할 때
-	                userDao.insertSocialUser(email, name, "Google");
-	                session.setAttribute("id", email);
-	                response.sendRedirect("main.jsp");
-                }
+            String sessionId = (String) session.getAttribute("id");
+            String sessionType = (String) session.getAttribute("userType");
+
+            UserDAO userDao = new UserDAO();
+
+            if ("Google".equals(sessionType) && email.equals(sessionId)) {
+                // 동일한 Google 로그인 세션이 이미 존재함
+                System.out.println("세션 로그인 상태");
+                response.sendRedirect("main.jsp");
+                return;
             }
 
-            
+            if (userDao.isSocialUserExists(email, "Google")) {
+                // 이미 가입한 구글 계정
+                session.setAttribute("id", email);
+                System.out.println("이미 가입한 계정");
+                userDao.insertLog(email, "로그인");
+                response.sendRedirect("main.jsp");
+            } else {
+                // 첫 가입
+                session.setAttribute("id", email);
+                session.setAttribute("userType", "Google");
+                System.out.println("첫 가입");
+                response.sendRedirect("signup.jsp?social=Google");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");

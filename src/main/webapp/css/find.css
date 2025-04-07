@@ -100,7 +100,7 @@ input[type="text"] {
 }
 
 .email-input-group input {
-  width: 160px;
+  width: 190px;
   padding: 10px;
   font-size: 14px;
   border: 1px solid #ccc;
@@ -110,7 +110,7 @@ input[type="text"] {
 }
 
 .email-input-group select {
-  width: 160px;
+  width: 183px;
   padding: 10px;
   font-size: 14px;
   border: 1px solid #ccc;
