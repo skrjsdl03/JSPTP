@@ -60,7 +60,6 @@ public class GoogleLoginServlet extends HttpServlet {
             if (userDao.isSocialUserExists(email, "Google")) {
                 // 이미 가입한 구글 계정
                 session.setAttribute("id", email);
-                session.setAttribute("userType", "Google");
                 System.out.println("이미 가입한 계정");
                 userDao.insertLog(email, "로그인");
                 response.sendRedirect("main.jsp");

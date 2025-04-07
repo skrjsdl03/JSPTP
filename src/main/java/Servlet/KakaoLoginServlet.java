@@ -53,7 +53,7 @@ public class KakaoLoginServlet extends HttpServlet {
 			UserDAO userDao = new UserDAO();
 			
 			
-			if ("Google".equals(sessionType) && email.equals(sessionId)) {
+			if ("Kakao".equals(sessionType) && email.equals(sessionId)) {
 			    // 동일한 Google 로그인 세션이 이미 존재함
 			    System.out.println("세션 로그인 상태");
 			    response.sendRedirect("main.jsp");
@@ -64,7 +64,6 @@ public class KakaoLoginServlet extends HttpServlet {
 			if (userDao.isSocialUserExists(email, "Kakao")) {
 			    // 이미 가입한 카카오 계정
 			    session.setAttribute("id", email);
-			    session.setAttribute("userType", "Kakao");
 			    System.out.println("이미 가입한 카카오 계정");
 			    userDao.insertLog(email, "로그인");
 			    response.sendRedirect("main.jsp");
