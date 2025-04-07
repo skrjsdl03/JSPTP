@@ -38,7 +38,6 @@
 
 <!-- 주문 내역 본문 시작 -->
 <div class="order-content">
-
   <!-- 타이틀 + 경계선 -->
   <div class="delivery-title-wrap">
     <h2 class="delivery-title">주문 내역</h2>
