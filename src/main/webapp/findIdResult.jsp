@@ -7,7 +7,6 @@
 <%
 		
 		String type = request.getParameter("authType");
-		
 		Vector<UserDTO> ulist = new Vector<UserDTO>();
 		String name = null;
 		
@@ -19,7 +18,9 @@
 			String phone = phone1 + "-" + phone2 + "-" + phone3;
 			ulist = userDao.findIdByPhone(name, phone);
 		} else if(type.equals("email")) {
-			
+			name = request.getParameter("name");
+			String email = request.getParameter("email");
+			ulist = userDao.findIdByEmail(name, email);
 		}
 %>
 <!DOCTYPE html>

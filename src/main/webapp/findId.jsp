@@ -56,7 +56,7 @@
     <option value="nate.com">nate.com</option>
   </select>
 </div>
-<input type="hidden" id="email" name="email">
+<input type="hidden" id="email1" name="email">
 
     <!-- 인증 버튼 -->
     <div id="authBtnBox">
@@ -146,7 +146,6 @@
 		    .then(data => {
 		      if (data.result === "success") {
 		        alert("확인되었습니다.");
-		        console.log("이름: " + name.value);
 		        if(name.value.trim() == null || name.value.trim() == ""){
 		        	alert("이름을 입력하시오.");
 		        	name.focus();
@@ -164,9 +163,9 @@
     const emailId = document.getElementById("emailId").value.trim();
     const emailDomain = document.getElementById("emailDomain").value.trim();
     if (emailId && emailDomain) {
-    	document.getElementById("email").value = emailId + "@" + emailDomain;
+    	document.getElementById("email1").value = emailId + "@" + emailDomain;
     } else {
-    	document.getElementById("email").value = null;
+    	document.getElementById("email1").value = null;
     }
     return true;
   }
@@ -174,7 +173,7 @@
 function showAuthBoxByEmail(){
 	if(handleEmailSubmit()){
 	    const name = document.getElementById("name").value;
-	    const email = document.getElementById("email").value;
+	    const email = document.getElementById("email1").value;
 	
 	    if (!name || !email) {
 	        alert("이름과 이메일을 모두 입력해주세요.");

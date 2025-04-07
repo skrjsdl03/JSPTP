@@ -371,17 +371,16 @@ public class UserDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
-		Vector<UserDTO> vlist = null;
+		Vector<UserDTO> vlist = new Vector<UserDTO>();
 		try {
 			con = pool.getConnection();
 			sql = "select user_id, user_rank, created_at from user "
-					+ "where user_name = ? and user_email = ?";
+					+ "where user_name = ? and user_email = ? and user_type = '일반'";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, name);
 			pstmt.setString(2, email);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
-				vlist = new Vector<UserDTO>();
 				UserDTO user = new UserDTO();
 				user.setUser_id(rs.getString(1));
 				user.setUser_rank(rs.getString(2));

@@ -4,7 +4,7 @@
 <%
 		String name = request.getParameter("name");
 		String email = request.getParameter("email");
-		int authNum = new Random().nextInt(900000) + 100000;
+		String authNum = (new Random().nextInt(900000) + 100000) + "";
 		session.setAttribute("authCode", authNum);
 		
 		String title = "[everyWEAR] 이메일 인증번호입니다.";
