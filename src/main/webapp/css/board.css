@@ -68,18 +68,14 @@ h2 {
 	border-collapse: collapse;
 }
 
-.notice-table .important td {
-	color: red !important;
-	font-weight: bold;
-}
-
-.notice-table .important td a {
-	color: red !important;
-	font-weight: bold;
+.notice-table .important {
+  background-color: #f0f8ff; /* 원하는 색상으로 변경 가능 */
+  font-weight: bold;
 }
 
 .notice-table tr {
 	border-bottom: 1px solid #BBBBBB;
+	border-top: 1px solid #BBBBBB;
 }
 
 .notice-table td {
@@ -89,11 +85,11 @@ h2 {
 
 .notice-table td a {
 	text-decoration: none;
+	color: black;
 }
 
 .notice-content {
   padding: 20px;
-  background-color: #f9f9f9;
   border-top: 1px solid #ddd;
 }
 
