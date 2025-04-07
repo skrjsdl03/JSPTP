@@ -9,6 +9,8 @@
 </head>
 <body>
 	<div class="login-container">
+		<img src="<%=request.getContextPath()%>/images/logo-black.png"
+			alt="Logo" class="login-logo">
 		<h2>관리자 로그인</h2>
 		<form>
 			<label>ID</label> <input type="text" name="adminId"
