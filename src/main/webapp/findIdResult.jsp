@@ -7,7 +7,6 @@
   <meta charset="UTF-8">
   <title>검색 결과 | everyWEAR</title>
   <link rel="stylesheet" type="text/css" href="css/find.css">
-  <link rel="stylesheet" type="text/css" href="css/header.css">
   <link rel="stylesheet" type="text/css" href="css/findResult.css">
   <link rel="icon" type="image/png" href="images/logo-white.png">
 </head>

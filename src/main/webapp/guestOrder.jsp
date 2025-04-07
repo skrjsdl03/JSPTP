@@ -8,7 +8,6 @@
     <title>비회원 주문 조회 | everyWEAR</title>
 
     <link rel="stylesheet" type="text/css" href="css/login.css">
-    <link rel="stylesheet" type="text/css" href="css/header.css">
     <link rel="icon" type="image/png" href="images/logo-white.png">
 </head>
 <body>
