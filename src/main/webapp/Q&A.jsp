@@ -5,54 +5,52 @@
 <meta charset="UTF-8">
 <title>에브리웨어 | everyWEAR</title>
 <link rel="icon" type="image/png" href="images/fav-icon.png">
-<link rel="stylesheet" type="text/css" href="css/board.css?v=124">
+<link rel="stylesheet" type="text/css" href="css/Q&A.css?v=123">
 </head>
 <body>
 
 	<%@ include file="includes/boardHeader.jsp"%>
 
 	<section2 class="content2">
-	<h3>BOARD</h3>
+	<h3>Q&A</h3>
 	</section2>
 
 	<div class="container">
 		<aside class="sidebar2">
 			<ul>
-				<li><a href="board.jsp?reload=true">BOARD</a></li>
+				<li><a href="board.jsp">BOARD</a></li>
 				<li><a href="FAQ.jsp">FAQ</a></li>
 				<li><a href="Q&A.jsp">Q&A</a></li>
 				<li><a href="review.jsp">REVIEW</a></li>
 			</ul>
 		</aside>
 
-		<section class="content" >
+		<section class="content">
 			<table class="notice-table">
-				<tr class="important">
-					<td><a href="noticeFix.jsp">※ 이용 안내</a></td>
+				<tr>
+					<td>&#128274; 배송관련 문의입니다.</td>
+					<td>답변 예정</td>
 					<td>2025-03-30</td>
-					<td>조회수: 56</td>
+					<td>배송 문의</td>
 				</tr>
 				<tr>
-					<td><a href="#">일부 지역 배송 제한 안내</a></td>
+					<td>&#128274; 제품 상세 문의입니다.</td>
+					<td>답변 완료</td>
 					<td>2025-03-30</td>
-					<td>조회수: 56</td>
+					<td>제품 상세 문의</td>
 				</tr>
 				<tr>
-					<td><a href="#">일부 지역 배송 제한 안내</a></td>
+					<td>&#128274; 제품 상세 문의입니다.</td>
+					<td>답변 완료</td>
 					<td>2025-03-30</td>
-					<td>조회수: 56</td>
-				</tr>
-				<tr>
-					<td><a href="#">일부 지역 배송 제한 안내</a></td>
-					<td>2025-03-30</td>
-					<td>조회수: 56</td>
-				</tr>
-				<tr>
-					<td><a href="#">일부 지역 배송 제한 안내</a></td>
-					<td>2025-03-30</td>
-					<td>조회수: 56</td>
+					<td>제품 상세 문의</td>
 				</tr>
 			</table>
+
+			<div class="write-btn-wrapper">
+				<button class="write-btn" onclick="location.href='writeForm.jsp'">작성하기</button>
+			</div>
+
 
 			<div class="pagination">
 				<span>Prev</span> <span class="active">1</span> <span>2</span> <span>3</span>

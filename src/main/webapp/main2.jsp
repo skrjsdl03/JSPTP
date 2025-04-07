@@ -57,21 +57,23 @@
 	<!-- Swiper 스크립트 -->
 	<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 	<script>
-		const swiper = new Swiper('.swiper', {
-			speed : 650,
-			navigation : {
-				nextEl : '.swiper-button-next',
-				prevEl : '.swiper-button-prev',
-			},
-			autoplay : {
-				delay : 3000,
-				disableOnInteraction : false,
-			},
-			grabCursor : true,
-			loop : true,
-			slidesPerView : 1, // 한 번에 1장만 보이게
-			centeredSlides : false, // 가운데 정렬 X (필요 시 true로도 가능)
-			spaceBetween : 0,
+		document.addEventListener('DOMContentLoaded', function() {
+			const swiper = new Swiper('.swiper', {
+				speed : 650,
+				navigation : {
+					nextEl : '.swiper-button-next',
+					prevEl : '.swiper-button-prev',
+				},
+				autoplay : {
+					delay : 3000,
+					disableOnInteraction : false,
+				},
+				grabCursor : true,
+				loop : true,
+				slidesPerView : 1, // 한 번에 1장만 보이게
+				centeredSlides : false, // 가운데 정렬 X (필요 시 true로도 가능)
+				spaceBetween : 0,
+			})
 		});
 	</script>
 

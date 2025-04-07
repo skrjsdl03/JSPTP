@@ -5,50 +5,50 @@
 <meta charset="UTF-8">
 <title>에브리웨어 | everyWEAR</title>
 <link rel="icon" type="image/png" href="images/fav-icon.png">
-<link rel="stylesheet" type="text/css" href="css/board.css?v=124">
+<link rel="stylesheet" type="text/css" href="css/FAQ.css?v=123">
 </head>
 <body>
 
 	<%@ include file="includes/boardHeader.jsp"%>
-
+	
 	<section2 class="content2">
-	<h3>BOARD</h3>
+		<h3>FAQ</h3>
 	</section2>
 
 	<div class="container">
 		<aside class="sidebar2">
 			<ul>
-				<li><a href="board.jsp?reload=true">BOARD</a></li>
+				<li><a href="board.jsp">BOARD</a></li>
 				<li><a href="FAQ.jsp">FAQ</a></li>
 				<li><a href="Q&A.jsp">Q&A</a></li>
 				<li><a href="review.jsp">REVIEW</a></li>
 			</ul>
 		</aside>
 
-		<section class="content" >
+		<section class="content">
 			<table class="notice-table">
-				<tr class="important">
-					<td><a href="noticeFix.jsp">※ 이용 안내</a></td>
+				<tr>
+					<td>상품/상품 박스가 파손되어 배송됐어요.</td>
 					<td>2025-03-30</td>
 					<td>조회수: 56</td>
 				</tr>
 				<tr>
-					<td><a href="#">일부 지역 배송 제한 안내</a></td>
+					<td>교환/반품 비용은 무료인가요?</td>
 					<td>2025-03-30</td>
 					<td>조회수: 56</td>
 				</tr>
 				<tr>
-					<td><a href="#">일부 지역 배송 제한 안내</a></td>
+					<td>반품접수는 어떻게 하나요?</td>
 					<td>2025-03-30</td>
 					<td>조회수: 56</td>
 				</tr>
 				<tr>
-					<td><a href="#">일부 지역 배송 제한 안내</a></td>
+					<td>배송조회는 어떻게 하나요?</td>
 					<td>2025-03-30</td>
 					<td>조회수: 56</td>
 				</tr>
 				<tr>
-					<td><a href="#">일부 지역 배송 제한 안내</a></td>
+					<td>언제 환불되나요?</td>
 					<td>2025-03-30</td>
 					<td>조회수: 56</td>
 				</tr>

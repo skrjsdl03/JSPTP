@@ -68,16 +68,6 @@ h2 {
 	border-collapse: collapse;
 }
 
-.notice-table .important td {
-	color: red !important;
-	font-weight: bold;
-}
-
-.notice-table .important td a {
-	color: red !important;
-	font-weight: bold;
-}
-
 .notice-table tr {
 	border-bottom: 1px solid #BBBBBB;
 }
@@ -85,21 +75,6 @@ h2 {
 .notice-table td {
 	padding: 14px 10px;
 	font-size: 14px;
-}
-
-.notice-table td a {
-	text-decoration: none;
-}
-
-.notice-content {
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-top: 1px solid #ddd;
-}
-
-.notice-body p {
-  margin: 0 0 10px;
-  line-height: 1.6;
 }
 
 .pagination {

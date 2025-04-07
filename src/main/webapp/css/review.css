@@ -68,16 +68,6 @@ h2 {
 	border-collapse: collapse;
 }
 
-.notice-table .important td {
-	color: red !important;
-	font-weight: bold;
-}
-
-.notice-table .important td a {
-	color: red !important;
-	font-weight: bold;
-}
-
 .notice-table tr {
 	border-bottom: 1px solid #BBBBBB;
 }
@@ -87,19 +77,42 @@ h2 {
 	font-size: 14px;
 }
 
-.notice-table td a {
-	text-decoration: none;
+.product-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
 }
 
-.notice-content {
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-top: 1px solid #ddd;
+.product-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
 }
 
-.notice-body p {
-  margin: 0 0 10px;
-  line-height: 1.6;
+.product-info {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.write-btn-wrapper {
+  text-align: right;
+  margin-top: 20px;
+}
+
+.write-btn {
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.write-btn:hover {
+  background-color: #333;
 }
 
 .pagination {

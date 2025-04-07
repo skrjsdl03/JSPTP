@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <title>에브리웨어 | everyWEAR</title>
-<link rel="stylesheet" type="text/css" href="css/board.css?v=127">
+<link rel="stylesheet" type="text/css" href="css/boardHeader.css?v=123">
 <link rel="icon" type="image/png" href="images/fav-icon.png">
 </head>
 <body>
