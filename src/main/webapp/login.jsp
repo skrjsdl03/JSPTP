@@ -29,7 +29,7 @@
   <title>로그인 | everyWEAR</title>
 <link rel="stylesheet" type="text/css" href="css/login.css?v=2">
   <link rel="stylesheet" type="text/css" href="css/header.css">
-  <link rel="icon" type="image/png" href="images/logo-white.png">
+  <link rel="icon" type="image/png" href="images/fav-icon.png">
 </head>
 <body>
 

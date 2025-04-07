@@ -14,7 +14,7 @@ public class UserDAO {
 	
 	private DBConnectionMgr pool;
 	
-	private final SimpleDateFormat SDF_DATE = new SimpleDateFormat("yyyy - MM - dd");
+	private final SimpleDateFormat SDF_DATE = new SimpleDateFormat("yyyy-MM-dd");
 	
 	public UserDAO() {
 		pool = DBConnectionMgr.getInstance();
@@ -28,7 +28,7 @@ public class UserDAO {
 		try {
 			con = pool.getConnection();
 			sql = "insert user values "
-					+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, now(), ?, 'N', ?, 0, 'N', ?, ?, '그린')";
+					+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, now(), ?, '정상', ?, 0, 'N', ?, ?, '그린')";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, user.getUser_id());
 			pstmt.setString(2, user.getUser_pwd());
@@ -341,17 +341,16 @@ public class UserDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
-		Vector<UserDTO> vlist = null;
+		Vector<UserDTO> vlist  = new Vector<UserDTO>();
 		try {
 			con = pool.getConnection();
 			sql = "select user_id, user_rank, created_at from user "
-					+ "where user_name = ? and user_phone = ?";
+					+ "where user_name = ? and user_phone = ? and user_type = '일반'";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, name);
 			pstmt.setString(2, phone);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
-				vlist = new Vector<UserDTO>();
 				UserDTO user = new UserDTO();
 				user.setUser_id(rs.getString(1));
 				user.setUser_rank(rs.getString(2));

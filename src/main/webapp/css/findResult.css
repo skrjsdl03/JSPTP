@@ -40,7 +40,7 @@ body {
   width: 100%;
   max-width: 400px;
   padding: 20px;
-  margin-top: 80px;
+  margin-top: 20px;
   text-align: center;
 }
 
@@ -50,21 +50,24 @@ h2 {
 }
 
 .description {
-  font-size: 14px;
+  font-size: 16px;
   color: #333;
   margin-bottom: 30px;
   line-height: 1.6;
 }
 
 .result-box {
-  display: flex;
+  display: block;
   align-items: center; /* ✅ 세로 정렬 중앙으로 맞춤 */
   gap: 8px;             /* ✅ 버튼과 텍스트 사이 간격 */
   font-size: 14px;
   padding: 12px;
   border-radius: 10px;
-  background-color: #f7f7f7;
+  /* background-color: #f7f7f7; */
+  /* background-color: #F4F4F4; */
+  background-color: fff;
   margin-bottom: 30px;
+  
 }
 
 .result-box input[type="radio"] {
