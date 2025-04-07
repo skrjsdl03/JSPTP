@@ -1,0 +1,137 @@
+@charset "UTF-8";
+
+body {
+  font-family: 'Malgun Gothic';
+  background-color: #fff;
+  margin: 0;
+}
+
+.wishlist-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0 40px;
+  gap: 60px;
+}
+
+.wishlist-content {
+  flex: 1;
+  max-width: 750px;
+  margin: 40px auto 0 auto;
+}
+
+/* 제목 + 경계선 */
+.wishlist-title-wrap {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.wishlist-title {
+  font-size: 18px;
+  font-weight: bold;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #888;
+  display: inline-block;
+  width: 90%;
+}
+
+/* 본문 항목 */
+.wishlist-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+  margin: 20px auto;
+  padding: 16px;
+  border-radius: 8px;
+  background-color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.wishlist-item.soldout {
+  background-color: #ddd;
+  opacity: 0.8;
+}
+
+.wishlist-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 16px;
+}
+
+.wishlist-info {
+  flex: 1;
+}
+
+.wishlist-name {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.wishlist-price {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.wishlist-heart {
+  font-size: 20px;
+  color: red;
+  cursor: pointer;
+}
+
+.wishlist-heart.soldout {
+  color: black;
+}
+
+/* 사이드바 공통 */
+.sidebar {
+  width: 180px;
+  padding: 15px 10px;
+  font-size: 13px;
+}
+
+.user-box {
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+}
+
+.username {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.user-info {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  row-gap: 4px;
+  font-size: 13px;
+}
+
+.side-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.side-menu li {
+  padding: 8px 0;
+  cursor: pointer;
+  color: #222;
+}
+
+.side-menu li.active {
+  color: #015FC1;
+  font-weight: bold;
+}
+
+footer {
+  text-align: center;
+  font-size: 12px;
+  color: #aaa;
+  padding: 20px 0;
+}
