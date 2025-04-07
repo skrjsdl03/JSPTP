@@ -7,7 +7,6 @@
   <meta charset="UTF-8">
   <title>아이디 찾기 | everyWEAR</title>
   <link rel="stylesheet" type="text/css" href="css/find.css">
-  <link rel="stylesheet" type="text/css" href="css/header.css">
   <link rel="icon" type="image/png" href="images/fav-icon.png">
 </head>
 <body>
