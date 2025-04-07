@@ -269,81 +269,65 @@ body {
 	color: #FFFFFF;
 }
 
-/* middle slide */
+/* 메인 중앙 이미지 슬라이더 영역 */
 .slider-container {
-	position: relative;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	overflow: hidden;
-	padding: 260px 40px;
-	background: transparent;
-	width: 100%;
-	max-width: 100%;
-	box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  max-width: 1500px;
+  margin: 300px auto;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
 }
 
-.slider {
-	display: flex;
-	gap: 50px; /* 옆 슬라이드랑 간격 살짝 넓혀줌 */
-	transition: transform 0.3s ease-in-out;
-	align-items: flex-start;
+.slider-wrapper {
+  overflow: hidden;
+  width: 100%;
+}
+
+.slider-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
 }
 
 .slide {
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	align-items: flex-start; /* 👈 이미지 왼쪽 정렬 */
-	width: 300px;
-	height: 400px;
-	box-sizing: border-box;
-	padding: 0;
-	background: transparent;
-	flex-shrink: 0;
+  flex: 0 0 auto;
+  margin-right: 40px; /* 여백 늘림 */
+  max-width: 90vw;     /* 화면 너비 기준으로 최대 너비 제한 */
+  display: flex;
+  flex-direction: column;
 }
 
 .slide img {
-	height: 100%; /* 슬라이드 높이에 딱 맞게 */
-	width: auto; /* 가로는 유동적으로 */
-	object-fit: contain;
-	display: block;
+  height: 400px;
+  max-width: 100%;     /* 컨테이너 넘지 않도록 */
+  width: auto;
+  object-fit: contain; /* 이미지 비율 유지하며 축소 */
+  display: block;
 }
 
-.caption {
-	margin-top: 10px;
-	padding-left: 5px;
-	text-align: left;
-	font-size: 15px;
-	font-family: sans-serif;
-	color: #000;
+.slide-text {
+  margin-top: 10px;
+  text-align: left;
+  font-size: 14px;
+  color: #333;
 }
 
-.arrow {
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	font-size: 32px;
-	background: none;
-	border: none;
-	cursor: pointer;
-	z-index: 10;
-	color: #555;
-	padding: 10px;
+.slider-btn {
+  background: none;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 1;
+  color: #333;
 }
 
-.arrow.left {
-	left: 100px; /* 중앙으로 조금 더 이동 */
+.slider-btn:hover {
+  color: #015FC1;
 }
 
-.arrow.right {
-	right: 100px; /* 중앙으로 조금 더 이동 */
-}
-
-.arrow:hover {
-	color: #015FC1;
-}
-
+/* 메인 하단 이미지 영역 */
 .bottom-image-section {
 	position: relative;
 	width: 100%;
