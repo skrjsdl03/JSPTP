@@ -3,7 +3,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>관리자 로그인</title>
+<title>관리자 로그인 | everyWEAR</title>
+<link rel="icon" type="image/png" href="images/fav-icon.png">
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/css/admin_login.css">
 </head>
@@ -14,7 +15,7 @@
 		<h2>관리자 로그인</h2>
 		<form>
 			<label>ID</label> <input type="text" name="adminId"
-				placeholder="아이디를 입력하세요"> <br> <label>PWD</label> <input
+				placeholder="아이디를 입력하세요" required> <br> <label>PWD</label> <input
 				type="password" name="adminPwd" placeholder="비밀번호를 입력하세요"> <label>Email</label>
 			<input type="email" name="adminEmail" placeholder="이메일을 입력하세요">
 
@@ -70,6 +71,8 @@
       codeInputDiv.classList.remove("hidden");
       actionBtnDiv.classList.remove("hidden");
 
+      verifyCodeInput.focus(); // 🔽 인증번호 입력란으로 커서 이동
+      
       fetch("<%=request.getContextPath()%>/AdminAuthServlet", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },

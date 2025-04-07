@@ -8,27 +8,27 @@ body {
 	height: 100vh;
 	margin: 0;
 	background-color: #fff;
-	padding-top: 20px;
+	margin: 0;
 }
 
 .login-logo {
-  width: 120px;       /* 필요 시 크기 조절 */
-  margin-bottom: 10px;
-  opacity: 0.8;       /* 약간 투명하게 */
+	width: 150px; /* 필요 시 크기 조절 */
+	margin-bottom: 20px;
+	opacity: 0.8; /* 약간 투명하게 */
 }
 
 .login-container {
-	margin-top : 0px;
 	width: 350px;
 	text-align: center;
+	margin-top: 40px;
 }
 
 h2 {
 	margin-bottom: 20px;
-	font-size: 15px;
+	font-size: 20px;
 }
 
-label  {
+label {
 	display: block;
 	text-align: left;
 	font-weight: bold;
@@ -37,7 +37,7 @@ label  {
 
 input[type="text"], input[type="password"], input[type="email"] {
 	width: 100%;
-	padding: 5px;
+	padding: 10px;
 	margin-bottom: 10px;
 	border: 1px solid #ccc;
 	border-radius: 5px;
@@ -56,12 +56,12 @@ input:focus::placeholder {
 
 .btn {
 	width: 100%;
-	padding: 5px;
+	padding: 10px;
 	background: black;
 	color: white;
 	border: none;
 	border-radius: 5px;
-	font-size: 16px;
+	font-size: 15px;
 	margin-top: 10px;
 	cursor: pointer;
 }
