@@ -740,4 +740,100 @@ public class UserDAO {
 		return flag;
 	}
 	
+	
+	// 신규회원 : 오늘 가입한 사람
+	public int getTodayNewUserCount() {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    int count = 0;
+
+	    try {
+	        con = pool.getConnection();
+	        String sql = "SELECT COUNT(*) FROM user WHERE DATE(created_at) = CURDATE() AND (user_account_state != '탈퇴' OR user_account_state IS NULL)";
+	        pstmt = con.prepareStatement(sql);
+	        rs = pstmt.executeQuery();
+	        if (rs.next()) {
+	            count = rs.getInt(1);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(con, pstmt, rs);
+	    }
+
+	    return count;
+	}
+	
+	// 방문회원 : 오늘 방문한 사람
+	public int getTodayVisitUserCount() {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    int count = 0;
+
+	    try {
+	        con = pool.getConnection();
+	        String sql = "SELECT COUNT(DISTINCT user_id) FROM user_log WHERE log_type = '로그인' AND DATE(log_date) = CURDATE()";
+	        pstmt = con.prepareStatement(sql);
+	        rs = pstmt.executeQuery();
+	        if (rs.next()) {
+	            count = rs.getInt(1);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(con, pstmt, rs);
+	    }
+
+	    return count;
+	}
+	
+	// 탈퇴회원수
+	public int getWithdrawalUserCount() {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    int count = 0;
+
+	    try {
+	        con = pool.getConnection();
+	        String sql = "SELECT COUNT(*) FROM user WHERE user_account_state = '탈퇴'";
+	        pstmt = con.prepareStatement(sql);
+	        rs = pstmt.executeQuery();
+	        if (rs.next()) {
+	            count = rs.getInt(1);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(con, pstmt, rs);
+	    }
+
+	    return count;
+	}
+	
+	// 전체회원수
+	public int getTotalUserCount() {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    int count = 0;
+
+	    try {
+	        con = pool.getConnection();
+	        String sql = "SELECT COUNT(*) FROM user WHERE user_account_state NOT IN ('탈퇴', '휴먼')";
+	        pstmt = con.prepareStatement(sql);
+	        rs = pstmt.executeQuery();
+	        if (rs.next()) {
+	            count = rs.getInt(1);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(con, pstmt, rs);
+	    }
+
+	    return count;
+	}
 }
