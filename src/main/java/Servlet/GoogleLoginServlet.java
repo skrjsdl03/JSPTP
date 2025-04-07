@@ -62,6 +62,7 @@ public class GoogleLoginServlet extends HttpServlet {
                 session.setAttribute("id", email);
                 session.setAttribute("userType", "Google");
                 System.out.println("이미 가입한 계정");
+                userDao.insertLog(email, "로그인");
                 response.sendRedirect("main.jsp");
             } else {
                 // 첫 가입

@@ -96,6 +96,7 @@ public class Signup extends HttpServlet {
 		
 		userDao.insertUser(user, userAddr);
 		
+		if(email != null && !email.trim().isEmpty()) {
 		GmailSend mail = new GmailSend();
 		String title = "Welcome to everyWEAR 👟";
 		String content = "<html><body>"
@@ -118,7 +119,9 @@ public class Signup extends HttpServlet {
 			    + "<strong>everyWEAR</strong>"
 			    + "</body></html>";
 		
-		mail.send(title, content, email);
+			mail.send(title, content, email);
+		}
+
 		
 		response.sendRedirect("login.jsp");
 	}
