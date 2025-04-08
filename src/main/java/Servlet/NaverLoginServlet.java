@@ -10,106 +10,76 @@ import org.json.JSONObject;
 
 import DAO.UserDAO;
 
-@WebServlet("/NaverLoginServlet")
+@WebServlet("/naverLoginServlet")
 public class NaverLoginServlet extends HttpServlet {
-    private static final String CLIENT_ID = System.getenv("NAVER_CLIENT_ID");
-    private static final String CLIENT_SECRET = System.getenv("NAVER_CLIENT_SECRET"); 
-    private static final String REDIRECT_URI = "http://everywear.duckdns.org/JSPTP/NaverLoginServlet";
+	private final String clientId = "YOUR_CLIENT_ID";
+    private final String clientSecret = "YOUR_CLIENT_SECRET";
+    private final String redirectURI = "http://localhost:8080/naverCallback";
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String code = request.getParameter("code");
         String state = request.getParameter("state");
+        String sessionState = (String) request.getSession().getAttribute("state");
 
-        if (code == null || state == null) {
-            System.out.println("ERROR: code 또는 state 파라미터가 없음");
-            response.sendRedirect("login.jsp");
+        if (!state.equals(sessionState)) {
+            response.getWriter().println("잘못된 접근입니다. (CSRF 차단)");
             return;
         }
 
-        try {
-            // 1. Access Token 요청
-            String tokenUrl = "https://nid.naver.com/oauth2.0/token";
-            String params = "grant_type=authorization_code"
-                    + "&client_id=" + CLIENT_ID
-                    + "&client_secret=" + CLIENT_SECRET
-                    + "&redirect_uri=" + URLEncoder.encode(REDIRECT_URI, "UTF-8")
-                    + "&code=" + code
-                    + "&state=" + state;
+        // 1. access_token 요청
+        String tokenURL = "https://nid.naver.com/oauth2.0/token?grant_type=authorization_code"
+                + "&client_id=" + clientId
+                + "&client_secret=" + clientSecret
+                + "&redirect_uri=" + URLEncoder.encode(redirectURI, "UTF-8")
+                + "&code=" + code
+                + "&state=" + state;
 
-            String tokenResponse = sendGetRequest(tokenUrl + "?" + params);
-            System.out.println("Access Token 응답: " + tokenResponse);
+        String tokenResponse = get(tokenURL);
+        JSONObject tokenObj = new JSONObject(tokenResponse);
+        String accessToken = tokenObj.getString("access_token");
 
-            JSONObject tokenJson = new JSONObject(tokenResponse);
-            String accessToken = tokenJson.getString("access_token");
+        // 2. 사용자 정보 요청
+        String userInfoURL = "https://openapi.naver.com/v1/nid/me";
+        String userInfoResponse = get(userInfoURL, "Bearer " + accessToken);
 
-            // 2. 사용자 정보 요청
-            String userInfoJson = getUserInfo(accessToken);
-            System.out.println("네이버 사용자 정보 JSON: " + userInfoJson);
+        JSONObject userObj = new JSONObject(userInfoResponse);
+        JSONObject res = userObj.getJSONObject("response");
 
-            JSONObject userInfo = new JSONObject(userInfoJson);
-            JSONObject responseObj = userInfo.getJSONObject("response");
+        String id = res.getString("id");
+        String name = res.optString("name", ""); 
+        String email = res.optString("email", "");
 
-            String email = responseObj.optString("email", null);
-            String name = responseObj.optString("name", "");
-            String nickname = responseObj.optString("nickname", "");
+        // 3. 세션에 저장
+        HttpSession session = request.getSession();
+        session.setAttribute("naverId", id);
+        session.setAttribute("naverName", name);
+        session.setAttribute("naverEmail", email);
 
-            if (email == null) {
-                throw new Exception("이메일 정보가 없습니다. 네이버 계정에서 이메일 제공 동의가 필요합니다.");
-            }
+        // 4. 로그인 완료 후 메인 페이지로 이동
+        response.sendRedirect("main.jsp");
+    }
 
-            // 3. 세션 저장
-            HttpSession session = request.getSession();
-            session.setAttribute("id", email);
-            session.setAttribute("userType", "Naver");
+    private String get(String apiURL) throws IOException {
+        return get(apiURL, null);
+    }
 
-            // 4. 가입 여부 확인
-            UserDAO userDao = new UserDAO();
-            if (userDao.isSocialUserExists(email, "Naver")) {
-                System.out.println("이미 가입된 네이버 회원입니다: " + email);
-                userDao.insertLog(email, "로그인");
-                response.sendRedirect("main.jsp");
-            } else {
-            	session.setAttribute("id", email);
-			    session.setAttribute("userType", "Naver");
-            	System.out.println("네이버 첫 로그인 회원입니다: " + email);
-                response.sendRedirect("signup.jsp?social=Naver");
-            }
-
-        } catch (Exception e) {
-            System.out.println("❌ NaverLoginServlet 처리 중 에러 발생:");
-            e.printStackTrace();
-            response.sendRedirect("error.jsp");
+    private String get(String apiURL, String authHeader) throws IOException {
+        URL url = new URL(apiURL);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        if (authHeader != null) {
+            con.setRequestProperty("Authorization", authHeader);
         }
-    }
 
-    private String sendGetRequest(String urlStr) throws IOException {
-        URL url = new URL(urlStr);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-
-        return readResponse(conn);
-    }
-
-    private String getUserInfo(String accessToken) throws IOException {
-        String userInfoUrl = "https://openapi.naver.com/v1/nid/me";
-        URL url = new URL(userInfoUrl);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Authorization", "Bearer " + accessToken);
-
-        return readResponse(conn);
-    }
-
-    private String readResponse(HttpURLConnection conn) throws IOException {
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))) {
-            StringBuilder response = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                response.append(line.trim());
-            }
-            return response.toString();
+        BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuilder responseBuffer = new StringBuilder();
+        while ((inputLine = br.readLine()) != null) {
+            responseBuffer.append(inputLine);
         }
+        br.close();
+        return responseBuffer.toString();
     }
 }
