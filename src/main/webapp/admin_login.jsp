@@ -125,7 +125,7 @@
       .then(data => {
         alert(data.message || "알 수 없는 오류가 발생했습니다.");
         if (data.success) {
-          location.href = "<%=request.getContextPath()%>/admin/main.jsp";
+          location.href = "<%=request.getContextPath()%>/admin_main.jsp";
         } else {
         	location.href = "<%=request.getContextPath()%>/admin_login.jsp";
         }
