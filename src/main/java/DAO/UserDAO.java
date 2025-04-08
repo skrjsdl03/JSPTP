@@ -404,7 +404,7 @@ public class UserDAO {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "select * from user where user_id = ? and user_name = ? and user_phone = ?";
+			sql = "select * from user where user_id = ? and user_name = ? and user_phone = ? and user_type = '일반'";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			pstmt.setString(2, name);
@@ -429,7 +429,7 @@ public class UserDAO {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "select * from user where user_id = ? and user_name = ? and user_email = ?";
+			sql = "select * from user where user_id = ? and user_name = ? and user_email = ? and user_type = '일반'";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			pstmt.setString(2, name);
