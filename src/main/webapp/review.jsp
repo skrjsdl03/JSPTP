@@ -71,19 +71,11 @@
 				</tr>
 			</table>
 
-
-			<div class="write-btn-wrapper">
-				<button class="write-btn" onclick="location.href='writeForm.jsp'">작성하기</button>
-			</div>
-
 			<div class="pagination" id="pagination">
-				<span class="page-nav">Prev</span>
-  			<span class="page-num active">1</span>
- 				<span class="page-num">2</span>
-  			<span class="page-num">3</span>
-  			<span class="page-num">4</span>
-  			<span class="page-num">5</span>
-  			<span class="page-nav">Next</span>
+				<span class="page-nav">Prev</span> <span class="page-num active">1</span>
+				<span class="page-num">2</span> <span class="page-num">3</span> <span
+					class="page-num">4</span> <span class="page-num">5</span> <span
+					class="page-nav">Next</span>
 			</div>
 
 			<script>

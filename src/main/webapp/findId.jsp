@@ -56,7 +56,7 @@
     <option value="nate.com">nate.com</option>
   </select>
 </div>
-<input type="hidden" id="email" name="email">
+<input type="hidden" id="email1" name="email">
 
     <!-- 인증 버튼 -->
     <div id="authBtnBox">
@@ -69,7 +69,7 @@
       <input type="text" id="verifyCode" name="verifyCode" placeholder="인증번호를 입력하세요">
 
       <div class="verify-btn-group">
-        <button type="button" id=reverification class="btn white" onclick="showAuthBoxByPhone()">재전송</button>
+        <button type="button" id="reverification" class="btn white" onclick="showAuthBoxByPhone()">재전송</button>
         <button type="button" class="btn black" onclick="checkCode()">확인</button>
       </div>
     </div>
@@ -83,7 +83,7 @@
 <script>
   const emailId = document.getElementById("emailId");
   const emailDomain = document.getElementById("emailDomain");
-  const emailFull = document.getElementById("email");
+  const emailFull = document.getElementById("email1");
 
   const form = document.getElementById("findIdForm");
   form.addEventListener("submit", function(e) {
@@ -102,6 +102,11 @@
 
 <script>
 	function showAuthBoxByPhone() {
+		const name = document.getElementById("name");
+		if(!name.value){
+			alert("이름을 입력하시오.");
+			return;
+		}
 	    // 휴대전화 번호 결합
 	  const p1 = document.getElementById('phone1').value.trim();
 	  const p2 = document.getElementById('phone2').value.trim();
@@ -124,6 +129,7 @@
 	          alert("인증번호가 전송되었습니다.");
 	          document.getElementById('authBtnBox').style.display = 'none';
 	          document.getElementById('verifyBox').style.display = 'block';
+	          document.getElementById("name").readOnly = true;
 	          document.getElementById("phone2").readOnly = true;
 	          document.getElementById("phone3").readOnly = true;
 	        } else {
@@ -146,15 +152,8 @@
 		    .then(data => {
 		      if (data.result === "success") {
 		        alert("확인되었습니다.");
-		        console.log("이름: " + name.value);
-		        if(name.value.trim() == null || name.value.trim() == ""){
-		        	alert("이름을 입력하시오.");
-		        	name.focus();
-		        	return;
-		        } else{
-		        	document.getElementById("findIdForm").submit();
-		        }
-		      } else {
+		        document.getElementById("findIdForm").submit();
+		        }else {
 		        alert("인증번호가 틀렸습니다.");
 		      }
 		    });
@@ -164,23 +163,32 @@
     const emailId = document.getElementById("emailId").value.trim();
     const emailDomain = document.getElementById("emailDomain").value.trim();
     if (emailId && emailDomain) {
-    	document.getElementById("email").value = emailId + "@" + emailDomain;
+    	document.getElementById("email1").value = emailId + "@" + emailDomain;
     } else {
-    	document.getElementById("email").value = null;
+    	document.getElementById("email1").value = null;
     }
+    console.log("이메일: " + document.getElementById("email1").value);
     return true;
   }
 	  
 function showAuthBoxByEmail(){
+	const name = document.getElementById("name");
+	if(name.value == null || name.value == ""){
+		alert("이름을 입력하시오.");
+		return;
+	}
 	if(handleEmailSubmit()){
-	    const name = document.getElementById("name").value;
-	    const email = document.getElementById("email").value;
-	
-	    if (!name || !email) {
-	        alert("이름과 이메일을 모두 입력해주세요.");
+	    const email = document.getElementById("email1").value;
+	    if (!email) {
+	        alert("이메일을 입력하시오.");
 	        return;
 	    }
-	
+    	alert("인증번호가 이메일로 전송되었습니다!");
+        document.getElementById('authBtnBox').style.display = 'none';
+        document.getElementById('verifyBox').style.display = 'block';
+        document.getElementById("name").readOnly = true;
+        document.getElementById("emailId").readOnly = true;
+        document.getElementById("emailDomain").disabled = true;
 	    fetch("sendEmail.jsp", {
 	        method: "POST",
 	        headers: {
@@ -191,9 +199,7 @@ function showAuthBoxByEmail(){
 	    })
 	    .then(res => res.text())
 	    .then(data => {
-	    	alert("인증번호가 이메일로 전송되었습니다!");
-	          document.getElementById('authBtnBox').style.display = 'none';
-	          document.getElementById('verifyBox').style.display = 'block';
+
 	    })
 	    .catch(err => {
 	        console.error(err);
@@ -221,11 +227,23 @@ function showAuthBoxByEmail(){
     if (emailInputGroup) emailInputGroup.style.display = "none";
     document.getElementById("verification").onclick = showAuthBoxByPhone;
     document.getElementById("reverification").onclick = showAuthBoxByPhone;
+    document.getElementById("name").readOnly = false;
+    document.getElementById("phone2").readOnly = false;
+    document.getElementById("phone3").readOnly = false;
+    document.getElementById("name").value = "";
+    document.getElementById("phone2").value = "";
+    document.getElementById("phone3").value = "";
   } else if (emailRadio.checked) {
     if(phoneInputGroup)phoneInputGroup.style.display = "none";
     emailInputGroup.style.display = "block";
     document.getElementById("verification").onclick = showAuthBoxByEmail;
     document.getElementById("reverification").onclick = showAuthBoxByEmail;
+    document.getElementById("name").readOnly = false;
+    document.getElementById("emailId").readOnly = false;
+    document.getElementById("emailDomain").disabled = false;
+    document.getElementById("name").value = "";
+    document.getElementById("emailId").value = "";
+    document.getElementById("emailDomain").value = "";
   }
     // ✅ 인증 상태 초기화
     verifyBox.style.display = "none";

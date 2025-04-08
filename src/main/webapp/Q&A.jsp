@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <title>에브리웨어 | everyWEAR</title>
 <link rel="icon" type="image/png" href="images/fav-icon.png">
-<link rel="stylesheet" type="text/css" href="css/Q&A.css?v=123">
+<link rel="stylesheet" type="text/css" href="css/Q&A.css?v=35475">
 </head>
 <body>
 
@@ -48,7 +48,7 @@
 			</table>
 
 			<div class="write-btn-wrapper">
-				<button class="write-btn" onclick="location.href='writeForm.jsp'">작성하기</button>
+				<button class="write-btn" onclick="location.href='qnaForm.jsp'">작성하기</button>
 			</div>
 
 

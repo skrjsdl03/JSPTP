@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>에브리웨어 | everyWEAR</title>
-<link rel="stylesheet" type="text/css" href="css/main2.css?v=127">
+<link rel="stylesheet" type="text/css" href="css/main2.css?v=654654">
 <link rel="icon" type="image/png" href="images/fav-icon.png">
 <link rel="stylesheet"
 	href="https://unpkg.com/swiper/swiper-bundle.min.css" />
@@ -76,6 +76,129 @@
 			})
 		});
 	</script>
+
+	<!-- 메인 중앙 이미지 슬라이더 영역 -->
+	<div class="slider-container">
+		<button class="slider-btn prev">&#10094;</button>
+		<div class="slider-wrapper">
+			<div class="slider-track">
+				<div class="slide">
+					<img src="images/bald2.jpg" alt="look1">
+					<div class="slide-text">
+						<p>2025 SS</p>
+						<p>
+							<strong>STORY BEHIND</strong><br> THE IMAGES ( NOW BASED IN
+							BUENOS AIRES )
+						</p>
+					</div>
+				</div>
+				<div class="slide">
+					<img src="images/bald.png" alt="look2">
+					<div class="slide-text">
+						<p>2025 SS</p>
+						<p>
+							<strong>ALMOND SEA US</strong>
+						</p>
+					</div>
+				</div>
+				<div class="slide">
+					<img src="images/mainac1.jpg" alt="look1">
+					<div class="slide-text">
+						<p>2025 SS</p>
+						<p>
+							<strong>STORY BEHIND</strong><br> THE IMAGES ( NOW BASED IN
+							BUENOS AIRES )
+						</p>
+					</div>
+				</div>
+				<div class="slide">
+					<img src="images/mainac2.jpg" alt="look1">
+					<div class="slide-text">
+						<p>2025 SS</p>
+						<p>
+							<strong>STORY BEHIND</strong><br> THE IMAGES ( NOW BASED IN
+							BUENOS AIRES )
+						</p>
+					</div>
+				</div>
+				<div class="slide">
+					<img src="images/mainac3.jpg" alt="look1">
+					<div class="slide-text">
+						<p>2025 SS</p>
+						<p>
+							<strong>STORY BEHIND</strong><br> THE IMAGES ( NOW BASED IN
+							BUENOS AIRES )
+						</p>
+					</div>
+				</div>
+				<div class="slide">
+					<img src="images/mainac4.jpg" alt="look2">
+					<div class="slide-text">
+						<p>2025 SS</p>
+						<p>
+							<strong>ALMOND SEA US</strong>
+						</p>
+					</div>
+				</div>
+				<div class="slide">
+					<img src="images/mainac5.jpg" alt="look2">
+					<div class="slide-text">
+						<p>2025 SS</p>
+						<p>
+							<strong>ALMOND SEA US</strong>
+						</p>
+					</div>
+				</div>
+				<div class="slide">
+					<img src="images/mainac6.jpg" alt="look2">
+					<div class="slide-text">
+						<p>2025 SS</p>
+						<p>
+							<strong>ALMOND SEA US</strong>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<button class="slider-btn next">&#10095;</button>
+	</div>
+
+	<script>
+  const track = document.querySelector('.slider-track');
+  const slides = document.querySelectorAll('.slide');
+  const prevBtn = document.querySelector('.prev');
+  const nextBtn = document.querySelector('.next');
+  let index = 0;
+
+  function getOffset() {
+    let offset = 0;
+    for (let i = 0; i < index; i++) {
+      offset += slides[i].offsetWidth + 40; // margin-right 고려
+    }
+    return offset;
+  }
+
+  function updateSlider() {
+    track.style.transform = `translateX(-\${getOffset()}px)`;
+  }
+
+  prevBtn.addEventListener('click', () => {
+    index = Math.max(index - 1, 0);
+    updateSlider();
+  });
+
+  nextBtn.addEventListener('click', () => {
+    index = Math.min(index + 1, slides.length - 1);
+    updateSlider();
+  });
+
+  // 자동 슬라이드 (3초 간격)
+  setInterval(() => {
+    index = (index + 1) % slides.length;
+    updateSlider();
+  }, 3000);
+</script>
+
 
 	<!-- 메인 하단 이미지 영역 -->
 	<div class="bottom-image-section">

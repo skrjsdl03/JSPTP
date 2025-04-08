@@ -1,10 +1,24 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%
+  String userId = (String) session.getAttribute("userId"); // 로그인한 유저의 아이디 (세션에서 가져옴)
+  String iconSrc = "images/fav-icon.png"; // 기본 아이콘
+
+  if (userId == null) {
+    userId = "guest@everywear.com"; // 예외 처리
+  } else if (userId.contains("naver.com")) {
+    iconSrc = "images/Naver.png";
+  } else if (userId.contains("gmail.com")) {
+    iconSrc = "images/Google.png";
+  } else if (userId.contains("kakao.com")) {
+    iconSrc = "images/kakao.png";
+  }
+%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>회원 정보 수정 | everyWEAR</title>
-  <link rel="stylesheet" href="css/header.css">
   <link rel="stylesheet" href="css/memberEdit.css">
   <link rel="icon" type="image/png" href="images/logo-white.png">
 </head>
@@ -34,20 +48,22 @@
 
   <div class="edit-content">
     <form>
-      <div class="form-group">
+    
+ <div class="form-group">
         <label>ID *</label>
-        <div class="id-box">
-          <span class="id-text">dkdkrlsp03@naver.com</span>
+        <div class="id-box with-icon">
+          <img src="<%= iconSrc %>" alt="소셜 아이콘" class="social-icon">
+          <span class="id-text"><%= userId %></span>
         </div>
       </div>
-
-      <!-- 이름 입력 -->
+      
+      <!-- 이름 -->
 <div class="form-group">
   <label>이름 *</label>
   <input type="text" value="정시영" placeholder="이름을 입력하세요" required>
 </div>
 
-
+      <!-- 휴대전화 -->
 		<div class="form-group">
   <label>휴대전화 *</label>
   <div class="phone-group">
@@ -59,22 +75,26 @@
 
   <!-- 인증번호 입력 영역 (처음엔 숨김) -->
   <div id="verifyBox" class="verify-group" style="display:none;">
-    <input type="text" id="verifyCode" placeholder="인증번호 입력">
+    <input type="text" id="verifyCode" placeholder="인증번호 입력">  
+    <button type="button" class="btn white">재전송</button>
     <button type="button" class="btn-change">확인</button>
   </div>
 </div>
 
+      <!-- 이메일 -->
       <div class="form-group">
         <label>이메일</label>
         <input type="email" value="donguei123@naver.com">
       </div>
 
+           <!-- 성별 -->
       <div class="form-group">
         <label>성별 *</label>
         <label><input type="radio" name="gender" checked> 남자</label>
         <label><input type="radio" name="gender"> 여자</label>
       </div>
 
+            <!-- 키 & 몸무게 -->
       <div class="form-group">
         <label>키 & 몸무게</label>
         <div class="hw-group">
@@ -83,6 +103,7 @@
         </div>
       </div>
 
+            <!-- 생년월일 -->
       <div class="form-group">
         <label>생년월일 *</label>
         <div class="birth-group">
@@ -110,7 +131,10 @@
         </div>
       </div>
 
-      <button type="submit" class="submit-btn">회원 정보 수정</button>
+            <!-- 버튼들 -->
+      <button type="submit" class="submit-btn">회원 정보 수정</button>     
+      <a href="withdraw.jsp" class="withdraw-link">회원탈퇴</a>
+      
     </form>
   </div>
 </div>
@@ -120,7 +144,7 @@
 <script>
   function showVerification() {
     document.getElementById('verifyBox').style.display = 'flex';
-  }
+  } 
 </script>
 
 </body>
