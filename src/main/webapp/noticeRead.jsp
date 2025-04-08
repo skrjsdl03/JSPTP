@@ -1,4 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%
+		String noti_num = request.getParameter("noti_num");
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
