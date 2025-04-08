@@ -6,7 +6,6 @@
 <jsp:useBean id="userDao" class="DAO.UserDAO"/>
 <%
 		String type = request.getParameter("authType");
-		Vector<UserDTO> ulist = new Vector<UserDTO>();
 		String name = null;
 		String id = null;
 		boolean flag = false;
@@ -38,16 +37,16 @@
 
 <%@ include file="includes/loginHeader.jsp" %>
 
-  <%if(flag){ %>
 <div class="login-container">
   <h2 class="form-title">비밀번호 찾기</h2>
+  <%if(flag){ %>
   <form action="resetPwd" method="post" id="resetPwd">
 	<label for="username">아이디</label>
 	<input type="text" id="userId" name="userId" value="<%=id%>" class="readonly-input" readonly>
 
     <label for="newPassword">비밀번호</label>
     <input type="password" id="newPassword" name="newPassword" placeholder="비밀번호를 입력하세요." required>
-    <p class="input-hint">⋇ 영문 대소문자 + 숫자 포함(4자 이상 16자 이하 & 특수문자 1개 이상 포함)</p>
+    <div id="pwCheck"></div>
 
     <label for="confirmPassword">비밀번호 확인</label>
     <input type="password" id="confirmPassword" name="confirmPassword" placeholder="비밀번호를 입력하세요." required>
@@ -55,46 +54,74 @@
 
     <button type="button" class="login-btn" onclick="pwdCheck()">로그인</button>
   </form>
-</div>
-<%} else{ %>
-<%} %>
+  </div>
+<%}%>
 
 <footer>2025©everyWEAR</footer>
 
 <script>
-	// 비밀번호 일치 확인
-   const passwordInput = document.getElementById("newPassword");
-   const confirmPasswordInput = document.getElementById("confirmPassword");
-   const pwCheckMsg = document.getElementById("pwCheckMsg");
-   let isPwdChecked = false;
+	  const passwordInput = document.getElementById("newPassword");
+	  const confirmPasswordInput = document.getElementById("confirmPassword");
+	  const pwCheckMsg = document.getElementById("pwCheckMsg");
+	  const pwCheck = document.getElementById("pwCheck");
+	  let isPwdChecked = false;
 
-   function checkPasswordMatch() {
-     const pw = passwordInput.value;
-     const confirmPw = confirmPasswordInput.value;
+	  function validatePasswords() {
+	    const pw = passwordInput.value;
+	    const confirmPw = confirmPasswordInput.value;
+	    const regex = /^(?=.*[!@#$%^&*(),.?":{}|<>]).{4,16}$/;
 
-     if (confirmPw.length === 0) {
-       pwCheckMsg.textContent = "";
-       pwCheckMsg.className = "";
-       return;
-     }
+	    if (pw === "") {
+	        pwCheck.textContent = "";        // ← 이 부분 추가!
+	        pwCheck.className = "";
+	      pwCheckMsg.textContent = "";
+	      pwCheckMsg.className = "";
+	      isPwdChecked = false;
+	      return;
+	    }
 
-     if (pw === confirmPw) {
-       pwCheckMsg.textContent = "비밀번호가 일치합니다.";
-       pwCheckMsg.className = "match";
-       isPwdChecked = true;
-     } else {
-       pwCheckMsg.textContent = "비밀번호가 일치하지 않습니다.";
-       pwCheckMsg.className = "not-match";
-       isPwdChecked = false;
-     }
-   }
+	    if (!regex.test(pw)) {
+	    	pwCheck.textContent = "4자 이상 16자 이하이며, 특수문자 1개 이상을 포함";
+	    	pwCheck.className = "not-match";
+	      isPwdChecked = false;
+	      return;
+	    } else{
+	    	pwCheck.textContent = "조건에 맞는 비밀번호입니다!";
+	    	pwCheck.className = "match";
+	    	 isPwdChecked = false;
+	    }
+	    
 
-   passwordInput.addEventListener("input", checkPasswordMatch);
-   confirmPasswordInput.addEventListener("input", checkPasswordMatch);
+	    if (pw !== confirmPw) {
+	    	if(confirmPw === ""){
+		  	      pwCheckMsg.textContent = "";
+			      pwCheckMsg.className = "";
+			      isPwdChecked = false;
+			      return;
+	    	}
+	      pwCheckMsg.textContent = "비밀번호가 일치하지 않습니다.";
+	      pwCheckMsg.className = "not-match";
+	      isPwdChecked = false;
+	      return;
+	    } else {
+	      pwCheckMsg.textContent = "비밀번호가 일치합니다.";
+	      pwCheckMsg.className = "match";
+	      isPwdChecked = true;
+	      return;
+	    }
+	    
+	  }
 
-function pwdCheck(){
-	if(isPwdChecked)
-		document.getElementById("resetPwd").submit();
+	  passwordInput.addEventListener("input", validatePasswords);
+	  confirmPasswordInput.addEventListener("input", validatePasswords);
+
+	  
+function pwdCheck() {
+  if (isPwdChecked) {
+    document.getElementById("resetPwd").submit();
+  } else {
+    alert("비밀번호를 다시 확인해 주세요.");
+  }
 }
 </script>
 

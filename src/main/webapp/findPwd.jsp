@@ -39,11 +39,11 @@
     <div id="phoneInputGroup">
       <label for="phone1">휴대폰번호로 찾기</label>
       <div class="phone-input-group">
-        <input type="text" id="phone1" maxlength="3" value="010" readonly>
+        <input type="text" id="phone1" name="phone1" maxlength="3" value="010" readonly>
         <span>-</span>
-        <input type="text" id="phone2" maxlength="4" placeholder="1234" required>
+        <input type="text" id="phone2" name="phone2" maxlength="4" placeholder="1234" required>
         <span>-</span>
-        <input type="text" id="phone3" maxlength="4" placeholder="5678" required>
+        <input type="text" id="phone3" name="phone3" maxlength="4" placeholder="5678" required>
       </div>
     </div>
 
@@ -136,7 +136,9 @@ function showAuthBoxByPhone() {
       return;
     }
     
-    fetch("sendSMS.jsp?phone=" + encodeURIComponent(p))
+    fetch("sendSMSByPwd.jsp?phone=" + encodeURIComponent(p) +
+    	      "&id=" + encodeURIComponent(id.value) +
+    	      "&name=" + encodeURIComponent(name.value))
       .then(res => res.json())
       .then(data => {
         if (data.result === "success") {
@@ -147,8 +149,8 @@ function showAuthBoxByPhone() {
           document.getElementById("name").readOnly = true;
           document.getElementById("phone2").readOnly = true;
           document.getElementById("phone3").readOnly = true;
-        } else {
-          alert("전송 실패");
+        } else if(data.result ==="fail") {
+          alert("입력하신 정보와 일치하는 아이디가 없습니다.");
         }
       });
 }
@@ -188,40 +190,51 @@ return true;
   
 function showAuthBoxByEmail(){
 const name = document.getElementById("name");
+const id = document.getElementById("id");
+if(!id.value){
+	alert("아이디를 입력하시오.");
+	return;
+}
 if(name.value == null || name.value == ""){
 	alert("이름을 입력하시오.");
 	return;
 }
-if(handleEmailSubmit()){
-    const email = document.getElementById("email1").value;
-    if (!email) {
-        alert("이메일을 입력하시오.");
-        return;
-    }
-	alert("인증번호가 이메일로 전송되었습니다!");
-    document.getElementById('authBtnBox').style.display = 'none';
-    document.getElementById('verifyBox').style.display = 'block';
-	document.getElementById("id").readOnly = true;
-    document.getElementById("name").readOnly = true;
-    document.getElementById("emailId").readOnly = true;
-    document.getElementById("emailDomain").disabled = true;
-    fetch("sendEmail.jsp", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: "name=" + encodeURIComponent(name) + "&email=" + encodeURIComponent(email)
-
-    })
-    .then(res => res.text())
-    .then(data => {
-
-    })
-    .catch(err => {
-        console.error(err);
-        alert("인증번호 전송 중 오류가 발생했습니다.");
-    });
-}
+	if(handleEmailSubmit()){
+	    const email = document.getElementById("email1").value;
+	    if (!email) {
+	        alert("이메일을 입력하시오.");
+	        return;
+	    }
+	
+	/*     fetch("sendEmailByPwd.jsp", {
+	        method: "POST",
+	        headers: {
+	            "Content-Type": "application/x-www-form-urlencoded"
+	        },
+	        body: "name=" + encodeURIComponent(name.value) + "&email=" + encodeURIComponent(email) + "&id=" + encodeURIComponent(id.value)
+	
+	    }) */
+	    fetch("sendEmailByPwd.jsp?name=" + encodeURIComponent(name.value) + 
+	    		"&email=" + encodeURIComponent(email) + 
+	    		"&id=" + encodeURIComponent(id.value))
+	    .then(res => res.json())
+	    .then(data => {
+	    		if(data.result === "success"){
+	    		    document.getElementById('authBtnBox').style.display = 'none';
+	    		    document.getElementById('verifyBox').style.display = 'block';
+	    			document.getElementById("id").readOnly = true;
+	    		    document.getElementById("name").readOnly = true;
+	    		    document.getElementById("emailId").readOnly = true;
+	    		    document.getElementById("emailDomain").disabled = true;
+	    		}else if(data.result === "none"){
+	    			alert("입력하신 정보와 일치하는 아이디가 없습니다.");
+				}
+	    })
+	    .catch(err => {
+	        console.error(err);
+	        alert("인증번호 전송 중 오류가 발생했습니다.");
+	    });
+	}
 }
 
 // 요소 가져오기

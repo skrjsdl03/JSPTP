@@ -189,7 +189,7 @@
 <div class="signup-container">
   <h2>회원가입</h2>
 
-  <form action="signup" method="post" id="register" onsubmit="return handleEmailSubmit()">
+  <form id="register" action="signup" method="post" onsubmit="return handleEmailSubmit()">
 
 <%if(social == null){ %>
     <!-- 아이디 -->
@@ -198,12 +198,14 @@
 	    <input type="text" id="userId" name="userId" placeholder="아이디를 입력하세요" required>
 		<button type="button" class="search-btn" id="checking" onclick="checkId()">중복 체크</button>
 	</div>
-	<div id="checkResult" style="font-size: 0.9em; margin-top: 5px;"></div>
+	<div id="checkResult"></div>
 		
 
     <!-- 비밀번호 -->
     <label for="password">비밀번호 <span style="color: red;">*</span></label>
     <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+    
+    <div id="pwCheck"></div>
 
     <!-- 비밀번호 확인 -->
     <label for="confirmPassword">비밀번호 확인 <span style="color: red;">*</span></label>
@@ -215,6 +217,7 @@
     <label for="name">이름 <span style="color: red;">*</span></label>
     <input type="text" id="name" name="name" placeholder="이름을 입력하세요" required>
 
+<%if(social==null){ %>
     <!-- 이메일 -->
 <label for="emailId">이메일(선택사항)</label>
 <div class="email-input-group">
@@ -231,6 +234,8 @@
 </div>
 <!-- 서버로 전달할 hidden 필드 -->
 <input type="hidden" id="email" name="email">
+<%} %>
+
 
     <!-- 추천인 -->
     <label for="referrer">추천인 아이디(선택사항)</label>
@@ -242,18 +247,9 @@
       <input type="text" id="zipcode" name="zipcode" placeholder="우편번호" readonly>
       <button type="button" id="addrSearch" class="search-btn" onclick="execDaumPostcode()">주소 검색</button>
     </div>
-    <input type="text" id="address1" name="address1" placeholder="기본 주소" required readonly>
+    <input type="text" style="margin-top: 10px" id="address1" name="address1" placeholder="기본 주소" required readonly>
     <input type="text" id="address2" name="address2" placeholder="나머지 주소">
 
-<!--     성별
-    <label >성별 <span style="color: red;">*</span></label>
-    <div class="gender-group">
-      <input type="radio" id="male" name="gender" value="남자" required>
-      <label for="male">남자</label>
-      <input type="radio" id="female" name="gender" value="여자">
-      <label for="female">여자</label>
-    </div> -->
-    
     <div>
 	    <table class="gender-hw">
 	    	<tr>
@@ -270,12 +266,7 @@
 	    	</tr>
 	    </table>
 	</div>
-<!--         키 & 몸무게
-        <label>(선택사항)</label>
-    <div class="hw-group">
-      <input type="text" name="height" maxlength="3" placeholder="키 (cm)">
-      <input type="text" name="weight" maxlength="3" placeholder="몸무게 (kg)">
-    </div> -->
+
 	<br>
     <!-- 생년월일 -->
     <label for="birth">생년월일 <span class="required" style="color: red;">*</span></label>
@@ -464,7 +455,7 @@ function register(){
 	      document.getElementById("neceCheck").focus();
 		  return;
 	  }
-	 
+	 handleEmailSubmit();
 	  document.getElementById("register").submit();
 }
 
@@ -583,36 +574,63 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // social 파라미터가 없을 때만 비밀번호 확인 로직 실행
   if (!social) {
-    const passwordInput = document.getElementById("password");
-    const confirmPasswordInput = document.getElementById("confirmPassword");
-    const pwCheckMsg = document.getElementById("pwCheckMsg");
-    let isPwdChecked = false;
+	  const passwordInput = document.getElementById("password");
+	  const confirmPasswordInput = document.getElementById("confirmPassword");
+	  const pwCheckMsg = document.getElementById("pwCheckMsg");
+	  const pwCheck = document.getElementById("pwCheck");
 
-    function checkPasswordMatch() {
-      const pw = passwordInput.value;
-      const confirmPw = confirmPasswordInput.value;
+	  function validatePasswords() {
+	    const pw = passwordInput.value;
+	    const confirmPw = confirmPasswordInput.value;
+	    const regex = /^(?=.*[!@#$%^&*(),.?":{}|<>]).{4,16}$/;
 
-      if (confirmPw.length === 0) {
-        pwCheckMsg.textContent = "";
-        pwCheckMsg.className = "";
-        return;
-      }
+	    if (pw === "") {
+	        pwCheck.textContent = "";        // ← 이 부분 추가!
+	        pwCheck.className = "";
+	      pwCheckMsg.textContent = "";
+	      pwCheckMsg.className = "";
+	      isPwdChecked = false;
+	      return;
+	    }
 
-      if (pw === confirmPw) {
-        pwCheckMsg.textContent = "비밀번호가 일치합니다.";
-        pwCheckMsg.className = "match";
-        isPwdChecked = true;
-      } else {
-        pwCheckMsg.textContent = "비밀번호가 일치하지 않습니다.";
-        pwCheckMsg.className = "not-match";
-        isPwdChecked = false;
-      }
-    }
+	    if (!regex.test(pw)) {
+	    	pwCheck.textContent = "4자 이상 16자 이하이며, 특수문자 1개 이상을 포함";
+	    	pwCheck.className = "not-match";
+	      isPwdChecked = false;
+	      return;
+	    } else{
+	    	pwCheck.textContent = "조건에 맞는 비밀번호입니다!";
+	    	pwCheck.className = "match";
+	    	 isPwdChecked = false;
+	    }
+	    
 
-    passwordInput.addEventListener("input", checkPasswordMatch);
-    confirmPasswordInput.addEventListener("input", checkPasswordMatch);
+	    if (pw !== confirmPw) {
+	    	if(confirmPw === ""){
+		  	      pwCheckMsg.textContent = "";
+			      pwCheckMsg.className = "";
+			      isPwdChecked = false;
+			      return;
+	    	}
+	      pwCheckMsg.textContent = "비밀번호가 일치하지 않습니다.";
+	      pwCheckMsg.className = "not-match";
+	      isPwdChecked = false;
+	      return;
+	    } else {
+	      pwCheckMsg.textContent = "비밀번호가 일치합니다.";
+	      pwCheckMsg.className = "match";
+	      isPwdChecked = true;
+	      return;
+	    }
+	    
+	  }
+
+	  passwordInput.addEventListener("input", validatePasswords);
+	  confirmPasswordInput.addEventListener("input", validatePasswords);
   }
 });
+  
+  
 
   // 다음 주소 검색 API
   function execDaumPostcode() {
@@ -625,20 +643,24 @@ document.addEventListener("DOMContentLoaded", function () {
     }).open();
   }
 
-  // 이메일 조합 후 hidden 필드에 입력
   function handleEmailSubmit() {
-    const emailId = document.getElementById("emailId").value.trim();
-    const emailDomain = document.getElementById("emailDomain").value.trim();
+	  const params = new URLSearchParams(window.location.search);
+	  const social = params.get("social");
+	  
+	  if (social) return true; // 소셜이면 그냥 통과
 
-    console.log(emailId);
-    console.log(emailDomain);
-    if (emailId && emailDomain) {
-    	document.getElementById("email").value = emailId + "@" + emailDomain;
-    } else {
-    	document.getElementById("email").value = null;
-    }
-    return true;
-  }
+	  const emailId = document.getElementById("emailId").value.trim();
+	  const emailDomain = document.getElementById("emailDomain").value.trim();
+
+	  if (emailId && emailDomain) {
+	    document.getElementById("email").value = emailId + "@" + emailDomain;
+	  } else {
+	    document.getElementById("email").value = null;
+	  }
+
+	  return true;
+	}
+
   
   	function showAuthBox() {
 		    // 휴대전화 번호 결합

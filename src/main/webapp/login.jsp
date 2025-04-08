@@ -1,4 +1,5 @@
 <!-- login.jsp -->
+<%@page import="java.net.URLEncoder"%>
 <%@page import="DAO.UserDAO"%>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%
@@ -28,8 +29,7 @@
   <meta charset="UTF-8">
   <title>로그인 | everyWEAR</title>
 <link rel="stylesheet" type="text/css" href="css/login.css?v=2">
-  <link rel="stylesheet" type="text/css" href="css/header.css">
-  <link rel="icon" type="image/png" href="images/fav-icon.png">
+  <link rel="icon" type="image/png" href="images/logo-white.png">
 </head>
 <body>
 
@@ -87,6 +87,18 @@
                        + "&prompt=select_account";
     %>
     
+	<%
+	    String clientId_n = System.getenv("NAVER_CLIENT_ID");
+	    String redirectURI_n = java.net.URLEncoder.encode("http://everywear.duckdns.org/JSPTP/NaverLoginServlet", "UTF-8");
+	    String state = "RANDOM_STATE";  // 나중에 세션에 저장해도 좋아요
+	    String apiURL_n = "https://nid.naver.com/oauth2.0/authorize?response_type=code"
+	                  + "&client_id=" + clientId_n
+	                  + "&redirect_uri=" + redirectURI_n
+	                  + "&state=" + state;
+	%>
+
+
+
 
   <div class="social-login">
     <a class="social-btn google" href="<%=authUrl%>">
@@ -98,11 +110,11 @@
       <img src="images/kakao.png" alt="Kakao">
       <span>Sign in with Kakao</span>
     </a>
-    
-    <button class="social-btn naver">
-      <img src="images/Naver.png" alt="Naver">
-      <span>Sign in with Naver</span>
-    </button>
+ 	<br>
+	<a class="social-btn naver" href="<%= apiURL_n %>">
+	  <img src="images/Naver.png" alt="Naver">
+	  <span>Sign in with Naver</span>
+	</a>
   </div>
 
   <a href="guestOrder.jsp" class="guest-order">비회원 주문 조회</a>

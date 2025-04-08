@@ -40,7 +40,13 @@ public class Signup extends HttpServlet {
 			pwd = request.getParameter("password");
 		
 		String name = request.getParameter("name");
-		String email = request.getParameter("email");
+		String email = "";
+		
+		if(request.getParameter("email")!= null)
+			email = request.getParameter("email");
+		else if(!"일반".equals(type))
+			email = (String)session.getAttribute("id");
+
 		int point = 0;
 		if(request.getParameter("referrer") != null) {
 			if(userDao.idCheck(request.getParameter("referrer"))) {
