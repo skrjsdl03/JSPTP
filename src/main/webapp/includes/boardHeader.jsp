@@ -48,7 +48,7 @@
 
 	<!-- 로고 -->
 	<div class="logo-wrap">
-		<a href="main.jsp"> <img src="images/logo-black.png"
+		<a href="main2.jsp"> <img src="images/logo-black.png"
 			alt="everyWEAR" class="logo-img">
 		</a>
 	</div>
