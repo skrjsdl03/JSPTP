@@ -92,6 +92,7 @@ input:focus::placeholder {
 
 .find-links {
   text-align: right;
+  margin-top: 5px;
   margin-bottom: 15px;
   font-size: 13px;
 }
