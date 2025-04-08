@@ -71,7 +71,7 @@
   </div>
 </div>
 
-<footer>2025©everyWEAR</footer>
+<!-- <footer>2025©everyWEAR</footer> -->
 
 <script>
   function removeWishlistItem(heartElement) {

@@ -12,7 +12,7 @@
 	<%@ include file="includes/boardHeader.jsp"%>
 
 	<section2 class="content2">
-	<h3>리뷰</h3>
+	<h3>REVIEW</h3>
 	</section2>
 
 	<div class="container">
@@ -26,56 +26,229 @@
 		</aside>
 
 		<section class="content">
-			<table class="notice-table">
-				<tr>
-					<td>
-						<div class="product-box">
-							<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
-								class="product-img">
-							<div class="product-info">
-								<strong>ARCH LOGO VARSITY JACKET</strong><br> NAVY<br>
-								마음에 들어요
+			<table class="notice-table" id="notice-table">
+				<tbody>
+					<tr>
+						<td class="pdInfo">
+							<div class="product-box">
+								<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
+									class="product-img">
+								<div class="product-info">
+									<strong>ARCH LOGO VARSITY JACKET</strong><br> NAVY<br>
+									마음에 들어요
+								</div>
 							</div>
-						</div>
-					</td>
-					<td>★★★★☆</td>
-					<td>2025-03-30</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="product-box">
-							<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
-								class="product-img">
-							<div class="product-info">
-								<strong>ARCH LOGO VARSITY JACKET</strong><br> NAVY<br>
-								마음에 들어요
+						</td>
+						<td>★★★★☆</td>
+						<td class="date">2025-03-30</td>
+					</tr>
+					<tr>
+						<td class="pdInfo">
+							<div class="product-box">
+								<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
+									class="product-img">
+								<div class="product-info">
+									<strong>ARCH LOGO VARSITY JACKET</strong><br> NAVY<br>
+									마음에 들어요
+								</div>
 							</div>
-						</div>
-					</td>
-					<td>★★★★☆</td>
-					<td>2025-03-30</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="product-box">
-							<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
-								class="product-img">
-							<div class="product-info">
-								<strong>ARCH LOGO VARSITY JACKET</strong><br> NAVY<br>
-								마음에 들어요
+						</td>
+						<td>★★★★☆</td>
+						<td class="date">2025-03-30</td>
+					</tr>
+					<tr>
+						<td class="pdInfo">
+							<div class="product-box">
+								<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
+									class="product-img">
+								<div class="product-info">
+									<strong>ARCH LOGO VARSITY JACKET</strong><br> NAVY<br>
+									마음에 들어요
+								</div>
 							</div>
-						</div>
-					</td>
-					<td>★★★★☆</td>
-					<td>2025-03-30</td>
-				</tr>
+						</td>
+						<td>★★★★☆</td>
+						<td class="date">2025-03-30</td>
+					</tr>
+					<tr>
+						<td class="pdInfo">
+							<div class="product-box">
+								<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
+									class="product-img">
+								<div class="product-info">
+									<strong>ARCH LOGO VARSITY JACKET</strong><br> NAVY<br>
+									마음에 들어요
+								</div>
+							</div>
+						</td>
+						<td>★★★★☆</td>
+						<td class="date">2025-03-30</td>
+					</tr>
+					<tr>
+						<td class="pdInfo">
+							<div class="product-box">
+								<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
+									class="product-img">
+								<div class="product-info">
+									<strong>ARCH LOGO VARSITY JACKET</strong><br> NAVY<br>
+									마음에 들어요
+								</div>
+							</div>
+						</td>
+						<td>★★★★☆</td>
+						<td class="date">2025-03-30</td>
+					</tr>
+					<tr>
+						<td class="pdInfo">
+							<div class="product-box">
+								<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
+									class="product-img">
+								<div class="product-info">
+									<strong>ARCH LOGO VARSITY JACKET</strong><br> NAVY<br>
+									마음에 들어요
+								</div>
+							</div>
+						</td>
+						<td>★★★★☆</td>
+						<td class="date">2025-03-30</td>
+					</tr>
+					<tr>
+						<td class="pdInfo">
+							<div class="product-box">
+								<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
+									class="product-img">
+								<div class="product-info">
+									<strong>ARCH LOGO VARSITY JACKET</strong><br> NAVY<br>
+									마음에 들어요
+								</div>
+							</div>
+						</td>
+						<td>★★★★☆</td>
+						<td class="date">2025-03-30</td>
+					</tr>
+					<tr>
+						<td class="pdInfo">
+							<div class="product-box">
+								<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
+									class="product-img">
+								<div class="product-info">
+									<strong>ARCH LOGO VARSITY JACKET</strong><br> NAVY<br>
+									마음에 들어요
+								</div>
+							</div>
+						</td>
+						<td>★★★★☆</td>
+						<td class="date">2025-03-30</td>
+					</tr>
+					<tr>
+						<td class="pdInfo">
+							<div class="product-box">
+								<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
+									class="product-img">
+								<div class="product-info">
+									<strong>ARCH LOGO VARSITY JACKET</strong><br> NAVY<br>
+									마음에 들어요
+								</div>
+							</div>
+						</td>
+						<td>★★★★☆</td>
+						<td class="date">2025-03-30</td>
+					</tr>
+					<tr>
+						<td class="pdInfo">
+							<div class="product-box">
+								<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
+									class="product-img">
+								<div class="product-info">
+									<strong>ARCH LOGO VARSITY JACKET</strong><br> NAVY<br>
+									마음에 들어요
+								</div>
+							</div>
+						</td>
+						<td>★★★★☆</td>
+						<td class="date">2025-03-30</td>
+					</tr>
+					<tr>
+						<td class="pdInfo">
+							<div class="product-box">
+								<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
+									class="product-img">
+								<div class="product-info">
+									<strong>ARCH LOGO VARSITY JACKET</strong><br> NAVY<br>
+									마음에 들어요
+								</div>
+							</div>
+						</td>
+						<td>★★★★☆</td>
+						<td class="date">2025-03-30</td>
+					</tr>
+					<tr>
+						<td class="pdInfo">
+							<div class="product-box">
+								<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
+									class="product-img">
+								<div class="product-info">
+									<strong>ARCH LOGO VARSITY JACKET</strong><br> NAVY<br>
+									마음에 들어요
+								</div>
+							</div>
+						</td>
+						<td>★★★★☆</td>
+						<td class="date">2025-03-30</td>
+					</tr>
+					<tr>
+						<td class="pdInfo">
+							<div class="product-box">
+								<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
+									class="product-img">
+								<div class="product-info">
+									<strong>ARCH LOGO VARSITY JACKET</strong><br> NAVY<br>
+									마음에 들어요
+								</div>
+							</div>
+						</td>
+						<td>★★★★☆</td>
+						<td class="date">2025-03-30</td>
+					</tr>
+					<tr>
+						<td class="pdInfo">
+							<div class="product-box">
+								<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
+									class="product-img">
+								<div class="product-info">
+									<strong>ARCH LOGO VARSITY JACKET</strong><br> NAVY<br>
+									마음에 들어요
+								</div>
+							</div>
+						</td>
+						<td>★★★★☆</td>
+						<td class="date">2025-03-30</td>
+					</tr>
+					<tr>
+						<td class="pdInfo">
+							<div class="product-box">
+								<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
+									class="product-img">
+								<div class="product-info">
+									<strong>ARCH LOGO VARSITY JACKET</strong><br> NAVY<br>
+									마음에 들어요
+								</div>
+							</div>
+						</td>
+						<td>★★★★☆</td>
+						<td class="date">2025-03-30</td>
+					</tr>
+				</tbody>
 			</table>
 
 			<div class="pagination" id="pagination">
-				<span class="page-nav">Prev</span> <span class="page-num active">1</span>
-				<span class="page-num">2</span> <span class="page-num">3</span> <span
-					class="page-num">4</span> <span class="page-num">5</span> <span
-					class="page-nav">Next</span>
+				<span>Prev</span>
+				<span class="active">1</span>
+				<span>2</span>
+				<span>3</span>
+				<span>4</span>
+				<span>5</span>
+				<span>Next</span>
 			</div>
 
 			<script>
@@ -95,5 +268,63 @@
 			</div>
 		</section>
 	</div>
+
+	<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const rowsPerPage = 6;
+    const table = document.getElementById("notice-table");
+    const rows = table.querySelectorAll("tbody tr");
+    const totalPages = Math.ceil(rows.length / rowsPerPage);
+    const pagination = document.getElementById("pagination");
+
+    let currentPage = 1;
+
+    function showPage(page) {
+      const start = (page - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+
+      rows.forEach((row, index) => {
+        row.style.display = index >= start && index < end ? "" : "none";
+      });
+
+      updatePagination(page);
+    }
+
+    function updatePagination(activePage) {
+      pagination.innerHTML = "";
+
+      // Prev 버튼
+      const prev = document.createElement("span");
+      prev.textContent = "Prev";
+      prev.onclick = () => {
+        if (currentPage > 1) showPage(--currentPage);
+      };
+      pagination.appendChild(prev);
+
+      // 페이지 번호
+      for (let i = 1; i <= totalPages; i++) {
+        const span = document.createElement("span");
+        span.textContent = i;
+        if (i === activePage) span.classList.add("active");
+        span.onclick = () => {
+          currentPage = i;
+          showPage(currentPage);
+        };
+        pagination.appendChild(span);
+      }
+
+      // Next 버튼
+      const next = document.createElement("span");
+      next.textContent = "Next";
+      next.onclick = () => {
+        if (currentPage < totalPages) showPage(++currentPage);
+      };
+      pagination.appendChild(next);
+    }
+
+    // 초기 페이지 로드
+    showPage(currentPage);
+  });
+</script>
 
 </body>
