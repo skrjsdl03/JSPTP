@@ -1,0 +1,257 @@
+@charset "UTF-8";
+
+body {
+  font-family: 'Malgun Gothic', sans-serif;
+  background-color: #fff;
+  margin: 0;
+}
+
+.top-nav {
+  width: 100%;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.menu-btn {
+  position: absolute;
+  left: 20px;
+  top: 28px;
+  font-size: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.logo-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.logo-img {
+  width: 110px;
+  height: auto;
+  margin-bottom: 8px;
+}
+
+.mypage-title {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.nav-right {
+  position: absolute;
+  right: 30px;
+  top: 32px;
+  display: flex;
+  gap: 16px;
+}
+
+.nav-right a {
+  font-size: 10px;
+  font-weight: bold;
+  text-decoration: none;
+  color: black;
+}
+
+.order-container {
+  display: flex;
+  gap: 60px;
+  padding: 0 40px;
+}
+
+.order-container {
+  display: flex;
+  padding: 0 40px;
+  gap: 0; /* gap 없애고 아래에서 margin으로 정렬 */
+}
+
+.sidebar {
+  width: 180px;
+  flex-shrink: 0;
+}
+
+.post-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.tab-content {
+  width: 100%;
+  max-width: 700px;  /* ✅ 여기가 본문 최대 폭 */
+}
+
+.user-box {
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+}
+
+.username {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.user-info {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  row-gap: 4px;
+}
+
+.side-menu {
+  list-style: none;
+  padding: 0;
+}
+
+.side-menu li {
+  padding: 8px 0;
+  cursor: pointer;
+  color: #222;
+}
+
+.side-menu li.active {
+  color: #015FC1;
+  font-weight: bold;
+}
+
+.main-content {
+  flex: 1;
+}
+
+.delivery-title-wrap {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.delivery-title {
+  font-size: 18px;
+  font-weight: bold;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #888;
+  display: inline-block;
+  width: 90%;
+}
+
+.tab-wrap {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 30px 0 15px;
+  border-bottom: 1px solid #ccc;
+  width: 100%;
+  max-width: 700px;
+}
+
+.tab-wrap,
+.tab-content {
+  width: 100%;
+  max-width: 700px; /* 원하는 폭으로 조정 가능 */
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  padding-bottom: 6px;
+  border-bottom: 2px solid transparent;
+}
+
+.tab-btn.active {
+  color: #015FC1;
+  border-bottom: 2px solid #015FC1;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.post-item {
+  width: 100%;
+  max-width: 650px;
+  border-bottom: 1px solid #e2e2e2;
+  padding: 20px 0;
+}
+
+.post-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  margin-right: 20px;
+  border-radius: 8px;
+}
+
+.post-info {
+  flex: 1;
+}
+
+.post-title {
+  font-weight: bold;
+  margin: 0 0 4px;
+}
+
+.post-option,
+.post-text {
+  font-size: 13px;
+  color: #444;
+  margin: 2px 0;
+}
+
+.post-meta {
+  text-align: right;
+  font-size: 12px;
+  min-width: 120px;
+}
+
+.post-stars {
+  color: #FFA500;
+}
+
+.post-status {
+  font-weight: bold;
+  color: #888;
+}
+
+.post-date {
+  margin: 6px 0;
+}
+
+.action-group {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.btn-edit {
+  color: #015FC1;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.btn-delete {
+  color: #ccc;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+footer {
+  text-align: center;
+  font-size: 12px;
+  color: #aaa;
+  padding: 30px 0;
+}
