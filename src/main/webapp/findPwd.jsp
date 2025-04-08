@@ -16,7 +16,7 @@
 <div class="find-id-container">
   <h2>비밀번호 찾기</h2>
 
-  <form id="findPwdForm">
+  <form id="findPwdForm" action="findPwdResult.jsp" method="post">
 
     <!-- 인증 방식 -->
     <label>본인확인 인증</label>
@@ -29,7 +29,7 @@
 
     <!-- 아이디 입력 -->
     <label for="name">아이디</label>
-    <input type="text" id="name" name="name" placeholder="아이디를 입력하세요" required>
+    <input type="text" id="id" name="id" placeholder="아이디를 입력하세요" required>
     
     <!-- 이름 입력 -->
     <label for="name">이름</label>
@@ -39,11 +39,11 @@
     <div id="phoneInputGroup">
       <label for="phone1">휴대폰번호로 찾기</label>
       <div class="phone-input-group">
-        <input type="text" id="phone1" maxlength="3" required>
+        <input type="text" id="phone1" maxlength="3" value="010" readonly>
         <span>-</span>
-        <input type="text" id="phone2" maxlength="4" required>
+        <input type="text" id="phone2" maxlength="4" placeholder="1234" required>
         <span>-</span>
-        <input type="text" id="phone3" maxlength="4" required>
+        <input type="text" id="phone3" maxlength="4" placeholder="5678" required>
       </div>
     </div>
 
@@ -64,12 +64,12 @@
   </div>
 
   <!-- 실제 서버로 보낼 숨은 필드 -->
-  <input type="hidden" id="email" name="email">
+  <input type="hidden" id="email1" name="email">
 </div>
 
     <!-- 인증 버튼 -->
     <div id="authBtnBox">
-      <button type="button" class="btn black" onclick="showVerification()">인증</button>
+      <button type="button" class="btn black" id="verification" onclick="showAuthBoxByPhone()">인증</button>
     </div>
 
     <!-- 인증번호 입력 영역 -->
@@ -78,8 +78,8 @@
       <input type="text" id="verifyCode" name="verifyCode" placeholder="인증번호를 입력하세요">
 
       <div class="verify-btn-group">
-        <button type="button" class="btn white">재전송</button>
-        <button type="submit" class="btn black">확인</button>
+        <button type="button" id=reverification class="btn white" onclick="showAuthBoxByPhone()">재전송</button>
+        <button type="button" class="btn black" onclick="checkCode()">확인</button>
       </div>
     </div>
 
@@ -90,61 +90,188 @@
 
 <!-- 스크립트: 이메일 주소 조합 및 인증 방식 전환 -->
 <script>
-  const emailId = document.getElementById("emailId");
-  const emailDomain = document.getElementById("emailDomain");
-  const emailFull = document.getElementById("email");
+const emailId = document.getElementById("emailId");
+const emailDomain = document.getElementById("emailDomain");
+const emailFull = document.getElementById("email1");
 
-  const form = document.getElementById("findIdForm");
-  form.addEventListener("submit", function(e) {
-    if (emailRadio.checked) {
-      const id = emailId.value.trim();
-      const domain = emailDomain.value;
-      if (!id || !domain) {
-        alert("이메일 아이디와 도메인을 모두 입력해주세요.");
-        e.preventDefault();
-        return;
-      }
-      emailFull.value = `${id}@${domain}`;
+const form = document.getElementById("findPwdForm");
+form.addEventListener("submit", function(e) {
+  if (emailRadio.checked) {
+    const id = emailId.value.trim();
+    const domain = emailDomain.value;
+    if (!id || !domain) {
+      alert("이메일 아이디와 도메인을 모두 입력해주세요.");
+      e.preventDefault();
+      return;
     }
-  });
+    emailFull.value = `${id}@${domain}`;
+  }
+});
 </script>
 
 <script>
-  // 인증 버튼 클릭 시 인증번호 입력창 보이기
-  function showVerification() {
+function showAuthBoxByPhone() {
+	const id = document.getElementById("id");
+	const name = document.getElementById("name");
+	if(!id.value){
+		alert("아이디를 입력하시오.");
+		return;
+	}
+	if(!name.value){
+		alert("이름을 입력하시오.");
+		return;
+	}
+    // 휴대전화 번호 결합
+  const p1 = document.getElementById('phone1').value.trim();
+  const p2 = document.getElementById('phone2').value.trim();
+  const p3 = document.getElementById('phone3').value.trim();
+  console.log("p1:", p1, typeof p1);
+  console.log("p2:", p2, typeof p2);
+  console.log("p3:", p3, typeof p3);
+  const p = p1+p2+p3;
+  
+  console.log("전화번호:", p); // 디버깅용
+    if (!p.match(/^010\d{4}\d{4}$/)) {
+      alert("전화번호 형식이 올바르지 않습니다.");
+      return;
+    }
+    
+    fetch("sendSMS.jsp?phone=" + encodeURIComponent(p))
+      .then(res => res.json())
+      .then(data => {
+        if (data.result === "success") {
+          alert("인증번호가 전송되었습니다.");
+          document.getElementById('authBtnBox').style.display = 'none';
+          document.getElementById('verifyBox').style.display = 'block';
+          document.getElementById("id").readOnly = true;
+          document.getElementById("name").readOnly = true;
+          document.getElementById("phone2").readOnly = true;
+          document.getElementById("phone3").readOnly = true;
+        } else {
+          alert("전송 실패");
+        }
+      });
+}
+  // 숫자만 입력되게
+  ['phone2', 'phone3', 'verifyCode'].forEach(id => {
+    document.getElementById(id).addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, '');
+    });
+  });
+  
+function checkCode(){
+	const writeCode = document.getElementById('verifyCode').value.trim();
+	const name = document.getElementById("name");
+	 fetch("verifyCode.jsp?code=" + encodeURIComponent(writeCode))
+	    .then(res => res.json())
+	    .then(data => {
+	      if (data.result === "success") {
+	        alert("확인되었습니다.");
+	        document.getElementById("findPwdForm").submit();
+	        }else {
+	        alert("인증번호가 틀렸습니다.");
+	      }
+	    });
+}
+
+function handleEmailSubmit() {
+const emailId = document.getElementById("emailId").value.trim();
+const emailDomain = document.getElementById("emailDomain").value.trim();
+if (emailId && emailDomain) {
+	document.getElementById("email1").value = emailId + "@" + emailDomain;
+} else {
+	document.getElementById("email1").value = null;
+}
+console.log("이메일: " + document.getElementById("email1").value);
+return true;
+}
+  
+function showAuthBoxByEmail(){
+const name = document.getElementById("name");
+if(name.value == null || name.value == ""){
+	alert("이름을 입력하시오.");
+	return;
+}
+if(handleEmailSubmit()){
+    const email = document.getElementById("email1").value;
+    if (!email) {
+        alert("이메일을 입력하시오.");
+        return;
+    }
+	alert("인증번호가 이메일로 전송되었습니다!");
     document.getElementById('authBtnBox').style.display = 'none';
     document.getElementById('verifyBox').style.display = 'block';
-  }
+	document.getElementById("id").readOnly = true;
+    document.getElementById("name").readOnly = true;
+    document.getElementById("emailId").readOnly = true;
+    document.getElementById("emailDomain").disabled = true;
+    fetch("sendEmail.jsp", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "name=" + encodeURIComponent(name) + "&email=" + encodeURIComponent(email)
 
-  // 요소 가져오기
-  const phoneRadio = document.getElementById("phone");
-  const emailRadio = document.getElementById("email");
-  const phoneInputGroup = document.getElementById("phoneInputGroup");
-  const emailInputGroup = document.getElementById("emailInputGroup");
-  const authBtnBox = document.getElementById("authBtnBox");
-  const verifyBox = document.getElementById("verifyBox");
+    })
+    .then(res => res.text())
+    .then(data => {
 
-  // 라디오 버튼 변경 시 실행
-  phoneRadio.addEventListener("change", toggleAuthInput);
-  emailRadio.addEventListener("change", toggleAuthInput);
+    })
+    .catch(err => {
+        console.error(err);
+        alert("인증번호 전송 중 오류가 발생했습니다.");
+    });
+}
+}
 
-  function toggleAuthInput() {
-    // 입력창 전환
-    if (phoneRadio.checked) {
-      phoneInputGroup.style.display = "block";
-      emailInputGroup.style.display = "none";
-    } else if (emailRadio.checked) {
-      phoneInputGroup.style.display = "none";
-      emailInputGroup.style.display = "block";
-    }
+// 요소 가져오기
+const phoneRadio = document.getElementById("phone");
+const emailRadio = document.getElementById("email");
+const phoneInputGroup = document.getElementById("phoneInputGroup");
+const emailInputGroup = document.getElementById("emailInputGroup");
+const authBtnBox = document.getElementById("authBtnBox");
+const verifyBox = document.getElementById("verifyBox");
 
-    // ✅ 인증 상태 초기화
-    verifyBox.style.display = "none";
-    authBtnBox.style.display = "block";
-  }
+// 라디오 버튼 변경 시 실행
+phoneRadio.addEventListener("change", toggleAuthInput);
+emailRadio.addEventListener("change", toggleAuthInput);
 
-  // 페이지 로드시 초기 세팅
-  window.addEventListener("DOMContentLoaded", toggleAuthInput);
+function toggleAuthInput() {
+// 입력창 전환
+if (phoneRadio.checked) {
+phoneInputGroup.style.display = "block";
+if (emailInputGroup) emailInputGroup.style.display = "none";
+document.getElementById("verification").onclick = showAuthBoxByPhone;
+document.getElementById("reverification").onclick = showAuthBoxByPhone;
+document.getElementById("id").readOnly = false;
+document.getElementById("name").readOnly = false;
+document.getElementById("phone2").readOnly = false;
+document.getElementById("phone3").readOnly = false;
+document.getElementById("id").value = "";
+document.getElementById("name").value = "";
+document.getElementById("phone2").value = "";
+document.getElementById("phone3").value = "";
+} else if (emailRadio.checked) {
+if(phoneInputGroup)phoneInputGroup.style.display = "none";
+emailInputGroup.style.display = "block";
+document.getElementById("verification").onclick = showAuthBoxByEmail;
+document.getElementById("reverification").onclick = showAuthBoxByEmail;
+document.getElementById("id").readOnly = false;
+document.getElementById("name").readOnly = false;
+document.getElementById("emailId").readOnly = false;
+document.getElementById("emailDomain").disabled = false;
+document.getElementById("id").value = "";
+document.getElementById("name").value = "";
+document.getElementById("emailId").value = "";
+document.getElementById("emailDomain").value = "";
+}
+// ✅ 인증 상태 초기화
+verifyBox.style.display = "none";
+authBtnBox.style.display = "block";
+}
+
+// 페이지 로드시 초기 세팅
+window.addEventListener("DOMContentLoaded", toggleAuthInput);
 </script>
 
 </body>
