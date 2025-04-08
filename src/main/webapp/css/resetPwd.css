@@ -85,6 +85,53 @@ input[readonly] {
   width: 100%;
 }
 
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.btn {
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+  text-align: center;
+  font-weight: bold;
+  text-decoration: none; /* ✅ 링크 밑줄 제거 */
+}
+
+.btn.black {
+  background-color: black;
+  color: white;
+  border: none;
+}
+
+.btn.white {
+  background-color: white;
+  color: black;
+  border: 1px solid #ccc;
+}
+
+.match {
+  color: green;
+}
+
+.not-match {
+  color: red;
+}
+
+#pwCheck{
+font-size: 13px;
+  text-align: left;
+}
+
+#pwCheckMsg{
+font-size: 13px;
+  text-align: left;
+}
+
 footer {
   text-align: center;
   font-size: 12px;

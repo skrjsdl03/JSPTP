@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <title>에브리웨어 | everyWEAR</title>
 <link rel="icon" type="image/png" href="images/fav-icon.png">
-<link rel="stylesheet" type="text/css" href="css/board.css?v=654">
+<link rel="stylesheet" type="text/css" href="css/board.css?v=165456">
 </head>
 <body>
 
@@ -18,19 +18,19 @@
 	<div class="container">
 		<aside class="sidebar2">
 			<ul>
-				<li><a href="board.jsp">공지사항</a></li>
+				<li><a href="board.jsp">BOARD</a></li>
 				<li><a href="FAQ.jsp">FAQ</a></li>
 				<li><a href="Q&A.jsp">Q&A</a></li>
-				<li><a href="review.jsp">리뷰</a></li>
+				<li><a href="review.jsp">REVIEW</a></li>
 			</ul>
 		</aside>
 
 		<section class="content">
 			<table class="notice-table">
 				<tr class="important">
-					<td>※ 이용 안내</td>
-					<td>2025-03-30</td>
-					<td>조회수: 56</td>
+					<td class="title">※ 이용 안내</td>
+					<td class="date">2025-03-30</td>
+					<td class="views">조회수: 56</td>
 				</tr>
 
 				<!-- 본문 내용을 별도 tr로 처리 -->

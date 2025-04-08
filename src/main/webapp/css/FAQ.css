@@ -26,7 +26,7 @@ h3 {
 	top: 0;
 	left: 80px;
 	width: 180px;
-	height: 100vh;
+	height: 700px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -61,6 +61,20 @@ h2 {
 	text-align: center;
 	font-size: 20px;
 	margin-bottom: 20px;
+}
+
+.notice-table td.views {
+  text-align: right;
+  padding-right: 30px;
+  white-space: nowrap;
+}
+
+.notice-table td.date {
+  width: 150px;
+}
+
+.notice-table td.title {
+  width: 600px;
 }
 
 .notice-table {
@@ -99,4 +113,56 @@ h2 {
 	margin-top: 20px;
 	font-size: 12px;
 	color: #FFFFFF;
+}
+
+.faq-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+}
+
+.faq-item .arrow {
+    transition: transform 0.3s ease;
+    font-size: 14px;
+    color: #888;
+}
+
+.faq-item.active .arrow {
+    transform: rotate(180deg); /* 아래 → 위 */
+}
+
+.faq-content {
+    display: none;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #ddd;
+    background-color: #f2f2f2; /* 기존보다 조금 더 어둡게 */
+    margin: 0 15px 15px 15px;  /* 좌우 여백 및 아래 마진 */
+}
+
+.faq-item.active + .faq-content {
+    display: block;
+}
+
+.pagination {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.pagination a {
+  margin: 0 5px;
+  text-decoration: none;
+  color: black;
+}
+
+.pagination a.active {
+  font-weight: bold;
+  color: #fff;
+  background-color: #000;
+  padding: 5px 10px;
+  border-radius: 4px;
 }
