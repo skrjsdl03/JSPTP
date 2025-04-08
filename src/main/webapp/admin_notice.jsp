@@ -1,9 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="DAO.NoticeDAO" %>
-<%@ page import="DTO.NoticeDTO" %>
-<%@ page import="java.text.SimpleDateFormat" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -13,38 +8,6 @@
 <link rel="stylesheet" type="text/css" href="css/admin_notice.css">
 </head>
 <body>
-<%
-    // 페이지네이션 설정
-    int currentPage = 1;
-    if (request.getParameter("page") != null) {
-        currentPage = Integer.parseInt(request.getParameter("page"));
-    }
-    
-    int itemsPerPage = 10; // 한 페이지에 표시할 항목 수
-    int start = (currentPage - 1) * itemsPerPage;
-    
-    // 검색 파라미터 가져오기
-    String searchType = request.getParameter("searchType");
-    String keyword = request.getParameter("keyword");
-    
-    NoticeDAO noticeDAO = new NoticeDAO();
-    List<NoticeDTO> noticeList = new ArrayList<>();
-    int totalNotices = 0;
-    
-    // 검색 여부에 따라 다른 메서드 호출
-    if (searchType != null && keyword != null && !keyword.trim().isEmpty()) {
-        noticeList = noticeDAO.searchNotices(searchType, keyword, start, itemsPerPage);
-        totalNotices = noticeDAO.getSearchResultCount(searchType, keyword);
-    } else {
-        noticeList = noticeDAO.getNoticeList(start, itemsPerPage);
-        totalNotices = noticeDAO.getTotalNoticeCount();
-    }
-    
-    int totalPages = (int) Math.ceil((double) totalNotices / itemsPerPage);
-    
-    // 날짜 포맷 설정
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-%>
 
     <header>
         <div class="header-container">
@@ -70,14 +33,12 @@
             <div class="notice-control">
                 <button id="addNoticeBtn" class="btn btn-primary">새 공지사항 작성</button>
                 <div class="search-box">
-                    <form action="admin_notice.jsp" method="get">
-                        <select id="searchType" name="searchType">
-                            <option value="title" <%= "title".equals(searchType) ? "selected" : "" %>>제목</option>
-                            <option value="content" <%= "content".equals(searchType) ? "selected" : "" %>>내용</option>
-                        </select>
-                        <input type="text" id="searchKeyword" name="keyword" placeholder="검색어 입력" value="<%= keyword != null ? keyword : "" %>">
-                        <button type="submit" id="searchBtn" class="btn">검색</button>
-                    </form>
+                    <select id="searchType">
+                        <option value="title">제목</option>
+                        <option value="content">내용</option>
+                    </select>
+                    <input type="text" id="searchKeyword" placeholder="검색어 입력">
+                    <button id="searchBtn" class="btn">검색</button>
                 </div>
             </div>
             
@@ -94,38 +55,90 @@
                     </tr>
                 </thead>
                 <tbody>
-                <% if (noticeList.isEmpty()) { %>
                     <tr>
-                        <td colspan="7" style="text-align: center; padding: 20px;">공지사항이 없습니다.</td>
-                    </tr>
-                <% } else { 
-                     for (NoticeDTO notice : noticeList) {
-                        String formattedDate = "";
-                        try {
-                            // DB에서 가져온 날짜를 포맷팅
-                            formattedDate = sdf.format(sdf.parse(notice.getCreated_at()));
-                        } catch (Exception e) {
-                            formattedDate = notice.getCreated_at();
-                        }
-                        
-                        boolean isPinned = "Y".equals(notice.getNoti_isPinned());
-                %>
-                    <tr>
-                        <td><input type="checkbox" class="notice-check" value="<%= notice.getNoti_id() %>"></td>
-                        <td><%= notice.getNoti_id() %></td>
-                        <td><a href="admin_notice_view.jsp?id=<%= notice.getNoti_id() %>"><%= notice.getNoti_title() %></a></td>
-                        <td><%= formattedDate %></td>
-                        <td><%= notice.getNoti_views() %></td>
-                        <td><span class="badge <%= isPinned ? "important" : "normal" %>"><%= isPinned ? "중요" : "일반" %></span></td>
+                        <td><input type="checkbox" class="notice-check"></td>
+                        <td>10</td>
+                        <td>이용 안내</td>
+                        <td>2025-03-30</td>
+                        <td>56</td>
+                        <td><span class="badge important">중요</span></td>
                         <td>
-                            <button class="btn btn-sm btn-edit" data-id="<%= notice.getNoti_id() %>">수정</button>
-                            <button class="btn btn-sm btn-delete" data-id="<%= notice.getNoti_id() %>">삭제</button>
+                            <button class="btn btn-sm btn-edit">수정</button>
+                            <button class="btn btn-sm btn-delete">삭제</button>
                         </td>
                     </tr>
-                <% 
-                     }
-                   } 
-                %>
+                    <tr>
+                        <td><input type="checkbox" class="notice-check"></td>
+                        <td>9</td>
+                        <td>일부 지역 배송 제한 안내</td>
+                        <td>2025-03-25</td>
+                        <td>42</td>
+                        <td><span class="badge important">중요</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-edit">수정</button>
+                            <button class="btn btn-sm btn-delete">삭제</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" class="notice-check"></td>
+                        <td>8</td>
+                        <td>4월 신상품 입고 안내</td>
+                        <td>2025-03-20</td>
+                        <td>78</td>
+                        <td><span class="badge normal">일반</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-edit">수정</button>
+                            <button class="btn btn-sm btn-delete">삭제</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" class="notice-check"></td>
+                        <td>7</td>
+                        <td>시스템 점검 안내</td>
+                        <td>2025-03-15</td>
+                        <td>35</td>
+                        <td><span class="badge normal">일반</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-edit">수정</button>
+                            <button class="btn btn-sm btn-delete">삭제</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" class="notice-check"></td>
+                        <td>6</td>
+                        <td>회원 등급 혜택 변경 안내</td>
+                        <td>2025-03-10</td>
+                        <td>64</td>
+                        <td><span class="badge normal">일반</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-edit">수정</button>
+                            <button class="btn btn-sm btn-delete">삭제</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" class="notice-check"></td>
+                        <td>5</td>
+                        <td>3월 이벤트 당첨자 발표</td>
+                        <td>2025-03-05</td>
+                        <td>93</td>
+                        <td><span class="badge normal">일반</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-edit">수정</button>
+                            <button class="btn btn-sm btn-delete">삭제</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" class="notice-check"></td>
+                        <td>4</td>
+                        <td>봄 시즌 할인 이벤트</td>
+                        <td>2025-02-28</td>
+                        <td>112</td>
+                        <td><span class="badge normal">일반</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-edit">수정</button>
+                            <button class="btn btn-sm btn-delete">삭제</button>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             
@@ -136,28 +149,13 @@
             </div>
             
             <div class="pagination" id="pagination">
-                <% if (currentPage > 1) { %>
-                    <a href="admin_notice.jsp?page=<%= currentPage - 1 %><%= searchType != null && keyword != null ? "&searchType=" + searchType + "&keyword=" + keyword : "" %>">Prev</a>
-                <% } else { %>
-                    <span class="disabled">Prev</span>
-                <% } %>
-                
-                <% 
-                // 페이지 번호 표시 범위 설정
-                int startPage = Math.max(1, currentPage - 2);
-                int endPage = Math.min(totalPages, currentPage + 2);
-                
-                for (int i = startPage; i <= endPage; i++) { 
-                %>
-                    <a href="admin_notice.jsp?page=<%= i %><%= searchType != null && keyword != null ? "&searchType=" + searchType + "&keyword=" + keyword : "" %>" 
-                       class="<%= i == currentPage ? "active" : "" %>"><%= i %></a>
-                <% } %>
-                
-                <% if (currentPage < totalPages) { %>
-                    <a href="admin_notice.jsp?page=<%= currentPage + 1 %><%= searchType != null && keyword != null ? "&searchType=" + searchType + "&keyword=" + keyword : "" %>">Next</a>
-                <% } else { %>
-                    <span class="disabled">Next</span>
-                <% } %>
+                <span>Prev</span>
+                <span class="active">1</span>
+                <span>2</span>
+                <span>3</span>
+                <span>4</span>
+                <span>5</span>
+                <span>Next</span>
             </div>
         </div>
     </main>
@@ -170,10 +168,7 @@
                 <span class="close">&times;</span>
             </div>
             <div class="modal-body">
-                <form id="noticeForm" action="NoticeServlet" method="post">
-                    <input type="hidden" id="noticeId" name="noticeId" value="">
-                    <input type="hidden" id="action" name="action" value="insert">
-                    
+                <form id="noticeForm">
                     <div class="form-group">
                         <label for="noticeTitle">제목</label>
                         <input type="text" id="noticeTitle" name="noticeTitle" placeholder="제목을 입력하세요" required>
@@ -186,10 +181,10 @@
                         <label>공지 상태</label>
                         <div class="radio-group">
                             <label>
-                                <input type="radio" name="noticeStatus" value="N" checked> 일반
+                                <input type="radio" name="noticeStatus" value="normal" checked> 일반
                             </label>
                             <label>
-                                <input type="radio" name="noticeStatus" value="Y"> 중요
+                                <input type="radio" name="noticeStatus" value="important"> 중요
                             </label>
                         </div>
                     </div>
@@ -211,24 +206,13 @@
             </div>
             <div class="modal-body">
                 <p>선택한 공지사항을 삭제하시겠습니까?</p>
-                <form id="deleteForm" action="NoticeServlet" method="post">
-                    <input type="hidden" id="deleteIds" name="deleteIds" value="">
-                    <input type="hidden" name="action" value="delete">
-                    <div class="form-actions">
-                        <button type="button" id="cancelDeleteBtn" class="btn">취소</button>
-                        <button type="submit" id="confirmDeleteBtn" class="btn btn-danger">삭제</button>
-                    </div>
-                </form>
+                <div class="form-actions">
+                    <button type="button" id="cancelDeleteBtn" class="btn">취소</button>
+                    <button type="button" id="confirmDeleteBtn" class="btn btn-danger">삭제</button>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- 상태 변경 폼 -->
-    <form id="statusForm" action="NoticeServlet" method="post" style="display: none;">
-        <input type="hidden" id="statusIds" name="statusIds" value="">
-        <input type="hidden" id="statusValue" name="statusValue" value="">
-        <input type="hidden" name="action" value="updateStatus">
-    </form>
 
     <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -240,7 +224,6 @@
         const cancelBtn = document.getElementById("cancelBtn");
         const modalTitle = document.getElementById("modalTitle");
         const noticeForm = document.getElementById("noticeForm");
-        const statusForm = document.getElementById("statusForm");
         
         // 체크박스 관련
         const selectAllCheckbox = document.getElementById("selectAll");
@@ -258,8 +241,6 @@
         // 모달 열기
         addNoticeBtn.addEventListener("click", function() {
             modalTitle.textContent = "공지사항 작성";
-            document.getElementById("action").value = "insert";
-            document.getElementById("noticeId").value = "";
             noticeForm.reset();
             noticeModal.style.display = "block";
         });
@@ -300,21 +281,15 @@
         // 수정 버튼 클릭
         editButtons.forEach(function(btn) {
             btn.addEventListener("click", function() {
-                const noticeId = this.getAttribute("data-id");
-                modalTitle.textContent = "공지사항 수정";
-                document.getElementById("action").value = "update";
-                document.getElementById("noticeId").value = noticeId;
-                
-                // AJAX로 공지사항 정보 가져오기 (실제 구현 시)
-                // 여기에서는 간단히 구현
                 const row = this.closest("tr");
-                const title = row.querySelector("td:nth-child(3) a").textContent;
+                const title = row.querySelector("td:nth-child(3)").textContent;
                 const isImportant = row.querySelector(".badge").classList.contains("important");
                 
                 document.getElementById("noticeTitle").value = title;
-                document.getElementById("noticeContent").value = "공지사항 내용을 불러오는 중..."; // 실제로는 AJAX로 가져와야 함
-                document.querySelector(`input[name="noticeStatus"][value="${isImportant ? 'Y' : 'N'}"]`).checked = true;
+                document.getElementById("noticeContent").value = "샘플 공지사항 내용입니다."; // 실제로는 DB에서 가져와야 함
+                document.querySelector(`input[name="noticeStatus"][value="${isImportant ? 'important' : 'normal'}"]`).checked = true;
                 
+                modalTitle.textContent = "공지사항 수정";
                 noticeModal.style.display = "block";
             });
         });
@@ -322,47 +297,65 @@
         // 삭제 버튼 클릭
         deleteButtons.forEach(function(btn) {
             btn.addEventListener("click", function() {
-                const noticeId = this.getAttribute("data-id");
-                document.getElementById("deleteIds").value = noticeId;
                 deleteModal.style.display = "block";
             });
         });
         
         // 선택 삭제 버튼 클릭
         deleteSelectedBtn.addEventListener("click", function() {
-            const checkedBoxes = document.querySelectorAll(".notice-check:checked");
-            if (checkedBoxes.length > 0) {
-                const ids = Array.from(checkedBoxes).map(box => box.value).join(",");
-                document.getElementById("deleteIds").value = ids;
+            const hasSelected = Array.from(noticeCheckboxes).some(checkbox => checkbox.checked);
+            if (hasSelected) {
                 deleteModal.style.display = "block";
             } else {
                 alert("삭제할 공지사항을 선택해주세요.");
             }
         });
         
-        // 중요 설정 버튼
+        // 공지사항 저장
+        noticeForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+            // 여기에 서버로 데이터 전송 코드 추가
+            alert("공지사항이 저장되었습니다.");
+            noticeModal.style.display = "none";
+        });
+        
+        // 공지사항 삭제 확인
+        confirmDeleteBtn.addEventListener("click", function() {
+            // 여기에 서버로 삭제 요청 코드 추가
+            alert("선택한 공지사항이 삭제되었습니다.");
+            deleteModal.style.display = "none";
+        });
+        
+        // 중요/일반 설정 버튼
         setImportantBtn.addEventListener("click", function() {
-            const checkedBoxes = document.querySelectorAll(".notice-check:checked");
-            if (checkedBoxes.length > 0) {
-                const ids = Array.from(checkedBoxes).map(box => box.value).join(",");
-                document.getElementById("statusIds").value = ids;
-                document.getElementById("statusValue").value = "Y";
-                statusForm.submit();
+            const hasSelected = Array.from(noticeCheckboxes).some(checkbox => checkbox.checked);
+            if (hasSelected) {
+                // 여기에 서버로 상태 변경 요청 코드 추가
+                alert("선택한 공지사항이 중요로 설정되었습니다.");
             } else {
                 alert("상태를 변경할 공지사항을 선택해주세요.");
             }
         });
         
-        // 일반 설정 버튼
         setNormalBtn.addEventListener("click", function() {
-            const checkedBoxes = document.querySelectorAll(".notice-check:checked");
-            if (checkedBoxes.length > 0) {
-                const ids = Array.from(checkedBoxes).map(box => box.value).join(",");
-                document.getElementById("statusIds").value = ids;
-                document.getElementById("statusValue").value = "N";
-                statusForm.submit();
+            const hasSelected = Array.from(noticeCheckboxes).some(checkbox => checkbox.checked);
+            if (hasSelected) {
+                // 여기에 서버로 상태 변경 요청 코드 추가
+                alert("선택한 공지사항이 일반으로 설정되었습니다.");
             } else {
                 alert("상태를 변경할 공지사항을 선택해주세요.");
+            }
+        });
+        
+        // 페이지네이션
+        const paginationSpans = document.querySelectorAll(".pagination span");
+        paginationSpans.forEach(function(span) {
+            if (span.textContent !== "Prev" && span.textContent !== "Next") {
+                span.addEventListener("click", function() {
+                    document.querySelector(".pagination .active").classList.remove("active");
+                    this.classList.add("active");
+                    // 여기에 페이지 변경 코드 추가
+                });
             }
         });
     });
