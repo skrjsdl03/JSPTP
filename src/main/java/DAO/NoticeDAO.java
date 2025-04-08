@@ -3,8 +3,10 @@ package DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import DTO.NoticeDTO;
 
@@ -18,6 +20,8 @@ public class NoticeDAO {
             e.printStackTrace();
         }
     }
+    
+    private final SimpleDateFormat SDF_DATE = new SimpleDateFormat("yyyy-MM-dd");
     
     // 공지사항 목록 가져오기
     public List<NoticeDTO> getNoticeList(int start, int end) {
@@ -328,5 +332,57 @@ public class NoticeDAO {
         }
         
         return count;
+    }
+    
+    //중요 공지사항 출력
+    public Vector<NoticeDTO> showImpNotice(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<NoticeDTO> nlist = new Vector<NoticeDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from notice where noti_isPinned = 'Y' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				nlist.add(new NoticeDTO(rs.getInt(1), rs.getString(2), 
+																rs.getString(3), rs.getString(4), 
+																SDF_DATE.format(rs.getDate(5)), rs.getInt(6), rs.getString(7)));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return nlist;
+    }
+    
+    //일반 공지사항 출력
+    public Vector<NoticeDTO> showNotImpNotice(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<NoticeDTO> nlist = new Vector<NoticeDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from notice where noti_isPinned = 'N' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				nlist.add(new NoticeDTO(rs.getInt(1), rs.getString(2), 
+																rs.getString(3), rs.getString(4), 
+																SDF_DATE.format(rs.getDate(5)), rs.getInt(6), rs.getString(7)));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return nlist;
     }
 } 
