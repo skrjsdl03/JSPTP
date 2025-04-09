@@ -1,4 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%
+		String id = (String)session.getAttribute("id");
+
+		// 현재 페이지 경로를 얻기 위한 코드
+		String fullUrl = request.getRequestURI();
+		String queryString = request.getQueryString();
+		if (queryString != null) {
+			fullUrl += "?" + queryString;
+		}
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -29,9 +39,15 @@
 			</script>
 
 		</div>
+		<%if(id == null){ %>
 		<div class="nav-right">
-			<a href="#">LOGIN</a> <a href="#">CART</a>
+			<a href="login.jsp?redirect=<%= java.net.URLEncoder.encode(fullUrl, "UTF-8") %>">LOGIN</a> <a href="#">CART</a>
 		</div>
+		<%} else{ %>
+		<div class="nav-right">
+			<a href="logout.jsp?redirect=<%= java.net.URLEncoder.encode(fullUrl, "UTF-8") %>">LOGOUT</a> <a href="#">CART</a>
+		</div>
+		<%} %>
 
 		<!-- 사이드바 메뉴 -->
 		<div id="sidebar" class="sidebar">

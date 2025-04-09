@@ -20,6 +20,8 @@ public class Login extends HttpServlet {
 		
 		HttpSession session = request.getSession();
 		
+		 String redirect = request.getParameter("redirect");
+		
 		String id = request.getParameter("userId");
 		String pwd = request.getParameter("password");
 		
@@ -27,7 +29,11 @@ public class Login extends HttpServlet {
 		
 		if(result.equals("success")) {	//로그인 성공
 			session.setAttribute("id", id);		//세션에 ID 저장
-			response.sendRedirect("main.jsp");
+            if (redirect != null && !redirect.equals("")) {
+                response.sendRedirect(redirect);
+            } else {
+                response.sendRedirect("main2.jsp");
+            }
 		} else if(result.equals("fail")) {		//로그인 실패
 			int fail = userDao.showFailLogin(id);
 			response.sendRedirect("login.jsp?error=wrong&fail=" + fail);
