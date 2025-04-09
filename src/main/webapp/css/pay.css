@@ -377,12 +377,52 @@ body {
   cursor: pointer;
 }
 
-/* 하단 푸터 */
-.footer {
-  text-align: center;
-  font-size: 12px;
-  color: #aaa;
-  margin: 40px 0 20px;
+/* 주소 필드 정렬용 grid: 우편번호, 주소검색, 별칭, 저장 버튼 한 줄 */
+.address-row-grid {
+  display: grid;
+  grid-template-columns: 1fr 100px 1fr 80px; /* 좌우 정렬 맞춤 */
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.address-row-grid input[type="text"],
+.address-row-grid button {
+  height: 42px;
+  font-size: 14px;
+  border-radius: 8px;
+  padding: 0 12px;
+  box-sizing: border-box;
+}
+
+/* 검정 버튼: 주소 검색 */
+.address-row-grid .search-btn {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+/* 회색 버튼: 저장 */
+.address-row-grid .gray-btn {
+  background-color: #f7f7f7;
+  color: #333;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+/* 두 번째 줄: 기본주소 + 상세주소 정렬 */
+.address-row-grid.address-sub {
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 10px;
+}
+
+.address-sub input[type="text"] {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f7fafd;
+  box-sizing: border-box;
 }
 
 /* 배송지 유형 버튼 */
@@ -401,8 +441,23 @@ body {
   cursor: pointer;
 }
 
-/* readonly input 기본값 스타일 */
 input.readonly {
   background-color: #f7fafd;
+}
+
+.delete-icon {
+  display: inline;
+}
+
+.tag-btn:hover .delete-icon {
+  display: inline;
+}
+
+/* 하단 푸터 */
+.footer {
+  text-align: center;
+  font-size: 12px;
+  color: #aaa;
+  margin: 40px 0 20px;
 }
 

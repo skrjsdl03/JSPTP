@@ -3,7 +3,9 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>주문서 작성</title>
+  <title>주문서 작성 | everyWEAR</title>
+  <link rel="icon" type="image/png" href="images/fav-icon.png">
+ 
   <link rel="stylesheet" href="css/pay.css">
 </head>
 <body>
@@ -88,32 +90,40 @@
   <!-- 다른 배송지 선택 시 나타나는 영역 -->
   <div id="delivery-extra" style="display: none;">
     <!-- 배송지 유형 버튼 -->
-    <div class="delivery-types">
-      <button type="button" class="tag-btn">회사</button>
-      <button type="button" class="tag-btn">학교</button>
-      <button type="button" class="tag-btn">우리집</button>
-      <button type="button" class="tag-btn">...</button>
+	<div class="delivery-types" id="alias-list">
+	<button class="tag-btn" onclick="fillAddress('회사')">
+    	회사
+   	  <span class="delete-icon" onclick="deleteAlias(event, this)">×</span>
+    </button>	  
+	<button class="tag-btn" onclick="fillAddress('학교')">
+    	학교
+   	  <span class="delete-icon" onclick="deleteAlias(event, this)">×</span>
+    </button>	  
+	<button class="tag-btn" onclick="fillAddress('우리집')">
+    	우리집
+   	  <span class="delete-icon" onclick="deleteAlias(event, this)">×</span>
+    </button>	  
     </div>
 
 <!-- 주소 -->
 <label>주소 *</label>
 
 <!-- 우편번호 + 주소 검색 버튼 -->
-<div class="address-combined">
-  <input type="text" class="zipcode" placeholder="우편번호"
+	<div class="address-combined">
+ 	 <input type="text" id="zipcode" class="zipcode" placeholder="우편번호"
          onfocus="clearPlaceholderOnFocus(this)" onblur="restorePlaceholderOnBlur(this)">
-  <button type="button" class="addr-btn" onclick="execDaumPostcode()">주소 검색</button>
-
-  <input type="text" class="alias" placeholder="별칭"
+ 	 <button type="button" class="addr-btn" onclick="execDaumPostcode()">주소 검색</button>
+	
+  		<input type="text" class="alias" placeholder="별칭"
          onfocus="clearPlaceholderOnFocus(this)" onblur="restorePlaceholderOnBlur(this)">
-  <button type="button" class="addr-btn">저장</button>
-</div>
+	<button type="button" class="addr-btn" id="alias-save-btn" onclick="addAlias()" disabled>저장</button>
+	</div>
 
 <!-- 기본주소 + 상세주소 -->
 <div class="address-sub">
-  <input type="text" class="wide" placeholder="기본주소"
+  <input type="text" id="address1" class="wide" placeholder="기본주소"
          onfocus="clearPlaceholderOnFocus(this)" onblur="restorePlaceholderOnBlur(this)">
-  <input type="text" placeholder="상세주소"
+  <input type="text" id="address2" placeholder="상세주소"
          onfocus="clearPlaceholderOnFocus(this)" onblur="restorePlaceholderOnBlur(this)">
 </div>
 
@@ -157,13 +167,26 @@
 	    <span>202,000 원</span>
 	  </div>
 	
-	  <button type="submit" class="pay-btn">결제하기</button>
+	<button type="button" class="pay-btn" onclick="fnPay()">결제하기</button>
 	</section>
 	
+	<form id="payForm" method="post">
+  <input type="hidden" name="P_INI_PAYMENT" value="CARD"> <!-- 결제수단 -->
+  <input type="hidden" name="P_MID" value="INIpayTest">    <!-- 테스트 상점 ID -->
+  <input type="hidden" name="P_OID" value="ORDER123456">   <!-- 주문번호 -->
+  <input type="hidden" name="P_AMT" value="202000">        <!-- 결제금액 -->
+  <input type="hidden" name="P_GOODS" value="주문 상품명"> <!-- 상품명 -->
+  <input type="hidden" name="P_UNAME" value="정시영">      <!-- 주문자 이름 -->
+  <input type="hidden" name="P_CHARSET" value="utf8">
+  <input type="hidden" name="P_NEXT_URL" value="http://localhost:8080/paySuccess.jsp"> <!-- 결제 후 이동 주소 -->
+</form>
+		
 	<!-- 푸터 -->
 	<footer class="footer"> 2025©everyWEAR</footer>
 
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://stdpay.inicis.com/stdjs/INIStdPay.js"></script>
+
 <script>
   function execDaumPostcode() {
     new daum.Postcode({
@@ -194,8 +217,90 @@
 	      el.placeholder = el.dataset.placeholder;
 	    }
 	  }
-</script>
+  
+  function addAlias() {
+	  const input = document.querySelector(".address-combined input.alias");
+	  const value = input.value.trim();
+	  const aliasList = document.getElementById("alias-list");
 
+	  if (value === "") {
+	    alert("별칭을 입력해주세요.");
+	    return;
+	  }
+
+	  const exists = Array.from(aliasList.children).some(btn => btn.textContent === value);
+	  if (exists) {
+	    alert("이미 추가된 별칭입니다.");
+	    return;
+	  }
+
+	    const btn = document.createElement("button");
+	    btn.className = "tag-btn";
+	    btn.type = "button";
+	    btn.innerHTML = `
+	      ${value}
+	      <span class="delete-icon" onclick="deleteAlias(event, this)">×</span>
+	    `;
+	    btn.addEventListener("click", () => fillAddress(value));
+
+	    aliasList.appendChild(btn);
+	    input.value = "";
+	  }
+
+	function checkAddressFilled() {
+	  const address1 = document.getElementById("address1").value.trim();
+	  const address2 = document.getElementById("address2").value.trim();
+	  const saveBtn = document.getElementById("alias-save-btn");
+
+	  saveBtn.disabled = !(address1 !== "" && address2 !== "");
+	}
+
+	window.addEventListener("DOMContentLoaded", () => {
+	  document.getElementById("address1").addEventListener("input", checkAddressFilled);
+	  document.getElementById("address2").addEventListener("input", checkAddressFilled);
+	});
+	
+	function fillAddress(type) {
+		  const zipcodeField = document.getElementById("zipcode");
+		  const address1Field = document.getElementById("address1");
+		  const address2Field = document.getElementById("address2");
+		  const aliasInput = document.querySelector(".address-combined input.alias"); // 별칭 입력칸
+
+		  if (type === "회사") {
+		    zipcodeField.value = "06234";
+		    address1Field.value = "서울 강남구 테헤란로 231";
+		    address2Field.value = "OO타워 10층";
+		    aliasInput.value = "회사";
+		  } else if (type === "학교") {
+		    zipcodeField.value = "47340";
+		    address1Field.value = "부산 부산진구 엄광로 176";
+		    address2Field.value = "동의대학교";
+		    aliasInput.value = "학교";
+		  } else if (type === "우리집") {
+		    zipcodeField.value = "12345";
+		    address1Field.value = "서울 마포구 월드컵북로 396";
+		    address2Field.value = "XX아파트 101동 202호";
+		    aliasInput.value = "우리집";
+		    } else {
+		        aliasInput.value = type;
+		      }
+
+		  checkAddressFilled();
+		}
+	
+	  function deleteAlias(event, el) {
+		    event.stopPropagation();
+		    if (confirm("정말 이 배송지를 삭제하시겠습니까?")) {
+		      const btn = el.closest(".tag-btn");
+		      if (btn) btn.remove();
+		    }
+		  }
+	  
+	  function fnPay() {
+		    INIStdPay.pay('payForm');
+		  }
+
+</script>
 		
   </div>
 </body>
