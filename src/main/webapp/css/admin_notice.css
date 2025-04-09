@@ -1,0 +1,406 @@
+@charset "UTF-8";
+
+body {
+    font-family: '맑은 고딕', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+/* 헤더 스타일 */
+header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 10px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+}
+
+nav ul li a:hover, nav ul li a.active {
+    background-color: #1abc9c;
+}
+
+/* 메인 콘텐츠 스타일 */
+main {
+    padding: 30px 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #2c3e50;
+    font-size: 22px;
+}
+
+/* 공지사항 컨트롤 영역 */
+.notice-control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+}
+
+.search-box select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px 0 0 3px;
+    background-color: #f9f9f9;
+}
+
+.search-box input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-left: none;
+    min-width: 200px;
+}
+
+.search-box button {
+    border-radius: 0 3px 3px 0;
+}
+
+/* 테이블 스타일 */
+.notice-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.notice-table th, .notice-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.notice-table th {
+    background-color: #f9f9f9;
+    font-weight: bold;
+}
+
+.notice-table tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+.notice-table .checkbox {
+    width: 40px;
+    text-align: center;
+}
+
+.notice-table .no {
+    width: 60px;
+}
+
+.notice-table .title {
+    width: auto;
+}
+
+.notice-table .date {
+    width: 120px;
+}
+
+.notice-table .views {
+    width: 80px;
+    text-align: center;
+}
+
+.notice-table .status {
+    width: 80px;
+    text-align: center;
+}
+
+.notice-table .actions {
+    width: 120px;
+    text-align: center;
+}
+
+/* 배지 스타일 */
+.badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.badge.important {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.badge.normal {
+    background-color: #3498db;
+    color: white;
+}
+
+/* 버튼 스타일 */
+.btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 3px;
+    background-color: #f0f0f0;
+    color: #333;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #e0e0e0;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.btn-sm {
+    padding: 5px 8px;
+    font-size: 12px;
+}
+
+/* 액션 버튼 그룹 */
+.notice-actions {
+    margin: 20px 0;
+}
+
+.notice-actions .btn {
+    margin-right: 10px;
+}
+
+/* 페이지네이션 */
+.pagination {
+    text-align: center;
+    margin: 30px 0 10px;
+}
+
+.pagination span {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 0 3px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.pagination span:hover {
+    background-color: #f0f0f0;
+}
+
+.pagination span.active {
+    background-color: #3498db;
+    color: white;
+}
+
+/* 모달 스타일 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: auto;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 0;
+    width: 60%;
+    max-width: 800px;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    animation: modalopen 0.3s;
+}
+
+.confirm-modal {
+    width: 40%;
+    max-width: 400px;
+}
+
+@keyframes modalopen {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    padding: 15px 20px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #2c3e50;
+}
+
+.close {
+    font-size: 28px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #333;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+/* 폼 스타일 */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.radio-group input[type="radio"] {
+    margin-right: 5px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        padding: 10px;
+    }
+    
+    nav ul {
+        margin-top: 15px;
+        flex-wrap: wrap;
+    }
+    
+    nav ul li {
+        margin: 5px;
+    }
+    
+    .notice-control {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-box {
+        margin-top: 15px;
+    }
+    
+    .modal-content {
+        width: 90%;
+        margin: 20% auto;
+    }
+    
+    .notice-table th, .notice-table td {
+        padding: 8px;
+        font-size: 14px;
+    }
+    
+    .notice-table .date,
+    .notice-table .views,
+    .notice-table .status {
+        display: none;
+    }
+} 
