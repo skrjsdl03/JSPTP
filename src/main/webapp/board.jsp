@@ -9,27 +9,10 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>에브리웨어 | everyWEAR</title>
-    <link rel="icon" type="image/png" href="images/fav-icon.png">
-    <link rel="stylesheet" type="text/css" href="css/board.css?v=326015">
-    <style>
-        /* 페이징 스타일 */
-        .pagination {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .pagination span {
-            margin: 0 5px;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-        .pagination .active {
-            background-color: black;
-            color: white;
-            border-radius: 5px;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>에브리웨어 | everyWEAR</title>
+<link rel="icon" type="image/png" href="images/fav-icon.png">
+<link rel="stylesheet" type="text/css" href="css/board.css?v=789">
 </head>
 <body>
 
