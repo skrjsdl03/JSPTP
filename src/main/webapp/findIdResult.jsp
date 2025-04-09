@@ -66,7 +66,7 @@
     			입력하신 정보와 일치하는 회원을 찾을 수 없습니다.
   			</div>
   			  <div class="btn-group">
-    		<a href="signup.jsp" class="btn black">회원가입</a>
+    			<a href="signup.jsp" class="btn black">회원가입</a>
   			</div>
   <%} %>
 </div>
