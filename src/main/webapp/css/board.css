@@ -24,7 +24,7 @@ h3 {
 .sidebar2 {
 	position: fixed;
 	top: 0;
-	left: 80px;
+	left: 150px;
 	width: 180px;
 	height: 700px;
 	display: flex;
@@ -65,12 +65,12 @@ h2 {
 
 .notice-table td.views {
   text-align: right;
-  padding-right: 30px;
   white-space: nowrap;
 }
 
 .notice-table td.date {
   width: 150px;
+  text-align: right;
 }
 
 .notice-table td.title {
@@ -78,8 +78,9 @@ h2 {
 }
 
 .notice-table {
-	width: 100%;
 	border-collapse: collapse;
+	width: 1000px;
+	margin: 0px auto 0 auto;
 }
 
 .notice-table .important {

@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%
   String userId = (String) session.getAttribute("userId"); // 로그인한 유저의 아이디 (세션에서 가져옴)
   String iconSrc = "images/fav-icon.png"; // 기본 아이콘
@@ -18,13 +18,13 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>회원 정보 수정 | everyWEAR</title>
+  <title>에브리웨어 | everyWEAR</title>
   <link rel="stylesheet" href="css/memberEdit.css">
   <link rel="icon" type="image/png" href="images/logo-white.png">
 </head>
 <body>
 
-<%@ include file="includes/mypageHeader.jsp" %>
+<%@ include file="includes/boardHeader.jsp" %>
 
 <div class="edit-container">
   <div class="sidebar">

@@ -14,7 +14,7 @@
 <head>
 <meta charset="UTF-8">
 <title>에브리웨어 | everyWEAR</title>
-<link rel="stylesheet" type="text/css" href="css/boardHeader.css?v=123">
+<link rel="stylesheet" type="text/css" href="css/boardHeader.css?v=1354351">
 <link rel="icon" type="image/png" href="images/fav-icon.png">
 </head>
 <body>
@@ -51,11 +51,19 @@
 
 		<!-- 사이드바 메뉴 -->
 		<div id="sidebar" class="sidebar">
-
-			<a href="#">NEW</a> <a href="#">BEST</a> <a href="#"
-				class="group-gap">ALL</a> <a href="#">OUTER</a> <a href="#">TOP</a>
-			<a href="#">BOTTOM</a> <a href="#">ACC</a> <a href="#">SALE</a> <a
-				href="#" class="group-gap">MY PAGE</a> <a href="#">BOARD</a>
+	
+  	<a href="#">NEW</a>
+  	<a href="#">BEST</a>
+  
+  	<a href="#" class="group-gap">ALL</a>
+  	<a href="#">OUTER</a>
+  	<a href="#">TOP</a>
+  	<a href="#">BOTTOM</a>
+  	<a href="#">ACC</a>
+  	<a href="#">SALE</a>
+  
+  	<a href="myPage.jsp" class="group-gap">MY PAGE</a>
+  	<a href="board.jsp">BOARD</a>
 		</div>
 
 		<div id="overlay" class="overlay" onclick="closeSidebar()"></div>

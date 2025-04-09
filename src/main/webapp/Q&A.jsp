@@ -23,7 +23,7 @@
 <meta charset="UTF-8">
 <title>에브리웨어 | everyWEAR</title>
 <link rel="icon" type="image/png" href="images/fav-icon.png">
-<link rel="stylesheet" type="text/css" href="css/Q&A.css?v=35475">
+<link rel="stylesheet" type="text/css" href="css/Q&A.css?v=354">
 </head>
 <body>
 
@@ -46,11 +46,19 @@
 		<section class="content">
 			<table class="notice-table" id="notice-table">
 				<tbody>
+<<<<<<< HEAD
 					<tr style="border-bottom: 2px solid #BBBBBB;">
 						<td class="title">제목</td>
 						<td>답변 현황</td>
 						<td class="date">작성 일시</td>
 						<td class="type">작성자</td>
+=======
+					<tr>
+						<td class="title"><a href="qnaAnswerEx1.jsp">&#128274; 배송관련 문의입니다.</a></td>
+						<td>답변 예정</td>
+						<td class="date">2025-03-30</td>
+						<td class="type">배송 문의</td>
+>>>>>>> branch 'main' of https://github.com/skrjsdl03/JSPTP.git
 					</tr>
 				<%for(int i = start;i<end;i++){ 
 						InquiryDTO qna = qlist.get(i);
