@@ -3,8 +3,10 @@ package DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import DTO.NoticeDTO;
 
@@ -18,6 +20,8 @@ public class NoticeDAO {
             e.printStackTrace();
         }
     }
+    
+    private final SimpleDateFormat SDF_DATE = new SimpleDateFormat("yyyy-MM-dd");
     
     // 공지사항 목록 가져오기
     public List<NoticeDTO> getNoticeList(int start, int end) {
@@ -328,5 +332,115 @@ public class NoticeDAO {
         }
         
         return count;
+    }
+    
+    //중요 공지사항 출력
+    public Vector<NoticeDTO> showImpNotice(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<NoticeDTO> nlist = new Vector<NoticeDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from notice where noti_isPinned = 'Y' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				nlist.add(new NoticeDTO(rs.getInt(1), rs.getString(2), 
+																rs.getString(3), rs.getString(4), 
+																SDF_DATE.format(rs.getDate(5)), rs.getInt(6), rs.getString(7)));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return nlist;
+    }
+    
+    //일반 공지사항 출력
+    public Vector<NoticeDTO> showNotImpNotice(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<NoticeDTO> nlist = new Vector<NoticeDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from notice where noti_isPinned = 'N' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				nlist.add(new NoticeDTO(rs.getInt(1), rs.getString(2), 
+																rs.getString(3), rs.getString(4), 
+																SDF_DATE.format(rs.getDate(5)), rs.getInt(6), rs.getString(7)));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return nlist;
+    }
+    
+    //중요공지사항인지 확인
+    public boolean isPinned(int id) {
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "select noti_isPinned from notice where noti_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				if("Y".equals(rs.getString(1)))
+					flag = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return flag;
+    }
+    
+    // 공지사항 상세 보기(관리자용)
+    public NoticeDTO getNoticeForAdmin(int notiId) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        NoticeDTO notice = null;
+        
+        try {
+            con = pool.getConnection();
+            // 공지사항 가져오기
+            String sql = "SELECT * FROM notice WHERE noti_id = ?";
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, notiId);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                notice = new NoticeDTO();
+                notice.setNoti_id(rs.getInt("noti_id"));
+                notice.setAdmin_id(rs.getString("admin_id"));
+                notice.setNoti_title(rs.getString("noti_title"));
+                notice.setContent(rs.getString("noti_content"));
+                notice.setCreated_at(rs.getString("created_at"));
+                notice.setNoti_views(rs.getInt("noti_views"));
+                notice.setNoti_isPinned(rs.getString("noti_isPinned"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.freeConnection(con, pstmt, rs);
+        }
+        
+        return notice;
     }
 } 

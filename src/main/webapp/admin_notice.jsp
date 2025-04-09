@@ -11,6 +11,50 @@
 <title>관리자 공지사항 | everyWEAR</title>
 <link rel="icon" type="image/png" href="images/fav-icon.png">
 <link rel="stylesheet" type="text/css" href="css/admin_notice.css">
+<script>
+// 페이지 로드 시 상태 메시지 표시
+window.onload = function() {
+    // URL 파라미터 읽기
+    var urlParams = new URLSearchParams(window.location.search);
+    var success = urlParams.get('success');
+    var error = urlParams.get('error');
+    
+    if (success) {
+        switch(success) {
+            case 'insert':
+                alert('공지사항이 등록되었습니다.');
+                break;
+            case 'update':
+                alert('공지사항이 수정되었습니다.');
+                break;
+            case 'delete':
+                alert('공지사항이 삭제되었습니다.');
+                break;
+            case 'status':
+                alert('공지사항 상태가 변경되었습니다.');
+                break;
+        }
+    } else if (error) {
+        switch(error) {
+            case 'insert':
+                alert('공지사항 등록에 실패했습니다.');
+                break;
+            case 'update':
+                alert('공지사항 수정에 실패했습니다.');
+                break;
+            case 'delete':
+                alert('공지사항 삭제에 실패했습니다.');
+                break;
+            case 'status':
+                alert('공지사항 상태 변경에 실패했습니다.');
+                break;
+            case 'system':
+                alert('시스템 오류가 발생했습니다. 관리자에게 문의하세요.');
+                break;
+        }
+    }
+}
+</script>
 </head>
 <body>
 <%
@@ -312,8 +356,19 @@
                 const isImportant = row.querySelector(".badge").classList.contains("important");
                 
                 document.getElementById("noticeTitle").value = title;
-                document.getElementById("noticeContent").value = "공지사항 내용을 불러오는 중..."; // 실제로는 AJAX로 가져와야 함
+                document.getElementById("noticeContent").value = "샘플 공지사항 내용입니다."; // 실제로는 AJAX로 가져와야 함
                 document.querySelector(`input[name="noticeStatus"][value="${isImportant ? 'Y' : 'N'}"]`).checked = true;
+                
+                // AJAX로 공지사항 내용 가져오기
+                fetch("NoticeServlet?action=getContent&id=" + noticeId)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("noticeContent").value = data || "내용을 불러올 수 없습니다.";
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    document.getElementById("noticeContent").value = "내용을 불러올 수 없습니다.";
+                });
                 
                 noticeModal.style.display = "block";
             });
@@ -330,40 +385,58 @@
         
         // 선택 삭제 버튼 클릭
         deleteSelectedBtn.addEventListener("click", function() {
-            const checkedBoxes = document.querySelectorAll(".notice-check:checked");
-            if (checkedBoxes.length > 0) {
-                const ids = Array.from(checkedBoxes).map(box => box.value).join(",");
-                document.getElementById("deleteIds").value = ids;
-                deleteModal.style.display = "block";
-            } else {
+            const selectedIds = Array.from(noticeCheckboxes)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value);
+            
+            if (selectedIds.length === 0) {
                 alert("삭제할 공지사항을 선택해주세요.");
+                return;
             }
+            
+            document.getElementById("deleteIds").value = selectedIds.join(",");
+            deleteModal.style.display = "block";
         });
         
-        // 중요 설정 버튼
+        // 중요/일반 설정 버튼
         setImportantBtn.addEventListener("click", function() {
-            const checkedBoxes = document.querySelectorAll(".notice-check:checked");
-            if (checkedBoxes.length > 0) {
-                const ids = Array.from(checkedBoxes).map(box => box.value).join(",");
-                document.getElementById("statusIds").value = ids;
-                document.getElementById("statusValue").value = "Y";
-                statusForm.submit();
-            } else {
-                alert("상태를 변경할 공지사항을 선택해주세요.");
-            }
+            updateNoticeStatus("Y");
         });
         
-        // 일반 설정 버튼
         setNormalBtn.addEventListener("click", function() {
-            const checkedBoxes = document.querySelectorAll(".notice-check:checked");
-            if (checkedBoxes.length > 0) {
-                const ids = Array.from(checkedBoxes).map(box => box.value).join(",");
-                document.getElementById("statusIds").value = ids;
-                document.getElementById("statusValue").value = "N";
-                statusForm.submit();
-            } else {
+            updateNoticeStatus("N");
+        });
+        
+        function updateNoticeStatus(status) {
+            const selectedIds = Array.from(noticeCheckboxes)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value);
+            
+            if (selectedIds.length === 0) {
                 alert("상태를 변경할 공지사항을 선택해주세요.");
+                return;
             }
+            
+            document.getElementById("statusIds").value = selectedIds.join(",");
+            document.getElementById("statusValue").value = status;
+            document.getElementById("statusForm").submit();
+        }
+        
+        // 폼 제출 전 확인
+        noticeForm.addEventListener("submit", function(e) {
+            if (!document.getElementById("noticeTitle").value.trim()) {
+                alert("제목을 입력해주세요.");
+                e.preventDefault();
+                return false;
+            }
+            
+            if (!document.getElementById("noticeContent").value.trim()) {
+                alert("내용을 입력해주세요.");
+                e.preventDefault();
+                return false;
+            }
+            
+            return true;
         });
     });
     </script>
