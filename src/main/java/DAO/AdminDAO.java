@@ -1,9 +1,12 @@
 package DAO;
 
+import DTO.AdminDTO;
 import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdminDAO {
     private DBConnectionMgr pool;
@@ -173,5 +176,61 @@ public class AdminDAO {
         } finally {
             pool.freeConnection(con, pstmt);
         }
+    }
+
+    public List<AdminDTO> getAllAdmins() {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        List<AdminDTO> adminList = new ArrayList<>();
+        
+        try {
+            con = pool.getConnection();
+            String sql = "SELECT * FROM admin";
+            pstmt = con.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+            
+            while (rs.next()) {
+                AdminDTO admin = new AdminDTO();
+                admin.setAdmin_id(rs.getString("admin_id"));
+                admin.setAdmin_name(rs.getString("admin_name"));
+                admin.setAdmin_roll(rs.getString("admin_roll"));
+                admin.setAdmin_email(rs.getString("admin_email"));
+                admin.setAdmin_fail_login(rs.getInt("admin_fail_login"));
+                admin.setAdmin_lock_state(rs.getString("admin_lock_state"));
+                adminList.add(admin);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.freeConnection(con, pstmt, rs);
+        }
+        
+        return adminList;
+    }
+    
+    // 첫 번째 관리자 ID 가져오기
+    public String getFirstAdminId() {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        String adminId = null;
+        
+        try {
+            con = pool.getConnection();
+            String sql = "SELECT admin_id FROM admin LIMIT 1";
+            pstmt = con.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                adminId = rs.getString("admin_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.freeConnection(con, pstmt, rs);
+        }
+        
+        return adminId;
     }
 }

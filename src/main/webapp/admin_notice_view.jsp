@@ -1,4 +1,31 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ page import="DTO.NoticeDTO, DAO.NoticeDAO" %>
+<%
+    // 공지사항 ID 가져오기
+    int noticeId = 0;
+    try {
+        noticeId = Integer.parseInt(request.getParameter("id"));
+    } catch (Exception e) {
+        response.sendRedirect("admin_notice.jsp");
+        return;
+    }
+    
+    // 공지사항 상세 정보 가져오기
+    NoticeDAO noticeDAO = new NoticeDAO();
+    NoticeDTO notice = noticeDAO.getNotice(noticeId);
+    
+    if (notice == null) {
+        response.sendRedirect("admin_notice.jsp");
+        return;
+    }
+    
+    // 공지사항 정보 설정
+    String title = notice.getNoti_title();
+    String content = notice.getContent();
+    String createdAt = notice.getCreated_at();
+    int views = notice.getNoti_views();
+    boolean isImportant = "Y".equals(notice.getNoti_isPinned());
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -45,6 +72,33 @@
         margin-top: 30px;
     }
 </style>
+<script>
+// 페이지 로드 시 상태 메시지 표시
+window.onload = function() {
+    // URL 파라미터 읽기
+    var urlParams = new URLSearchParams(window.location.search);
+    var success = urlParams.get('success');
+    var error = urlParams.get('error');
+    
+    if (success) {
+        switch(success) {
+            case 'view':
+                console.log('공지사항을 확인합니다.');
+                break;
+        }
+    } else if (error) {
+        switch(error) {
+            case 'notfound':
+                alert('공지사항을 찾을 수 없습니다.');
+                location.href = 'admin_notice.jsp';
+                break;
+            case 'system':
+                alert('시스템 오류가 발생했습니다. 관리자에게 문의하세요.');
+                break;
+        }
+    }
+}
+</script>
 </head>
 <body>
 
@@ -72,61 +126,28 @@
             <div class="notice-view">
                 <div class="notice-header">
                     <div class="notice-title">
+                        <% if (isImportant) { %>
                         <span class="badge important">중요</span>
-                        이용 안내
+                        <% } else { %>
+                        <span class="badge normal">일반</span>
+                        <% } %>
+                        <%= title %>
                     </div>
                     <div class="notice-info">
-                        <span>등록일: 2025-03-30</span>
-                        <span>조회수: 56</span>
+                        <span>등록일: <%= createdAt %></span>
+                        <span>조회수: <%= views %></span>
                         <span>작성자: 관리자</span>
                     </div>
                 </div>
                 
                 <div class="notice-content">
-                    <p>
-                        안녕하세요, everyWEAR 고객님!
-                    </p>
-                    <p>
-                        저희 everyWEAR 서비스를 이용해 주셔서 감사합니다. 
-                        원활한 서비스 이용을 위해 아래 사항을 안내해 드립니다.
-                    </p>
-                    <p>
-                        <strong>1. 회원 가입 및 로그인</strong><br>
-                        - 회원 가입은 이메일 인증을 통해 진행됩니다.<br>
-                        - 비밀번호는 영문, 숫자, 특수문자를 조합하여 8자 이상으로 설정해주세요.<br>
-                        - 개인정보 보호를 위해 주기적인 비밀번호 변경을 권장합니다.
-                    </p>
-                    <p>
-                        <strong>2. 주문 및 결제</strong><br>
-                        - 주문은 24시간 가능합니다.<br>
-                        - 결제는 신용카드, 계좌이체, 휴대폰 결제 등 다양한 방법으로 가능합니다.<br>
-                        - 주문 완료 후 결제 정보 변경은 고객센터로 문의해 주세요.
-                    </p>
-                    <p>
-                        <strong>3. 배송 안내</strong><br>
-                        - 배송은 주문 완료 후 1-2일 내에 출고됩니다.(공휴일 제외)<br>
-                        - 배송 조회는 마이페이지에서 확인 가능합니다.<br>
-                        - 일부 지역은 배송이 제한될 수 있습니다.
-                    </p>
-                    <p>
-                        <strong>4. 교환 및 반품</strong><br>
-                        - 교환/반품은 상품 수령 후 7일 이내에 신청 가능합니다.<br>
-                        - 고객 변심으로 인한 교환/반품의 경우 배송비는 고객 부담입니다.<br>
-                        - 상품 불량, 오배송의 경우 배송비는 당사에서 부담합니다.
-                    </p>
-                    <p>
-                        보다 자세한 내용은 고객센터로 문의해 주시기 바랍니다.
-                    </p>
-                    <p>
-                        항상 최상의 서비스를 제공하기 위해 노력하겠습니다.<br>
-                        감사합니다.
-                    </p>
+                    <%= content.replace("\n", "<br>") %>
                 </div>
             </div>
             
             <div class="button-group">
                 <button class="btn btn-primary" onclick="location.href='admin_notice.jsp'">목록</button>
-                <button class="btn" onclick="editNotice()">수정</button>
+                <button class="btn" onclick="location.href='admin_notice_edit.jsp?id=<%= noticeId %>'">수정</button>
                 <button class="btn btn-danger" onclick="deleteNotice()">삭제</button>
             </div>
         </div>
@@ -141,10 +162,14 @@
             </div>
             <div class="modal-body">
                 <p>이 공지사항을 삭제하시겠습니까?</p>
-                <div class="form-actions">
-                    <button type="button" id="cancelDeleteBtn" class="btn">취소</button>
-                    <button type="button" id="confirmDeleteBtn" class="btn btn-danger">삭제</button>
-                </div>
+                <form id="deleteForm" action="NoticeServlet" method="post">
+                    <input type="hidden" name="deleteIds" value="<%= noticeId %>">
+                    <input type="hidden" name="action" value="delete">
+                    <div class="form-actions">
+                        <button type="button" id="cancelDeleteBtn" class="btn">취소</button>
+                        <button type="submit" id="confirmDeleteBtn" class="btn btn-danger">삭제</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -154,7 +179,6 @@
         const deleteModal = document.getElementById("deleteModal");
         const closeBtn = document.querySelector(".close");
         const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
-        const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
         
         // 삭제 모달 닫기
         function closeModal() {
@@ -171,20 +195,7 @@
                 closeModal();
             }
         });
-        
-        // 삭제 확인
-        confirmDeleteBtn.addEventListener("click", function() {
-            // 서버에 삭제 요청 보내는 코드
-            alert("공지사항이 삭제되었습니다.");
-            window.location.href = "admin_notice.jsp";
-        });
     });
-    
-    // 공지사항 수정 페이지로 이동
-    function editNotice() {
-        // 실제로는 공지사항 ID를 전달해야 함
-        window.location.href = "admin_notice.jsp?edit=true";
-    }
     
     // 삭제 모달 열기
     function deleteNotice() {
