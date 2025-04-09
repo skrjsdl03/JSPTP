@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <title>에브리웨어 | everyWEAR</title>
 <link rel="icon" type="image/png" href="images/fav-icon.png">
-<link rel="stylesheet" type="text/css" href="css/Q&A.css?v=35475">
+<link rel="stylesheet" type="text/css" href="css/Q&A.css?v=354">
 </head>
 <body>
 
@@ -29,7 +29,7 @@
 			<table class="notice-table" id="notice-table">
 				<tbody>
 					<tr>
-						<td class="title">&#128274; 배송관련 문의입니다.</td>
+						<td class="title"><a href="qnaAnswerEx1.jsp">&#128274; 배송관련 문의입니다.</a></td>
 						<td>답변 예정</td>
 						<td class="date">2025-03-30</td>
 						<td class="type">배송 문의</td>

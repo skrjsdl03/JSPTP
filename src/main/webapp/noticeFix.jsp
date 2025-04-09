@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <title>에브리웨어 | everyWEAR</title>
 <link rel="icon" type="image/png" href="images/fav-icon.png">
-<link rel="stylesheet" type="text/css" href="css/board.css?v=165456">
+<link rel="stylesheet" type="text/css" href="css/board.css?v=45354">
 </head>
 <body>
 
@@ -78,10 +78,14 @@
 				</tr>
 			</table>
 
-			<div class="pagination">
+			<div class="list-btn-wrapper">
+				<button class="list-btn" onclick="window.history.back()">목록</button>
+			</div>
+
+			<!-- <div class="pagination">
 				<span>Prev</span> <span class="active">1</span> <span>2</span> <span>3</span>
 				<span>4</span> <span>5</span> <span>Next</span>
-			</div>
+			</div> -->
 
 			<div class="footer-bottom">
 				<p>2025&copy;everyWEAR</p>

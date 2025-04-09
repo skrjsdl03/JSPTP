@@ -96,7 +96,7 @@ body {
 
 /* 로고 */
 .logo-wrap {
-	position: fixed;
+	position: absolute;
 	top: 80px; /* 햄버거 버튼과 nav-right보다 아래로 */
 	left: 50%;
 	transform: translate(-50%, -30px);

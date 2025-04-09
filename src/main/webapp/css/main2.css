@@ -226,7 +226,7 @@ body {
 	flex-wrap: wrap; /* 화면 작아지면 줄바꿈 가능 */
 	border-top: 1px solid #FFFFFF;
 	padding-bottom: 50px;
-	gap: 130px; /* 칼럼 간 간격 */
+	gap: 150px; /* 칼럼 간 간격 */
 }
 
 .footer {
@@ -240,6 +240,16 @@ body {
 }
 
 .footer-col {
+	flex: 1;
+	min-width: 160px;
+}
+
+.footer-col li a {
+	text-decoration: none;
+	color: white;
+}
+
+.footer-left {
 	flex: 1;
 	min-width: 160px;
 }
@@ -307,10 +317,11 @@ body {
 }
 
 .slide-text {
-  margin-top: 10px;
+  margin-top: 5px;
   text-align: left;
   font-size: 14px;
   color: #333;
+  line-height: 1.5;
 }
 
 .slider-btn {

@@ -1,185 +1,117 @@
-@charset "UTF-8";
-
-body {
-  font-family: 'Malgun Gothic', sans-serif;
-  background-color: #fff;
-  margin: 0;
-}
-
-.top-nav {
-  position: relative;
-  width: 100%;
-  height: auto;
-  padding-top: 20px;
-  padding-bottom: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.menu-btn {
-  position: absolute;
-  left: 20px;
-  top: 28px;
-  font-size: 20px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.logo-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 30px;
-  margin-bottom: 10px;
-}
-
-.logo-img {
-  width: 110px;
-  height: auto;
-  margin-bottom: 8px;
-}
-
-.mypage-title {
-  font-size: 12px;
-  font-weight: bold;
-  text-align: center;
-}
-
-.nav-right {
-  position: absolute;
-  right: 30px;
-  top: 32px;
-  display: flex;
-  gap: 16px;
-}
-
-.nav-right a {
-  font-size: 10px;
-  font-weight: bold;
-  text-decoration: none;
-  color: black;
-}
-
-.order-container {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 60px;
-  padding: 0 0px;
-  margin-top: 0;
-}
-
 .order-content {
-  flex: 1;
-  max-width: 750px;
-  margin: 40px auto 0 auto; 
-  }
+	flex: 1;
+	max-width: 750px;
+	margin: 40px auto 0 auto;
+}
 
 .order-filter {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin: 10px 30px 20px 0;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	margin: 10px 30px 20px 0;
 }
 
 .order-filter select {
-  font-size: 13px;
-  padding: 6px 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: white;
-  cursor: pointer;
+	font-size: 13px;
+	padding: 6px 10px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	background-color: white;
+	cursor: pointer;
 }
 
 .order-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0;
 }
 
 /* 주문 아이템 구조 */
 .order-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 5px;
-  border-bottom: 1px solid #ddd;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 15px 5px;
+	border-bottom: 1px solid #ddd;
 }
 
 /* 이미지 스타일 */
 .order-row img {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  margin-right: 16px;
+	width: 60px;
+	height: 60px;
+	object-fit: cover;
+	margin-right: 16px;
 }
 
 /* 상품 정보 */
 .order-info {
-  flex: 1;
+	flex: 1;
 }
 
 .item-name {
-  font-weight: bold;
-  font-size: 14px;
+	font-weight: bold;
+	font-size: 14px;
 }
 
-.item-option,
-.item-count {
-  font-size: 13px;
-  color: #666;
+.item-option, .item-count {
+	font-size: 13px;
+	color: #666;
 }
 
 /* 주문 정보 */
 .order-meta {
-  text-align: right;
-  font-size: 13px;
+	text-align: right;
+	font-size: 13px;
 }
 
 .order-date {
-  margin-bottom: 4px;
-  color: #666;
+	margin-bottom: 4px;
+	color: #666;
 }
 
 /* 상태별 컬러 */
-.order-status.shipping { color: #015FC1; }
-.order-status.cancel { color: #E63946; }
-.order-status.done { color: #2CA02C; }
+.order-status.shipping {
+	color: #015FC1;
+}
+
+.order-status.cancel {
+	color: #E63946;
+}
+
+.order-status.done {
+	color: #2CA02C;
+}
 
 /* 페이지네이션 */
 .simple-pagination {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin: 40px 0 20px;
-  font-size: 14px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	margin: 40px 0 20px;
+	font-size: 14px;
 }
 
 .page-link {
-  text-decoration: none;
-  color: #333;
-  padding: 6px 10px;
-  border-radius: 4px;
+	text-decoration: none;
+	color: #333;
+	padding: 6px 10px;
+	border-radius: 4px;
 }
 
 .page-link.active {
-  background-color: #f0f0f0;
-  font-weight: bold;
+	background-color: #f0f0f0;
+	font-weight: bold;
 }
 
 .page-link:hover {
-  text-decoration: underline;
+	text-decoration: underline;
 }
 
 footer {
-  text-align: center;
-  font-size: 12px;
-  color: #aaa;
-  padding: 20px 0;
+	text-align: center;
+	font-size: 12px;
+	color: #aaa;
+	padding: 20px 0;
 }
