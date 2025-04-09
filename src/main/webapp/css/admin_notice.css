@@ -140,16 +140,6 @@ h2 {
     width: auto;
 }
 
-.notice-table td.title a, .notice-table td a {
-    text-decoration: none;
-    color: #333;
-}
-
-.notice-table td.title a:hover, .notice-table td a:hover {
-    text-decoration: underline;
-    color: #3498db;
-}
-
 .notice-table .date {
     width: 120px;
 }
@@ -242,32 +232,22 @@ h2 {
     margin: 30px 0 10px;
 }
 
-.pagination a, .pagination span {
+.pagination span {
     display: inline-block;
     padding: 5px 10px;
     margin: 0 3px;
     border-radius: 3px;
-    text-decoration: none;
+    cursor: pointer;
     transition: background-color 0.3s;
 }
 
-.pagination a {
-    color: #333;
-    background-color: #f9f9f9;
+.pagination span:hover {
+    background-color: #f0f0f0;
 }
 
-.pagination a:hover {
-    background-color: #e0e0e0;
-}
-
-.pagination a.active {
+.pagination span.active {
     background-color: #3498db;
     color: white;
-}
-
-.pagination span.disabled {
-    color: #ccc;
-    cursor: not-allowed;
 }
 
 /* 모달 스타일 */

@@ -1,7 +1,31 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ page import="DAO.NoticeDAO" %>
-<%@ page import="DTO.NoticeDTO" %>
-<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="DTO.NoticeDTO, DAO.NoticeDAO" %>
+<%
+    // 공지사항 ID 가져오기
+    int noticeId = 0;
+    try {
+        noticeId = Integer.parseInt(request.getParameter("id"));
+    } catch (Exception e) {
+        response.sendRedirect("admin_notice.jsp");
+        return;
+    }
+    
+    // 공지사항 상세 정보 가져오기
+    NoticeDAO noticeDAO = new NoticeDAO();
+    NoticeDTO notice = noticeDAO.getNotice(noticeId);
+    
+    if (notice == null) {
+        response.sendRedirect("admin_notice.jsp");
+        return;
+    }
+    
+    // 공지사항 정보 설정
+    String title = notice.getNoti_title();
+    String content = notice.getContent();
+    String createdAt = notice.getCreated_at();
+    int views = notice.getNoti_views();
+    boolean isImportant = "Y".equals(notice.getNoti_isPinned());
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -39,7 +63,6 @@
         min-height: 300px;
         line-height: 1.6;
         margin-bottom: 30px;
-        white-space: pre-line;  /* 줄바꿈 유지 */
     }
     
     .button-group {
@@ -49,42 +72,35 @@
         margin-top: 30px;
     }
 </style>
+<script>
+// 페이지 로드 시 상태 메시지 표시
+window.onload = function() {
+    // URL 파라미터 읽기
+    var urlParams = new URLSearchParams(window.location.search);
+    var success = urlParams.get('success');
+    var error = urlParams.get('error');
+    
+    if (success) {
+        switch(success) {
+            case 'view':
+                console.log('공지사항을 확인합니다.');
+                break;
+        }
+    } else if (error) {
+        switch(error) {
+            case 'notfound':
+                alert('공지사항을 찾을 수 없습니다.');
+                location.href = 'admin_notice.jsp';
+                break;
+            case 'system':
+                alert('시스템 오류가 발생했습니다. 관리자에게 문의하세요.');
+                break;
+        }
+    }
+}
+</script>
 </head>
 <body>
-<%
-    // 공지사항 ID 가져오기
-    String noticeIdStr = request.getParameter("id");
-    int noticeId = 0;
-    NoticeDTO notice = null;
-    
-    try {
-        noticeId = Integer.parseInt(noticeIdStr);
-        
-        // 공지사항 데이터 가져오기
-        NoticeDAO noticeDAO = new NoticeDAO();
-        notice = noticeDAO.getNotice(noticeId);
-        
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    
-    // 공지사항이 없는 경우 목록으로 이동
-    if (notice == null) {
-        response.sendRedirect("admin_notice.jsp");
-        return;
-    }
-    
-    // 날짜 포맷 설정
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    String formattedDate = "";
-    try {
-        formattedDate = sdf.format(sdf.parse(notice.getCreated_at()));
-    } catch (Exception e) {
-        formattedDate = notice.getCreated_at();
-    }
-    
-    boolean isPinned = "Y".equals(notice.getNoti_isPinned());
-%>
 
     <header>
         <div class="header-container">
@@ -110,27 +126,29 @@
             <div class="notice-view">
                 <div class="notice-header">
                     <div class="notice-title">
-                        <% if (isPinned) { %>
+                        <% if (isImportant) { %>
                         <span class="badge important">중요</span>
+                        <% } else { %>
+                        <span class="badge normal">일반</span>
                         <% } %>
-                        <%= notice.getNoti_title() %>
+                        <%= title %>
                     </div>
                     <div class="notice-info">
-                        <span>등록일: <%= formattedDate %></span>
-                        <span>조회수: <%= notice.getNoti_views() %></span>
-                        <span>작성자: 관리자(<%= notice.getAdmin_id() %>)</span>
+                        <span>등록일: <%= createdAt %></span>
+                        <span>조회수: <%= views %></span>
+                        <span>작성자: 관리자</span>
                     </div>
                 </div>
                 
                 <div class="notice-content">
-                    <%= notice.getContent() %>
+                    <%= content.replace("\n", "<br>") %>
                 </div>
             </div>
             
             <div class="button-group">
                 <button class="btn btn-primary" onclick="location.href='admin_notice.jsp'">목록</button>
-                <button class="btn" onclick="editNotice(<%= notice.getNoti_id() %>)">수정</button>
-                <button class="btn btn-danger" onclick="deleteNotice(<%= notice.getNoti_id() %>)">삭제</button>
+                <button class="btn" onclick="location.href='admin_notice_edit.jsp?id=<%= noticeId %>'">수정</button>
+                <button class="btn btn-danger" onclick="deleteNotice()">삭제</button>
             </div>
         </div>
     </main>
@@ -145,11 +163,11 @@
             <div class="modal-body">
                 <p>이 공지사항을 삭제하시겠습니까?</p>
                 <form id="deleteForm" action="NoticeServlet" method="post">
-                    <input type="hidden" id="deleteId" name="deleteIds" value="<%= notice.getNoti_id() %>">
+                    <input type="hidden" name="deleteIds" value="<%= noticeId %>">
                     <input type="hidden" name="action" value="delete">
                     <div class="form-actions">
                         <button type="button" id="cancelDeleteBtn" class="btn">취소</button>
-                        <button type="submit" class="btn btn-danger">삭제</button>
+                        <button type="submit" id="confirmDeleteBtn" class="btn btn-danger">삭제</button>
                     </div>
                 </form>
             </div>
@@ -168,6 +186,7 @@
         }
         
         closeBtn.addEventListener("click", closeModal);
+        
         cancelDeleteBtn.addEventListener("click", closeModal);
         
         // 모달 외부 클릭 시 닫기
@@ -178,32 +197,8 @@
         });
     });
     
-    // 공지사항 수정 페이지로 이동
-    function editNotice(noticeId) {
-        // 수정을 위한 폼 전송
-        const form = document.createElement("form");
-        form.method = "GET";
-        form.action = "admin_notice.jsp";
-        
-        const actionInput = document.createElement("input");
-        actionInput.type = "hidden";
-        actionInput.name = "edit";
-        actionInput.value = "true";
-        
-        const idInput = document.createElement("input");
-        idInput.type = "hidden";
-        idInput.name = "id";
-        idInput.value = noticeId;
-        
-        form.appendChild(actionInput);
-        form.appendChild(idInput);
-        document.body.appendChild(form);
-        form.submit();
-    }
-    
     // 삭제 모달 열기
-    function deleteNotice(noticeId) {
-        document.getElementById("deleteId").value = noticeId;
+    function deleteNotice() {
         document.getElementById("deleteModal").style.display = "block";
     }
     </script>

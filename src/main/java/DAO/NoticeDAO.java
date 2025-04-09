@@ -385,4 +385,62 @@ public class NoticeDAO {
 		}
 		return nlist;
     }
+    
+    //중요공지사항인지 확인
+    public boolean isPinned(int id) {
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "select noti_isPinned from notice where noti_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				if("Y".equals(rs.getString(1)))
+					flag = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return flag;
+    }
+    
+    // 공지사항 상세 보기(관리자용)
+    public NoticeDTO getNoticeForAdmin(int notiId) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        NoticeDTO notice = null;
+        
+        try {
+            con = pool.getConnection();
+            // 공지사항 가져오기
+            String sql = "SELECT * FROM notice WHERE noti_id = ?";
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, notiId);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                notice = new NoticeDTO();
+                notice.setNoti_id(rs.getInt("noti_id"));
+                notice.setAdmin_id(rs.getString("admin_id"));
+                notice.setNoti_title(rs.getString("noti_title"));
+                notice.setContent(rs.getString("noti_content"));
+                notice.setCreated_at(rs.getString("created_at"));
+                notice.setNoti_views(rs.getInt("noti_views"));
+                notice.setNoti_isPinned(rs.getString("noti_isPinned"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.freeConnection(con, pstmt, rs);
+        }
+        
+        return notice;
+    }
 } 
