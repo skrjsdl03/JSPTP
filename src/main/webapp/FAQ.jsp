@@ -29,7 +29,7 @@ if (end > totalData)
 </head>
 <body>
 
-	<%@ include file="includes/boardHeader.jsp"%>
+	<%@ include file="includes/header.jsp"%>
 
 	<section2 class="content2">
 	<h3>FAQ</h3>

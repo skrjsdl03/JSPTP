@@ -9,7 +9,7 @@
 </head>
 <body>
 
-	<%@ include file="includes/boardHeader.jsp"%>
+	<%@ include file="includes/header.jsp"%>
 
 	<section2 class="content2">
 	<h3>REVIEW</h3>

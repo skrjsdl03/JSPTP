@@ -9,7 +9,7 @@
 </head>
 <body>
 
-	<%@ include file="includes/boardHeader.jsp"%>
+	<%@ include file="includes/header.jsp"%>
 
 	<section2 class="content2">
 	<h3>주문 내역</h3>
@@ -96,6 +96,7 @@
 								주문번호<br>2025-03-30
 							</p>
 							<p class="order-status done">배송 완료</p>
+							<button class="review-button"><a href="reviewForm.jsp">리뷰 작성</a></button>
 						</div>
 					</div>
 

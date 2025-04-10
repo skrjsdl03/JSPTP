@@ -61,8 +61,8 @@
 								</td>
 								<td class="date">2025-03-30<br>★★★★☆
 									<div class="review-actions">
-										<a href="#" class="edit">수정</a>
-										<a href="#" class="delete disabled">삭제</a>
+										<a href="#" class="edit">수정</a> <a href="#"
+											class="delete disabled">삭제</a>
 									</div>
 								</td>
 							</tr>
@@ -79,8 +79,8 @@
 								</td>
 								<td class="date">2025-03-30<br>★★★★☆
 									<div class="review-actions">
-										<a href="#" class="edit">수정</a>
-										<a href="#" class="delete disabled">삭제</a>
+										<a href="#" class="edit">수정</a> <a href="#"
+											class="delete disabled">삭제</a>
 									</div>
 								</td>
 							</tr>
@@ -97,8 +97,8 @@
 								</td>
 								<td class="date">2025-03-30<br>★★★★☆
 									<div class="review-actions">
-										<a href="#" class="edit">수정</a>
-										<a href="#" class="delete disabled">삭제</a>
+										<a href="#" class="edit">수정</a> <a href="#"
+											class="delete disabled">삭제</a>
 									</div>
 								</td>
 							</tr>
@@ -124,8 +124,8 @@
 								</td>
 								<td class="date">2025-03-30<br>답변 예정
 									<div class="review-actions">
-										<a href="#" class="edit">수정</a>
-										<a href="#" class="delete disabled">삭제</a>
+										<a href="#" class="edit">수정</a> <a href="#"
+											class="delete disabled">삭제</a>
 									</div>
 								</td>
 							</tr>
@@ -142,8 +142,8 @@
 								</td>
 								<td class="date">2025-03-30<br>답변 완료
 									<div class="review-actions">
-										<a href="#" class="edit"></a>
-										<a href="#" class="delete disabled">삭제</a>
+										<a href="#" class="edit"></a> <a href="#"
+											class="delete disabled">삭제</a>
 									</div>
 								</td>
 							</tr>
@@ -160,8 +160,8 @@
 								</td>
 								<td class="date">2025-03-30<br>답변 완료
 									<div class="review-actions">
-										<a href="#" class="edit"></a>
-										<a href="#" class="delete disabled">삭제</a>
+										<a href="#" class="edit"></a> <a href="#"
+											class="delete disabled">삭제</a>
 									</div>
 								</td>
 							</tr>
@@ -169,28 +169,7 @@
 					</table>
 				</div>
 			</div>
-			
-			<div id="overlay"></div>
 
-			<div id="popup">
-				<h3>Q&A</h3>
-				<p></p>
-				<button onclick="closePopup()">확인</button>
-			</div>
-			
-			<!-- 삭제 전 팝업 -->
-			<div id="confirm-popup" style="display: none;">
-				<p>삭제하시겠습니까?</p>
-				<button class="cancel-btn" onclick="closeConfirmPopup()">취소</button>
-				<button onclick="submitWithSuccessPopup()">확인</button>
-			</div>
-
-			<!-- 삭제 완료 팝업 -->
-			<div id="success-popup" style="display: none;">
-				<p>삭제되었습니다.</p>
-				<button onclick="submitForm()">확인</button>
-			</div>
-			
 		</section>
 	</div>
 

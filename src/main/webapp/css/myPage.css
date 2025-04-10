@@ -27,7 +27,7 @@ h3 {
 	padding: 12px 16px;
 	margin-bottom: 20px;
 	position: fixed;
-	top: 270px;
+	top: 250px;
 	left: 150px;
 	width: 180px;
 	height: 80px;
@@ -60,10 +60,11 @@ h3 {
 
 .sidebar2 {
 	position: fixed;
-	top: 0;
+	top: 50%;
 	left: 150px;
+	transform: translateY(-50%);
 	width: 180px;
-	height: 1000px;
+	height: auto; /* 고정 높이 안 줘도 괜찮으면 auto 추천 */
 	display: flex;
 	flex-direction: column;
 	justify-content: center;

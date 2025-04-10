@@ -1,6 +1,5 @@
 body {
 	font-family: 'Malgun Gothic', sans-serif;
-	padding-top: 120px;
 }
 
 /* 상위 네비 */
@@ -8,7 +7,7 @@ body {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	height: 60px;
+	height: 50px;
 	padding: 0 30px;
 }
 
@@ -19,8 +18,8 @@ body {
 	cursor: pointer;
 	margin-left: -10px;
 	position: fixed;
-	top: 15px;
-	left: 20px;
+	top: 10px;
+	left: 25px;
 	z-index: 1001;
 }
 
@@ -87,7 +86,7 @@ body {
 }
 
 .nav-right a {
-	margin-left: 20px;
+	margin-left: 30px;
 	text-decoration: none;
 	color: black;
 	font-size: 14px;
@@ -96,11 +95,11 @@ body {
 
 /* 로고 */
 .logo-wrap {
-	position: relative; /* 또는 생략 가능 */
-	top: -137.5px; /* 상단 여백 조정 */
-	left: 50%; /* 수평 중앙으로 */
-	transform: translateX(-50%); /* 정확한 가운데 정렬 */
-	z-index: 1000; /* 다른 요소보다 위에 오도록 */
+	position: absolute;
+	top: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 1000;
 	display: flex;
 	justify-content: center;
 	margin: 0;

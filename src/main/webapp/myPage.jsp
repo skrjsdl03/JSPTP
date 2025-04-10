@@ -14,7 +14,7 @@ if (userId == null)
 </head>
 <body>
 
-	<%@ include file="includes/boardHeader.jsp"%>
+	<%@ include file="includes/header.jsp"%>
 
 	<section2 class="content2">
 	<h3>회원 정보 수정</h3>
@@ -35,8 +35,8 @@ if (userId == null)
 			<ul>
 				<li><a href="myPage.jsp">회원 정보 수정</a></li>
 				<li><a href="orderHistory2.jsp">주문 내역</a></li>
-				<li><a href="#">장바구니</a></li>
-				<li><a href="#">찜 상품</a></li>
+				<li><a href="cart.jsp">장바구니</a></li>
+				<li><a href="wishList.jsp">찜 상품</a></li>
 				<li><a href="postMn.jsp">게시물 관리</a></li>
 			</ul>
 		</aside>
