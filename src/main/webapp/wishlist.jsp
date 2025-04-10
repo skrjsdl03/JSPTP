@@ -13,7 +13,6 @@
 <%@ include file="includes/mypageHeader.jsp" %>
 
 <div class="wishlist-container">
-  <!-- 사이드바 -->
   <div class="sidebar">
     <div class="user-box">
       <p class="username">정시영 님</p>
@@ -22,7 +21,6 @@
         <div class="label">쿠폰</div><div class="value">2 개</div>
       </div>
     </div>
-
     <ul class="side-menu">
       <li>회원 정보 수정</li>
       <li>주문 내역</li>
