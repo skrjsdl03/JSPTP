@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
@@ -35,6 +34,11 @@ window.onload = function() {
                 alert('공지사항 상태가 변경되었습니다.');
                 break;
         }
+        
+     // alert 후 URL 파라미터 제거 (브라우저 히스토리만 변경)
+        const newUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+        
     } else if (error) {
         switch(error) {
             case 'insert':
@@ -53,6 +57,11 @@ window.onload = function() {
                 alert('시스템 오류가 발생했습니다. 관리자에게 문의하세요.');
                 break;
         }
+        
+     // alert 후 URL 파라미터 제거 (브라우저 히스토리만 변경)
+        const newUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+        
     }
 }
 </script>
@@ -97,11 +106,11 @@ window.onload = function() {
             <nav>
                 <ul>
                     <li><a href="admin_main.jsp">대시보드</a></li>
-                    <li><a href="admin_notice.jsp" class="active">게시판</a></li>
-                    <li><a href="#">회원</a></li>
-                    <li><a href="#">상품</a></li>
-                    <li><a href="#">주문</a></li>
-                    <li><a href="#">문의</a></li>
+                    <li><a href="admin_notice.jsp" class="active">공지사항 관리</a></li>
+                    <li><a href="#">회원 관리</a></li>
+                    <li><a href="#">상품 관리</a></li>
+                    <li><a href="#">주문 관리</a></li>
+                    <li><a href="#">문의 관리</a></li>
                     <li><a href="logout.jsp">로그아웃</a></li>
                 </ul>
             </nav>
