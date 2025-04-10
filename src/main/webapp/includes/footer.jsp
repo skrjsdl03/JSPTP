@@ -22,9 +22,10 @@
 		<div class="footer-col">
 			<h4>SUPPORT</h4>
 			<ul>
-				<li>FAQ</li>
-				<li>CONTACT US</li>
-				<li>BOARD</li>
+				<li><a href="board.jsp">BOARD</a></li>
+				<li><a href="FAQ.jsp">FAQ</a></li>
+				<li><a href="Q&A.jsp">Q&A</a></li>
+				<li><a href="review.jsp">REVIEW</a></li>
 			</ul>
 		</div>
 		<div class="footer-col">

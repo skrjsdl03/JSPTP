@@ -1,4 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%
+		String user_id = (String)session.getAttribute("id");
+		String i_id = request.getParameter("i_id");
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -28,21 +32,12 @@
 		<section class="content">
 
 			<div class="form-container">
-				<form action="submitQna.jsp" method="post"
-					enctype="multipart/form-data">
-					<label for="type">문의 유형 *</label>
-						<select name="type" id="type"
-						required>
-						<option value="">문의 유형을 선택해주세요.</option>
-						<option value="배송">배송</option>
-						<option value="상품">상품</option>
-						<option value="기타">기타</option>
-						</select>
+				<form action="submitQna.jsp" method="post" enctype="multipart/form-data">
 							<label for="title">제목 *</label>
 								<input type="text" name="title"
 						id="title" maxlength="30" placeholder="30자 이내로 입력해주세요." required>
 
-							<label><input type="checkbox" name="private"> 비공개</label>
+							<label><input type="checkbox" name="private" id="private"> 비공개</label>
 							<label for="content">내용 *</label>
 							<textarea name="content" id="content" rows="6"
 							 placeholder="내용을 입력해주세요." required></textarea>
@@ -182,16 +177,11 @@
 
 				// 기존 유효성 검사
 				function validateForm() {
-					const type = document.getElementById('type').value;
 					const title = document.getElementById('title').value
 							.trim();
 					const content = document.getElementById('content').value
 							.trim();
 
-					if (!type || type === '문의 유형 선택') {
-						showSimplePopup("문의 유형을 선택해주세요.");
-						return;
-					}
 					if (title === "") {
 						showSimplePopup("제목을 입력해주세요.");
 						return;
@@ -203,6 +193,33 @@
 
 					// 모든 조건 충족 시 확인 팝업 띄우기
 					showPopup("confirm-popup");
+				}
+				
+				function writeQna(){
+					const formData = new FormData();
+					formData.append("title", document.getElementById("title").value);
+					formData.append("content", document.getElementById("content").value);
+					formData.append("private", document.getElementById("private").checked ? "on" : "");
+
+					const fileInput = document.getElementById("file-upload");
+					if (fileInput.files.length > 0) {
+					  formData.append("file", fileInput.files[0]);
+					}
+
+					fetch("insertQna.jsp", {
+					  method: "POST",
+					  body: formData,
+					})
+				      .then(res => res.json()) // 응답을 JSON으로 파싱
+				      .then(data => {
+				    	  if(data.result === "success"){
+				    		  
+				    	  }
+				      })
+				      .catch(err => {
+/* 				        console.error(err);
+				        alert("서버 오류가 발생했습니다."); */
+				      });
 				}
 
 				// 기존 단순 메시지용 팝업
@@ -224,6 +241,7 @@
 
 				function submitWithSuccessPopup() {
 					hideAllPopups();
+					writeQna();
 					showPopup("success-popup");
 				}
 

@@ -1,4 +1,17 @@
+<%@page import="DTO.InquiryImgDTO"%>
+<%@page import="DTO.InquiryDTO"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<jsp:useBean id="qDao" class="DAO.QnaDAO"/>
+<%
+		String user_id = (String)session.getAttribute("id");
+		String i_id = request.getParameter("i_id");
+		if(user_id == null || i_id == null){
+			response.sendRedirect("Q&A.jsp");
+			return;			
+		}
+		InquiryDTO qna = qDao.showOneQna(Integer.parseInt(i_id));
+		InquiryImgDTO qnaImg = qDao.showOneQnaImage(Integer.parseInt(i_id));
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -28,24 +41,15 @@
 		<section class="content">
 
 			<div class="form-container">
-				<form action="submitQna.jsp" method="post"
-					enctype="multipart/form-data">
-					<label for="type">문의 유형 *</label>
-						<select name="type" id="type"
-						required>
-						<option value="">문의 유형을 선택해주세요.</option>
-						<option value="배송">배송</option>
-						<option value="상품">상품</option>
-						<option value="기타">기타</option>
-						</select>
+				<form action="submitQna.jsp" method="post" enctype="multipart/form-data">
 							<label for="title">제목 *</label>
 								<input type="text" name="title"
-						id="title" maxlength="30" placeholder="30자 이내로 입력해주세요." required>
+						id="title" maxlength="30" placeholder="30자 이내로 입력해주세요." value="<%=qna.getI_title()%>" required>
 
-							<label><input type="checkbox" name="private"> 비공개</label>
+							<label><input type="checkbox" name="private" id="private" <%=qna.getI_isPrivate().equals("Y") ? "checked" : ""%>> 비공개</label>
 							<label for="content">내용 *</label>
 							<textarea name="content" id="content" rows="6"
-							 placeholder="내용을 입력해주세요." required></textarea>
+							 placeholder="내용을 입력해주세요." required><%=qna.getI_content()%></textarea>
 
 							<label>사진 첨부</label>
 
@@ -64,6 +68,26 @@
 						<img id="preview-image" />
 						<button type="button" class="delete-btn" id="delete-btn">✕</button>
 					</div>
+					
+					<input type="hidden" id="hidden_id" value="<%=Integer.parseInt(i_id)%>">
+					
+					<% if (qnaImg != null && qnaImg.getIi_url() != null) { %>
+						<script>
+						window.addEventListener('DOMContentLoaded', function () {
+						  const previewImage = document.getElementById('preview-image');
+						  const previewWrapper = document.getElementById('preview-wrapper');
+						  const photoBox = document.getElementById('photo-box');
+						  const fileNameText = document.getElementById('file-name');
+						
+						  // 서버 이미지 경로 (웹 경로 기준으로 표시!)
+						  previewImage.src = "Q&A_images/<%= qnaImg.getIi_url() %>";
+						  previewWrapper.style.display = 'block';
+						  photoBox.style.display = 'none';
+						  fileNameText.innerText = "<%= qnaImg.getIi_url() %>";
+						});
+						</script>
+					<% } %>
+					
 
 					<script>
 						const fileInput = document
@@ -106,7 +130,8 @@
 			</div>
 
 			<div class="write-btn-wrapper">
-				<button type="button" class="write-btn" onclick="validateForm()">작성하기</button>
+				<button type="button" class="write-btn1" onclick="window.history.back()">취소하기</button>
+				<button type="button" class="write-btn" onclick="validateForm()">수정하기</button>
 			</div>
 
 			<div id="overlay"></div>
@@ -119,54 +144,17 @@
 
 			<!-- 확인 전 팝업 -->
 			<div id="confirm-popup" style="display: none;">
-				<p>작성하시겠습니까?</p>
+				<p>수정하시겠습니까?</p>
 				<button class="cancel-btn" onclick="closeConfirmPopup()">취소</button>
 				<button onclick="submitWithSuccessPopup()">확인</button>
 			</div>
 
 			<!-- 작성 완료 팝업 -->
 			<div id="success-popup" style="display: none;">
-				<p>작성되었습니다.</p>
+				<p>수정되었습니다.</p>
 				<button onclick="submitForm()">확인</button>
 			</div>
 
-			<!-- <script>
-				function showPopup(message) {
-					const overlay = document.getElementById('overlay');
-					const popup = document.getElementById('popup');
-					popup.querySelector('p').textContent = message;
-					overlay.style.display = 'block';
-					popup.style.display = 'block';
-				}
-
-				function closePopup() {
-					document.getElementById('overlay').style.display = 'none';
-					document.getElementById('popup').style.display = 'none';
-				}
-
-				function validateForm() {
-					const type = document.getElementById('type').value;
-					const title = document.getElementById('title').value.trim();
-					const content = document.getElementById('content').value
-							.trim();
-
-					if (!type || type === '문의 유형 선택') {
-						showPopup("문의 유형을 선택해주세요.");
-						return;
-					}
-					if (title === "") {
-						showPopup("제목을 입력해주세요.");
-						return;
-					}
-					if (content === "") {
-						showPopup("내용을 입력해주세요.");
-						return;
-					}
-
-					// 모든 조건이 통과되면 form 제출
-					document.getElementById('qnaForm').submit();
-				}
-			</script> -->
 
 			<script>
 				function showPopup(popupId) {
@@ -182,16 +170,11 @@
 
 				// 기존 유효성 검사
 				function validateForm() {
-					const type = document.getElementById('type').value;
 					const title = document.getElementById('title').value
 							.trim();
 					const content = document.getElementById('content').value
 							.trim();
 
-					if (!type || type === '문의 유형 선택') {
-						showSimplePopup("문의 유형을 선택해주세요.");
-						return;
-					}
 					if (title === "") {
 						showSimplePopup("제목을 입력해주세요.");
 						return;
@@ -203,6 +186,34 @@
 
 					// 모든 조건 충족 시 확인 팝업 띄우기
 					showPopup("confirm-popup");
+				}
+				
+				function updateQna(){
+					const formData = new FormData();
+					formData.append("title", document.getElementById("title").value);
+					formData.append("content", document.getElementById("content").value);
+					formData.append("private", document.getElementById("private").checked ? "on" : "");
+					formData.append("i_id", document.getElementById("hidden_id").value);
+
+					const fileInput = document.getElementById("file-upload");
+					if (fileInput.files.length > 0) {
+					  formData.append("file", fileInput.files[0]);
+					}
+
+					fetch("updateQna.jsp", {
+					  method: "POST",
+					  body: formData,
+					})
+				      .then(res => res.json()) // 응답을 JSON으로 파싱
+				      .then(data => {
+				    	  if(data.result === "success"){
+				    		  
+				    	  }
+				      })
+				      .catch(err => {
+/* 				        console.error(err);
+				        alert("서버 오류가 발생했습니다."); */
+				      });
 				}
 
 				// 기존 단순 메시지용 팝업
@@ -224,6 +235,7 @@
 
 				function submitWithSuccessPopup() {
 					hideAllPopups();
+					updateQna();
 					showPopup("success-popup");
 				}
 

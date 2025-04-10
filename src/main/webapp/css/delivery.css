@@ -1,296 +1,221 @@
-@charset "UTF-8";
-
-body {
-  font-family: 'Malgun Gothic', sans-serif;
-  background-color: #fff;
-  margin: 0;
-}
-
-.top-nav {
-  position: relative;
-  width: 100%;
-  height: auto;
-  padding-top: 20px;
-  padding-bottom: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.menu-btn {
-  position: absolute;
-  left: 20px;
-  top: 28px;
-  font-size: 20px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.logo-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 30px;
-  margin-bottom: 10px;
-}
-
-.logo-img {
-  width: 110px;
-  height: auto;
-  margin-bottom: 8px;
-}
-
-.mypage-title {
-  font-size: 12px;
-  font-weight: bold;
-  text-align: center;
-}
-
-.nav-right {
-  position: absolute;
-  right: 30px;
-  top: 32px;
-  display: flex;
-  gap: 16px;
-}
-
-.nav-right a {
-  font-size: 10px;
-  font-weight: bold;
-  text-decoration: none;
-  color: black;
-}
-
-.order-container {
+/* .order-container {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   gap: 60px;
   padding: 0 40px;
   margin-top: 0;
-}
+} */
 
 .order-content {
-  flex: 1;
-  max-width: 750px;
-  margin: 40px auto 0 auto; 
+	flex: 1;
+	max-width: 750px;
+	margin: 40px auto 0 auto;
 }
 
 .delivery-title-wrap {
-  margin-top: 40px;
-  text-align: center;
+	margin-top: 40px;
+	text-align: center;
 }
 
 .delivery-title {
-  font-size: 18px;
-  font-weight: bold;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #888;
-  display: inline-block;
-  width: 90%; 
+	font-size: 18px;
+	font-weight: bold;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #888;
+	display: inline-block;
+	width: 90%;
 }
 
 .readonly-field {
-  color: #000; 
-  background-color: transparent;
-  border: none;
-  outline: none;
-  pointer-events: none; /* 클릭 불가 */
+	color: #000;
+	background-color: transparent;
+	border: none;
+	outline: none;
+	pointer-events: none; /* 클릭 불가 */
 }
 
 .delivery-box {
-  margin-top: 10px;
+	margin-top: 10px;
 }
 
 .delivery-top {
-  margin-bottom: 10px;
-  font-size: 14px;
-  font-weight: bold;
+	margin-bottom: 10px;
+	font-size: 14px;
+	font-weight: bold;
 }
 
 .delivery-inputs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 8px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-bottom: 8px;
 }
 
-.input-tag,
-.input-zipcode,
-.input-full {
-  border: 1px solid #e2e2e2;
-  background-color: #f7fbff;
-  border-radius: 10px;
-  padding: 10px 12px;
-  font-size: 13px;
-  color: #333;
-  box-sizing: border-box;
+.input-tag, .input-zipcode, .input-full {
+	border: 1px solid #e2e2e2;
+	background-color: #f7fbff;
+	border-radius: 10px;
+	padding: 10px 12px;
+	font-size: 13px;
+	color: #333;
+	box-sizing: border-box;
 }
 
 .input-tag {
-  width: 80px;
+	width: 80px;
 }
 
 .input-zipcode {
-  width: 120px;
+	width: 120px;
 }
 
 .input-full {
-  flex: 1;
-  min-width: 250px;
+	flex: 1;
+	min-width: 250px;
 }
 
 input[readonly] {
-  pointer-events: none;
-  background-color: #f7fbff;
-  color: #333;
+	pointer-events: none;
+	background-color: #f7fbff;
+	color: #333;
 }
 
 .btn-search:disabled {
-  background-color: #eee;
-  color: #999;
-  cursor: not-allowed;
+	background-color: #eee;
+	color: #999;
+	cursor: not-allowed;
 }
 
 /* 주소 검색 버튼 스타일 */
 .btn-search {
-  background-color: #f7fbff;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 6px 12px;
-  font-size: 13px;
-  color: black;
-  cursor: pointer;
-  height: 38px;
-  box-sizing: border-box;
+	background-color: #f7fbff;
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	padding: 6px 12px;
+	font-size: 13px;
+	color: black;
+	cursor: pointer;
+	height: 38px;
+	box-sizing: border-box;
 }
 
 .action-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: auto;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-left: auto;
 }
 
 .btn-edit {
-  color: #015FC1;
-  font-size: 13px;
-  text-decoration: none;
-  cursor: pointer;
+	color: #015FC1;
+	font-size: 13px;
+	text-decoration: none;
+	cursor: pointer;
 }
 
 .btn-delete {
-  color: #ccc;
-  font-size: 13px;
-  text-decoration: none;
-  cursor: pointer;
+	color: #ccc;
+	font-size: 13px;
+	text-decoration: none;
+	cursor: pointer;
 }
 
 .sidebar {
-  width: 180px;
-  padding: 15px 10px;
-  margin-right: 40px;
-  font-size: 13px;
+	width: 180px;
+	padding: 15px 10px;
+	margin-right: 40px;
+	font-size: 13px;
 }
 
 .user-box {
-  background-color: #f1f1f1;
-  border-radius: 8px;
-  padding: 12px 16px;
-  margin-bottom: 20px;
+	background-color: #f1f1f1;
+	border-radius: 8px;
+	padding: 12px 16px;
+	margin-bottom: 20px;
 }
 
 .username {
-  font-weight: bold;
-  margin-bottom: 10px;
+	font-weight: bold;
+	margin-bottom: 10px;
 }
 
 .user-info {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  row-gap: 4px;
-  font-size: 13px;
+	display: grid;
+	grid-template-columns: 1fr auto;
+	row-gap: 4px;
+	font-size: 13px;
 }
 
 .user-info .label {
-  color: #333;
+	color: #333;
 }
 
 .user-info .value {
-  font-weight: bold;
-  text-align: right;
+	font-weight: bold;
+	text-align: right;
 }
 
 .side-menu {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+	list-style: none;
+	padding: 0;
+	margin: 0;
 }
 
 .side-menu li {
-  padding: 8px 0;
-  cursor: pointer;
-  color: #222;
+	padding: 8px 0;
+	cursor: pointer;
+	color: #222;
 }
 
 .side-menu li.active {
-  color: #015FC1;
-  font-weight: bold;
+	color: #015FC1;
+	font-weight: bold;
 }
 
 .main-content {
-  flex: 1;
+	flex: 1;
 }
 
 .page-title {
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
 }
 
 .divider {
-  margin: 10px 0 30px;
+	margin: 10px 0 30px;
 }
 
 .address-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
 }
 
 .address-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 
 .address-item input[type="text"] {
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
-  width: 230px;
-  background-color: #f8f8f8;
+	padding: 8px 12px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	font-size: 14px;
+	width: 230px;
+	background-color: #f8f8f8;
 }
 
 .address-item input[type="radio"] {
-  transform: scale(1.2);
-  margin-right: 5px;
+	transform: scale(1.2);
+	margin-right: 5px;
 }
 
 .address-item a {
-  font-size: 13px;
-  margin-left: 5px;
-  color: #015FC1;
-  text-decoration: none;
-}
-
-footer {
-  text-align: center;
-  font-size: 12px;
-  color: #aaa;
-  padding: 20px 0;
+	font-size: 13px;
+	margin-left: 5px;
+	color: #015FC1;
+	text-decoration: none;
 }
