@@ -27,7 +27,7 @@
 </head>
 <body>
 
-	<%@ include file="includes/boardHeader.jsp"%>
+	<%@ include file="includes/header.jsp"%>
 
 	<section class="content2">
 	<h3>Q&A</h3>

@@ -33,8 +33,7 @@
 
 				function closeSidebar() {
 					document.getElementById("sidebar").classList.remove("open");
-					document.getElementById("overlay").classList
-							.remove("active");
+					document.getElementById("overlay").classList.remove("active");
 				}
 			</script>
 
