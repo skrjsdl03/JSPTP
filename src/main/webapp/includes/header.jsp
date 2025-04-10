@@ -45,8 +45,8 @@
   <a href="#">ACC</a>
   <a href="#">SALE</a>
   
-  <a href="myPage.jsp" class="group-gap">MY PAGE</a>
-  <a href="board.jsp">BOARD</a>
+  <a href="#" class="group-gap">MY PAGE</a>
+  <a href="#">BOARD</a>
 	</div>
 	
 	<div id="overlay" class="overlay" onclick="closeSidebar()"></div>
@@ -55,7 +55,7 @@
 
 <!-- 로고 -->
 <div class="logo-wrap">
-	<a href="main2.jsp"> <img src="images/logo-black.png"
+	<a href="main.jsp"> <img src="images/logo-black.png"
 		alt="everyWEAR" class="logo-img">
 	</a>
 </div>
