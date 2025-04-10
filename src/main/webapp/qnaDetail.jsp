@@ -122,11 +122,15 @@
 
 			<div class="list-wrapper">
 				<%if(user_id != null && qna.getUser_id().equals(user_id) && !"Y".equals(isReply)){ %>
-				<button class="list1" onclick="window.history.back()">수정</button>
+				<button class="list1" onclick="updateQna(<%=qna.getI_id()%>)">수정</button>
 				<button class="list2" onclick="deleteQna(<%=qna.getI_id()%>)">삭제</button>
 				<%} %>
 				<button class="list" onclick="window.history.back()">목록</button>
 			</div>
+			
+				<form action="qnaFormForCommonUdp.jsp" method="post" id="updateForm">
+					<input type="hidden" name = "i_id" id = "hidden_id">
+				</form>
 
 			<div class="footer-bottom">
 				<p>2025&copy;everyWEAR</p>
@@ -138,6 +142,10 @@
 		if (confirm("정말 삭제하시겠습니까?")) {
 			location.href = "deleteQna?i_id=" + i_id;
 		}
+	}
+	function updateQna(i_id){
+		document.getElementById("hidden_id").value = i_id;
+		document.getElementById("updateForm").submit();
 	}
 </script>
 </body>

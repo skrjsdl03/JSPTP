@@ -191,23 +191,105 @@ public class QnaDAO {
 		}
 		
 		//한 Q&A 수정
-		public void updateQna() {
+		public void updateQna(HttpServletRequest req) {
 			Connection con = null;
 			PreparedStatement pstmt = null;
-			String sql = null;
+			ResultSet rs = null;
+			String sql;
+			MultipartRequest multi = null;
+
 			try {
 				con = pool.getConnection();
-				sql = "update inquiry set i_title = ?, i_content = ?, i_isPrivate = ?";
-				pstmt = con.prepareStatement(sql);
 
+				multi = new MultipartRequest(req, SAVEFOLDER, MAXSIZE, ENCTYPE,
+						new DefaultFileRenamePolicy());
+
+				String image = multi.getFilesystemName("file");
+				String i_isPrivate = "N";
+
+				if ("on".equals(multi.getParameter("private"))) {
+					i_isPrivate = "Y";
+				}
+
+				int i_id = Integer.parseInt(multi.getParameter("i_id"));
+
+				// 1. 문의 글 수정
+				sql = "UPDATE inquiry SET i_title = ?, i_content = ?, i_isPrivate = ? WHERE i_id = ?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, multi.getParameter("title"));
+				pstmt.setString(2, multi.getParameter("content"));
+				pstmt.setString(3, i_isPrivate);
+				pstmt.setInt(4, i_id);
 				pstmt.executeUpdate();
+				pstmt.close();
+
+				// 2. 이미지 수정
+				if (image != null && !image.isEmpty()) {
+					// 기존 이미지 삭제
+					sql = "SELECT ii_url FROM inquiry_image WHERE i_id = ?";
+					pstmt = con.prepareStatement(sql);
+					pstmt.setInt(1, i_id);
+					rs = pstmt.executeQuery();
+
+					boolean hasImage = false;
+					if (rs.next()) {
+						hasImage = true;
+						String ii_url = rs.getString("ii_url");
+						File oldFile = new File(SAVEFOLDER + ii_url);
+						if (oldFile.exists()) oldFile.delete();
+					}
+					rs.close();
+					pstmt.close();
+
+					if (hasImage) {
+						sql = "UPDATE inquiry_image SET ii_url = ? WHERE i_id = ?";
+					} else {
+						sql = "INSERT INTO inquiry_image (i_id, ii_url) VALUES (?, ?)";
+					}
+
+					pstmt = con.prepareStatement(sql);
+					if (hasImage) {
+						pstmt.setString(1, image);
+						pstmt.setInt(2, i_id);
+					} else {
+						pstmt.setInt(1, i_id);
+						pstmt.setString(2, image);
+					}
+					pstmt.executeUpdate();
+				} else {		//수정으로 파일을 삭제했을때
+					// 기존 이미지 삭제
+					sql = "SELECT ii_url FROM inquiry_image WHERE i_id = ?";
+					pstmt = con.prepareStatement(sql);
+					pstmt.setInt(1, i_id);
+					rs = pstmt.executeQuery();
+
+					boolean hasImage = false;
+					if (rs.next()) {
+						hasImage = true;
+						String ii_url = rs.getString("ii_url");
+						File oldFile = new File(SAVEFOLDER + ii_url);
+						if (oldFile.exists()) oldFile.delete();
+					}
+					rs.close();
+					pstmt.close();
+					
+					if(hasImage) {
+						sql = "delete from inquiry_image where i_id = ?";
+						pstmt = con.prepareStatement(sql);
+						pstmt.setInt(1, i_id);
+						pstmt.executeUpdate();
+					}
+				}
 
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
-				pool.freeConnection(con, pstmt);
+				try { if (rs != null) rs.close(); } catch (Exception e) {}
+				try { if (pstmt != null) pstmt.close(); } catch (Exception e) {}
+				pool.freeConnection(con);
 			}
 		}
+
 		
 		//한 Q&A 삭제
 		public void deleteQna(int i_id) {
