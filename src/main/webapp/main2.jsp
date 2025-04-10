@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>에브리웨어 | everyWEAR</title>
-<link rel="stylesheet" type="text/css" href="css/main2.css?v=654654">
+<link rel="stylesheet" type="text/css" href="css/main2.css?v=389">
 <link rel="icon" type="image/png" href="images/fav-icon.png">
 <link rel="stylesheet"
 	href="https://unpkg.com/swiper/swiper-bundle.min.css" />
@@ -13,6 +13,17 @@
 <body>
 
 	<%@ include file="includes/header.jsp"%>
+
+	<!-- 하위 네비 -->
+	<nav class="sub-nav">
+		<ul>
+			<li><a href="#">ALL</a></li>
+			<li><a href="#">OUTER</a></li>
+			<li><a href="#">TOP</a></li>
+			<li><a href="#">BOTTOM</a></li>
+			<li><a href="#">ACC</a></li>
+		</ul>
+	</nav>
 
 	<!-- 여기부터 메인 컨텐츠 시작 -->
 	<section class="main-collection">
@@ -47,7 +58,7 @@
 		</div>
 
 		<div class="collection-right">
-			<video class="collection-video" controls autoplay muted loop>
+			<video class="collection-video" autoplay muted loop playsinline>
 				<source src="videos/mainvideo-white.mp4" type="video/mp4">
 				브라우저가 비디오 태그를 지원하지 않습니다.
 			</video>
@@ -85,77 +96,57 @@
 				<div class="slide">
 					<img src="images/bald2.jpg" alt="look1">
 					<div class="slide-text">
-						<p>2025 SS</p>
-						<p>
-							<strong>STORY BEHIND</strong><br> THE IMAGES ( NOW BASED IN
-							BUENOS AIRES )
-						</p>
+						<strong>2025 SS</strong><br> <strong>STORY BEHIND</strong><br>
+						THE IMAGES(NOW BASED IN BUENOS AIRES)
 					</div>
 				</div>
 				<div class="slide">
 					<img src="images/bald.png" alt="look2">
 					<div class="slide-text">
-						<p>2025 SS</p>
-						<p>
-							<strong>ALMOND SEA US</strong>
-						</p>
+						<strong>2025 SS</strong><br> <strong>STORY BEHIND</strong><br>
+						THE IMAGES(NOW BASED IN BUENOS AIRES)
 					</div>
 				</div>
 				<div class="slide">
 					<img src="images/mainac1.jpg" alt="look1">
 					<div class="slide-text">
-						<p>2025 SS</p>
-						<p>
-							<strong>STORY BEHIND</strong><br> THE IMAGES ( NOW BASED IN
-							BUENOS AIRES )
-						</p>
+						<strong>2025 SS</strong><br> <strong>STORY BEHIND</strong><br>
+						THE IMAGES(NOW BASED IN BUENOS AIRES)
 					</div>
 				</div>
 				<div class="slide">
 					<img src="images/mainac2.jpg" alt="look1">
 					<div class="slide-text">
-						<p>2025 SS</p>
-						<p>
-							<strong>STORY BEHIND</strong><br> THE IMAGES ( NOW BASED IN
-							BUENOS AIRES )
-						</p>
+						<strong>2025 SS</strong><br> <strong>STORY BEHIND</strong><br>
+						THE IMAGES(NOW BASED IN BUENOS AIRES)
 					</div>
 				</div>
 				<div class="slide">
 					<img src="images/mainac3.jpg" alt="look1">
 					<div class="slide-text">
-						<p>2025 SS</p>
-						<p>
-							<strong>STORY BEHIND</strong><br> THE IMAGES ( NOW BASED IN
-							BUENOS AIRES )
-						</p>
+						<strong>2025 SS</strong><br> <strong>STORY BEHIND</strong><br>
+						THE IMAGES(NOW BASED IN BUENOS AIRES)
 					</div>
 				</div>
 				<div class="slide">
 					<img src="images/mainac4.jpg" alt="look2">
 					<div class="slide-text">
-						<p>2025 SS</p>
-						<p>
-							<strong>ALMOND SEA US</strong>
-						</p>
+						<strong>2025 SS</strong><br> <strong>STORY BEHIND</strong><br>
+						THE IMAGES(NOW BASED IN BUENOS AIRES)
 					</div>
 				</div>
 				<div class="slide">
 					<img src="images/mainac5.jpg" alt="look2">
 					<div class="slide-text">
-						<p>2025 SS</p>
-						<p>
-							<strong>ALMOND SEA US</strong>
-						</p>
+						<strong>2025 SS</strong><br> <strong>STORY BEHIND</strong><br>
+						THE IMAGES(NOW BASED IN BUENOS AIRES)
 					</div>
 				</div>
 				<div class="slide">
 					<img src="images/mainac6.jpg" alt="look2">
 					<div class="slide-text">
-						<p>2025 SS</p>
-						<p>
-							<strong>ALMOND SEA US</strong>
-						</p>
+						<strong>2025 SS</strong><br> <strong>STORY BEHIND</strong><br>
+						THE IMAGES(NOW BASED IN BUENOS AIRES)
 					</div>
 				</div>
 			</div>
@@ -168,6 +159,7 @@
   const slides = document.querySelectorAll('.slide');
   const prevBtn = document.querySelector('.prev');
   const nextBtn = document.querySelector('.next');
+  
   let index = 0;
 
   function getOffset() {
@@ -179,16 +171,18 @@
   }
 
   function updateSlider() {
-    track.style.transform = `translateX(-\${getOffset()}px)`;
+	  const maxOffset = track.scrollWidth - track.clientWidth;
+	  const offset = getOffset();
+	  track.style.transform = `translateX(-\${Math.min(offset, maxOffset)}px)`;
   }
 
   prevBtn.addEventListener('click', () => {
-    index = Math.max(index - 1, 0);
+	  index = (index - 1 + slides.length) % slides.length;
     updateSlider();
   });
 
   nextBtn.addEventListener('click', () => {
-    index = Math.min(index + 1, slides.length - 1);
+	  index = (index + 1) % slides.length;
     updateSlider();
   });
 
@@ -196,9 +190,9 @@
   setInterval(() => {
     index = (index + 1) % slides.length;
     updateSlider();
-  }, 3000);
-</script>
-
+  }, 3500);
+  
+	</script>
 
 	<!-- 메인 하단 이미지 영역 -->
 	<div class="bottom-image-section">
@@ -207,6 +201,14 @@
 	</div>
 
 	<%@ include file="includes/footer.jsp"%>
+
+	<button id="topBtn">TOP</button>
+
+	<script>
+  	document.getElementById("topBtn").addEventListener("click", function () {
+    	window.scrollTo({ top: 0, behavior: 'smooth' });
+  	});
+	</script>
 
 </body>
 </html>

@@ -3,12 +3,12 @@ package DTO;
 public class InquiryImgDTO {
 	private int ii_id;
 	private int i_id;
-	private int ii_url;
+	private String ii_url;
 	private String uploaded_at;
 	
 	public InquiryImgDTO() {}
 
-	public InquiryImgDTO(int ii_id, int i_id, int ii_url, String uploaded_at) {
+	public InquiryImgDTO(int ii_id, int i_id, String ii_url, String uploaded_at) {
 		super();
 		this.ii_id = ii_id;
 		this.i_id = i_id;
@@ -32,11 +32,11 @@ public class InquiryImgDTO {
 		this.i_id = i_id;
 	}
 
-	public int getIi_url() {
+	public String getIi_url() {
 		return ii_url;
 	}
 
-	public void setIi_url(int ii_url) {
+	public void setIi_url(String ii_url) {
 		this.ii_url = ii_url;
 	}
 

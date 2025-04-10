@@ -1,19 +1,50 @@
+<%@page import="DTO.InquiryReplyDTO"%>
+<%@page import="DTO.InquiryDTO"%>
+<%@page import="java.util.Vector"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<jsp:useBean id="qDao" class="DAO.QnaDAO"/>
+<%
+		String user_id = (String)session.getAttribute("id");
+		Vector<InquiryDTO> qlist = qDao.showAllQna();
+		int totalData = qlist.size();      // 일반 공지의 수
+		int itemsPerPage = 7;                // 한 페이지당 7개
+		int totalPage = (int)Math.ceil((double)totalData / itemsPerPage);
+		
+		int currentPage = 1;
+		if (request.getParameter("page") != null) {
+		    currentPage = Integer.parseInt(request.getParameter("page"));
+		}
+		
+		int start = (currentPage - 1) * itemsPerPage;
+		int end = start + itemsPerPage;
+		if (end > totalData) end = totalData;
+		
+		String onclickWrite = "onclick=\"location.href='qnaFormForCommon.jsp'\"";
+		if(user_id == null){
+			// 현재 페이지 경로를 얻기 위한 코드
+			String fullUrl = request.getRequestURI();
+			String queryString = request.getQueryString();
+			if (queryString != null) {
+				fullUrl += "?" + queryString;
+			}
+			onclickWrite = "onclick=\"location.href='login.jsp?redirect=" + java.net.URLEncoder.encode(fullUrl, "UTF-8") + "'\"";
+		}
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <title>에브리웨어 | everyWEAR</title>
 <link rel="icon" type="image/png" href="images/fav-icon.png">
-<link rel="stylesheet" type="text/css" href="css/Q&A.css?v=35475">
+<link rel="stylesheet" type="text/css" href="css/Q&A.css?v=354">
 </head>
 <body>
 
-	<%@ include file="includes/boardHeader.jsp"%>
+	<%@ include file="includes/header.jsp"%>
 
-	<section2 class="content2">
-	<h3>Q&A</h3>
-	</section2>
+	<section class="content2">
+	<h3>Q&A</h3> 
+	</section>
 
 	<div class="container">
 		<aside class="sidebar2">
@@ -28,141 +59,90 @@
 		<section class="content">
 			<table class="notice-table" id="notice-table">
 				<tbody>
-					<tr>
-						<td class="title">&#128274; 배송관련 문의입니다.</td>
-						<td>답변 예정</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">배송 문의</td>
+					<tr style="border-bottom: 2px solid #BBBBBB;">
+						<td class="title">제목</td>
+						<td>답변 현황</td>
+						<td class="date">작성 일시</td>
+						<td class="type">작성자</td>
 					</tr>
+				<%for(int i = start;i<end;i++){ 
+						InquiryDTO qna = qlist.get(i);
+						InquiryReplyDTO qnaReply = qDao.showOneQnaReply(qna.getI_id());
+						
+					    String onclick = "";
+					    String onclickReply = "";
+					    if (qna.getUser_id().equals(user_id)) {
+					        onclick = "onclick=\"location.href='qnaDetail.jsp?i_id=" + qna.getI_id() + "'\"";
+					        onclickReply = "onclick=\"location.href='qnaDetail.jsp?i_id=" + qna.getI_id() + "&reply=Y'\"";					        
+					    }
+						
+						if(qna.getI_isPrivate().equals("Y")){			/* 비밀글이라면 */
+				%>
 					<tr>
-						<td class="title">&#128274; 제품 상세 문의입니다.</td>
-						<td>답변 완료</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">제품 상세 문의</td>
+						<td class="title" <%=onclick%>><%=qlist.size() - i%>. &#128274; <%=qna.getI_title()%></td>
+						<td style="<%= qna.getI_status().equals("답변완료") ? "color: green; font-weight: bold;" : "" %>">
+						  <%=qna.getI_status()%>
+						</td>
+						<td class="date"><%=qna.getCreated_at()%></td>
+						<td class="type"><%=qna.getUser_id()%></td>
 					</tr>
-					<tr>
-						<td class="title">&#128274; 제품 상세 문의입니다.</td>
-						<td>답변 완료</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">제품 상세 문의</td>
+				<%if(qnaReply != null){ %>		<!-- 댓글이 있다면 -->
+					<tr style="background-color: #F0F0F0;">
+						<td class="title" <%=onclickReply%>><strong>&nbsp;&nbsp; └[답변] &#128274; <%=qna.getI_title()%></strong></td>
+						<td> </td>
+						<td class="date"> </td>
+						<td class="type"> </td>
 					</tr>
-					<tr>
-						<td class="title">&#128274; 배송관련 문의입니다.</td>
-						<td>답변 예정</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">배송 문의</td>
+					<%} %>
+				<%} else{ %>			<!-- 비밀글이 아니라면 -->
+					<tr onclick="location.href='qnaDetail.jsp?i_id=<%=qna.getI_id()%>'">
+						<td class="title"><%=qlist.size() - i%>. <%=qna.getI_title()%></td>
+						<td style="<%= qna.getI_status().equals("답변완료") ? "color: green; font-weight: bold;" : "" %>">
+						  <%=qna.getI_status()%>
+						</td>
+						<td class="date"><%=qna.getCreated_at()%></td>
+						<td class="type"><%=qna.getUser_id()%></td>
 					</tr>
-					<tr>
-						<td class="title">&#128274; 제품 상세 문의입니다.</td>
-						<td>답변 완료</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">제품 상세 문의</td>
+				<%if(qnaReply != null){ %>		<!-- 댓글이 있다면 -->
+					<tr onclick="location.href='qnaDetail.jsp?i_id=<%=qna.getI_id()%>&reply=Y'" style="background-color: #F0F0F0;">
+						<td class="title" ><strong>&nbsp;&nbsp; └[답변] <%=qna.getI_title()%></strong></td>
+						<td> </td>
+						<td class="date"> </td>
+						<td class="type"> </td>
 					</tr>
-					<tr>
-						<td class="title">&#128274; 제품 상세 문의입니다.</td>
-						<td>답변 완료</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">제품 상세 문의</td>
-					</tr>
-					<tr>
-						<td class="title">&#128274; 제품 상세 문의입니다.</td>
-						<td>답변 완료</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">제품 상세 문의</td>
-					</tr>
-					<tr>
-						<td class="title">&#128274; 배송관련 문의입니다.</td>
-						<td>답변 예정</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">배송 문의</td>
-					</tr>
-					<tr>
-						<td class="title">&#128274; 제품 상세 문의입니다.</td>
-						<td>답변 완료</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">제품 상세 문의</td>
-					</tr>
-					<tr>
-						<td class="title">&#128274; 제품 상세 문의입니다.</td>
-						<td>답변 완료</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">제품 상세 문의</td>
-					</tr><tr>
-						<td class="title">&#128274; 배송관련 문의입니다.</td>
-						<td>답변 예정</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">배송 문의</td>
-					</tr>
-					<tr>
-						<td class="title">&#128274; 제품 상세 문의입니다.</td>
-						<td>답변 완료</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">제품 상세 문의</td>
-					</tr>
-					<tr>
-						<td class="title">&#128274; 제품 상세 문의입니다.</td>
-						<td>답변 완료</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">제품 상세 문의</td>
-					</tr>
-					<tr>
-						<td class="title">&#128274; 배송관련 문의입니다.</td>
-						<td>답변 예정</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">배송 문의</td>
-					</tr>
-					<tr>
-						<td class="title">&#128274; 제품 상세 문의입니다.</td>
-						<td>답변 완료</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">제품 상세 문의</td>
-					</tr>
-					<tr>
-						<td class="title">&#128274; 제품 상세 문의입니다.</td>
-						<td>답변 완료</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">제품 상세 문의</td>
-					</tr>
-					<tr>
-						<td class="title">&#128274; 제품 상세 문의입니다.</td>
-						<td>답변 완료</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">제품 상세 문의</td>
-					</tr>
-					<tr>
-						<td class="title">&#128274; 배송관련 문의입니다.</td>
-						<td>답변 예정</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">배송 문의</td>
-					</tr>
-					<tr>
-						<td class="title">&#128274; 제품 상세 문의입니다.</td>
-						<td>답변 완료</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">제품 상세 문의</td>
-					</tr>
-					<tr>
-						<td class="title">&#128274; 제품 상세 문의입니다.</td>
-						<td>답변 완료</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">제품 상세 문의</td>
-					</tr>
+				<%	
+						}
+					} 
+				}	
+				%>
 				</tbody>
 			</table>
 
 			<div class="write-btn-wrapper">
-				<button class="write-btn" onclick="location.href='qnaForm.jsp'">작성하기</button>
+				<button class="write-btn" <%=onclickWrite%>>작성하기</button>
 			</div>
 
-			<div class="pagination" id="pagination">
-				<span>Prev</span>
-				<span class="active">1</span>
-				<span>2</span>
-				<span>3</span>
-				<span>4</span>
-				<span>5</span>
-				<span>Next</span>
-			</div>
+
+		       <!-- 🔻 페이징 처리 -->
+		<div class="pagination" id="pagination">
+		  <% if (currentPage > 1) { %>
+		    <a href="Q&A.jsp?page=<%= currentPage - 1 %>">Prev</a>
+		  <% } else { %>
+		    <span class="invisible-button">Prev</span>
+		  <% } %>
+		
+		  <% for (int i = 1; i <= totalPage; i++) { %>
+		    <a href="Q&A.jsp?page=<%= i %>" class="<%= (i == currentPage ? "active" : "") %>">
+		      <%= i %>
+		    </a>
+		  <% } %>
+		
+		  <% if (currentPage < totalPage) { %>
+		    <a href="Q&A.jsp?page=<%= currentPage + 1 %>">Next</a>
+		  <% } else { %>
+		    <span class="invisible-button">Next</span>
+		  <% } %>
+		</div>
 
 			<div class="footer-bottom">
 				<p>2025&copy;everyWEAR</p>
@@ -171,61 +151,7 @@
 	</div>
 
 	<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const rowsPerPage = 10;
-    const table = document.getElementById("notice-table");
-    const rows = table.querySelectorAll("tbody tr");
-    const totalPages = Math.ceil(rows.length / rowsPerPage);
-    const pagination = document.getElementById("pagination");
 
-    let currentPage = 1;
-
-    function showPage(page) {
-      const start = (page - 1) * rowsPerPage;
-      const end = start + rowsPerPage;
-
-      rows.forEach((row, index) => {
-        row.style.display = index >= start && index < end ? "" : "none";
-      });
-
-      updatePagination(page);
-    }
-
-    function updatePagination(activePage) {
-      pagination.innerHTML = "";
-
-      // Prev 버튼
-      const prev = document.createElement("span");
-      prev.textContent = "Prev";
-      prev.onclick = () => {
-        if (currentPage > 1) showPage(--currentPage);
-      };
-      pagination.appendChild(prev);
-
-      // 페이지 번호
-      for (let i = 1; i <= totalPages; i++) {
-        const span = document.createElement("span");
-        span.textContent = i;
-        if (i === activePage) span.classList.add("active");
-        span.onclick = () => {
-          currentPage = i;
-          showPage(currentPage);
-        };
-        pagination.appendChild(span);
-      }
-
-      // Next 버튼
-      const next = document.createElement("span");
-      next.textContent = "Next";
-      next.onclick = () => {
-        if (currentPage < totalPages) showPage(++currentPage);
-      };
-      pagination.appendChild(next);
-    }
-
-    // 초기 페이지 로드
-    showPage(currentPage);
-  });
 </script>
 
 </body>

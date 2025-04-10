@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <title>에브리웨어 | everyWEAR</title>
 <link rel="icon" type="image/png" href="images/fav-icon.png">
-<link rel="stylesheet" type="text/css" href="css/review.css?v=123">
+<link rel="stylesheet" type="text/css" href="css/review.css?v=1354">
 </head>
 <body>
 
@@ -39,8 +39,8 @@
 								</div>
 							</div>
 						</td>
-						<td>★★★★☆</td>
-						<td class="date">2025-03-30</td>
+						<td class="date">2025-03-30<br>★★★★☆
+						</td>
 					</tr>
 					<tr>
 						<td class="pdInfo">
@@ -53,8 +53,8 @@
 								</div>
 							</div>
 						</td>
-						<td>★★★★☆</td>
-						<td class="date">2025-03-30</td>
+						<td class="date">2025-03-30<br>★★★★☆
+						</td>
 					</tr>
 					<tr>
 						<td class="pdInfo">
@@ -67,8 +67,8 @@
 								</div>
 							</div>
 						</td>
-						<td>★★★★☆</td>
-						<td class="date">2025-03-30</td>
+						<td class="date">2025-03-30<br>★★★★☆
+						</td>
 					</tr>
 					<tr>
 						<td class="pdInfo">
@@ -81,8 +81,8 @@
 								</div>
 							</div>
 						</td>
-						<td>★★★★☆</td>
-						<td class="date">2025-03-30</td>
+						<td class="date">2025-03-30<br>★★★★☆
+						</td>
 					</tr>
 					<tr>
 						<td class="pdInfo">
@@ -95,8 +95,8 @@
 								</div>
 							</div>
 						</td>
-						<td>★★★★☆</td>
-						<td class="date">2025-03-30</td>
+						<td class="date">2025-03-30<br>★★★★☆
+						</td>
 					</tr>
 					<tr>
 						<td class="pdInfo">
@@ -109,8 +109,8 @@
 								</div>
 							</div>
 						</td>
-						<td>★★★★☆</td>
-						<td class="date">2025-03-30</td>
+						<td class="date">2025-03-30<br>★★★★☆
+						</td>
 					</tr>
 					<tr>
 						<td class="pdInfo">
@@ -123,8 +123,8 @@
 								</div>
 							</div>
 						</td>
-						<td>★★★★☆</td>
-						<td class="date">2025-03-30</td>
+						<td class="date">2025-03-30<br>★★★★☆
+						</td>
 					</tr>
 					<tr>
 						<td class="pdInfo">
@@ -137,8 +137,8 @@
 								</div>
 							</div>
 						</td>
-						<td>★★★★☆</td>
-						<td class="date">2025-03-30</td>
+						<td class="date">2025-03-30<br>★★★★☆
+						</td>
 					</tr>
 					<tr>
 						<td class="pdInfo">
@@ -151,8 +151,8 @@
 								</div>
 							</div>
 						</td>
-						<td>★★★★☆</td>
-						<td class="date">2025-03-30</td>
+						<td class="date">2025-03-30<br>★★★★☆
+						</td>
 					</tr>
 					<tr>
 						<td class="pdInfo">
@@ -165,8 +165,8 @@
 								</div>
 							</div>
 						</td>
-						<td>★★★★☆</td>
-						<td class="date">2025-03-30</td>
+						<td class="date">2025-03-30<br>★★★★☆
+						</td>
 					</tr>
 					<tr>
 						<td class="pdInfo">
@@ -179,8 +179,8 @@
 								</div>
 							</div>
 						</td>
-						<td>★★★★☆</td>
-						<td class="date">2025-03-30</td>
+						<td class="date">2025-03-30<br>★★★★☆
+						</td>
 					</tr>
 					<tr>
 						<td class="pdInfo">
@@ -193,8 +193,8 @@
 								</div>
 							</div>
 						</td>
-						<td>★★★★☆</td>
-						<td class="date">2025-03-30</td>
+						<td class="date">2025-03-30<br>★★★★☆
+						</td>
 					</tr>
 					<tr>
 						<td class="pdInfo">
@@ -207,8 +207,8 @@
 								</div>
 							</div>
 						</td>
-						<td>★★★★☆</td>
-						<td class="date">2025-03-30</td>
+						<td class="date">2025-03-30<br>★★★★☆
+						</td>
 					</tr>
 					<tr>
 						<td class="pdInfo">
@@ -221,8 +221,8 @@
 								</div>
 							</div>
 						</td>
-						<td>★★★★☆</td>
-						<td class="date">2025-03-30</td>
+						<td class="date">2025-03-30<br>★★★★☆
+						</td>
 					</tr>
 					<tr>
 						<td class="pdInfo">
@@ -235,20 +235,15 @@
 								</div>
 							</div>
 						</td>
-						<td>★★★★☆</td>
-						<td class="date">2025-03-30</td>
+						<td class="date">2025-03-30<br>★★★★☆
+						</td>
 					</tr>
 				</tbody>
 			</table>
 
 			<div class="pagination" id="pagination">
-				<span>Prev</span>
-				<span class="active">1</span>
-				<span>2</span>
-				<span>3</span>
-				<span>4</span>
-				<span>5</span>
-				<span>Next</span>
+				<span>Prev</span> <span class="active">1</span> <span>2</span> <span>3</span>
+				<span>4</span> <span>5</span> <span>Next</span>
 			</div>
 
 			<script>

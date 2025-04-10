@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<%@ include file="includes/mypageHeader.jsp" %>
+<%@ include file="includes/header.jsp" %>
 
 <div class="order-container">
   <!-- 사이드바 -->

@@ -11,9 +11,9 @@
 
 	<%@ include file="includes/boardHeader.jsp"%>
 
-	<section2 class="content2">
+	<section class="content2">
 	<h3>Q&A</h3>
-	</section2>
+	</section>
 
 	<div class="container">
 		<aside class="sidebar2">

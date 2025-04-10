@@ -1,6 +1,10 @@
+<%@page import="DTO.NoticeDTO"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<jsp:useBean id="nDao" class="DAO.NoticeDAO"/>
 <%
-		String noti_num = request.getParameter("noti_num");
+		int noti_id = Integer.parseInt(request.getParameter("noti_id"));
+		NoticeDTO nDto = nDao.getNotice(noti_id);
+		boolean isPinned = nDao.isPinned(noti_id);
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -17,7 +21,7 @@
 	<section2 class="content2">
 	<h3>BOARD</h3>
 	</section2>
-
+	
 	<div class="container">
 		<aside class="sidebar2">
 			<ul>
@@ -30,17 +34,25 @@
 
 		<section class="content">
 			<table class="notice-table">
+			<%if(isPinned){ %>
 				<tr class="important">
-					<td class="title">※ 이용 안내</td>
-					<td class="date">2025-03-30</td>
-					<td class="views">조회수: 56</td>
+					<td class="title">※ <%=nDto.getNoti_title()%></td>
+					<td class="date"><%=nDto.getCreated_at()%></td>
+					<td class="views">조회수: <%=nDto.getNoti_views()%></td>
 				</tr>
+				<%} else{ %>
+				<tr class="normal">
+					<td class="title"><%=nDto.getNoti_title()%></td>
+					<td class="date"><%=nDto.getCreated_at()%></td>
+					<td class="views">조회수: <%=nDto.getNoti_views()%></td>
+				</tr>
+				<%} %>
 
 				<!-- 본문 내용을 별도 tr로 처리 -->
 				<tr>
 					<td colspan="3" class="notice-content">
 						<div class="notice-body">
-							<p>
+							<!-- <p>
 								<strong>■ 회원가입 안내</strong>
 							</p>
 							<p>회원가입 메뉴를 통해 이용약관, 개인정보보호정책 동의 및 일정 양식의 가입항목을 기입함으로써 회원에
@@ -75,16 +87,20 @@
 								무통장 입금은 상품 구매 대금은 PC뱅킹, 인터넷뱅킹, 텔레뱅킹 혹은 가까운 은행에서 직접 입금하시면 됩니다. 주문시
 								입력한 입금자명과 실제입금자의 성명이 반드시 일치하여야 하며, 48시간 이내로 입금을 하셔야 하며 입금되지 않은
 								주문은 자동취소 됩니다.
-							</p>
+							</p> -->
+							<p><%=nDto.getContent().replace("\n", "<br>")%></p>
 						</div>
 					</td>
 				</tr>
 			</table>
+			<div class="list-wrapper">
+				<button class="list">목록</button>
+			</div>
 
-			<div class="pagination">
+<!-- 			<div class="pagination">
 				<span>Prev</span> <span class="active">1</span> <span>2</span> <span>3</span>
 				<span>4</span> <span>5</span> <span>Next</span>
-			</div>
+			</div> -->
 
 			<div class="footer-bottom">
 				<p>2025&copy;everyWEAR</p>
