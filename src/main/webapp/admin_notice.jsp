@@ -34,6 +34,11 @@ window.onload = function() {
                 alert('공지사항 상태가 변경되었습니다.');
                 break;
         }
+        
+     // alert 후 URL 파라미터 제거 (브라우저 히스토리만 변경)
+        const newUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+        
     } else if (error) {
         switch(error) {
             case 'insert':
@@ -52,6 +57,11 @@ window.onload = function() {
                 alert('시스템 오류가 발생했습니다. 관리자에게 문의하세요.');
                 break;
         }
+        
+     // alert 후 URL 파라미터 제거 (브라우저 히스토리만 변경)
+        const newUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+        
     }
 }
 </script>
