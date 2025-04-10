@@ -177,3 +177,18 @@ h3 {
 .order-status.done {
 	color: #2CA02C;
 }
+
+.review-button {
+	/* padding: 6px 12px; */
+	background-color: #015FC1;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 12px;
+	transition: background-color 0.3s;
+}
+
+.review-button:hover {
+	background-color: #0146a3;
+}
