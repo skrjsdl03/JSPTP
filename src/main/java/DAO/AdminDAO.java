@@ -233,4 +233,30 @@ public class AdminDAO {
         
         return adminId;
     }
+
+    // 관리자 ID로 관리자 이름 가져오기
+    public String getAdminName(String adminId) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        String adminName = "관리자";  // 기본값
+        
+        try {
+            con = pool.getConnection();
+            String sql = "SELECT admin_name FROM admin WHERE admin_id = ?";
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, adminId);
+            rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                adminName = rs.getString("admin_name");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.freeConnection(con, pstmt, rs);
+        }
+        
+        return adminName;
+    }
 }

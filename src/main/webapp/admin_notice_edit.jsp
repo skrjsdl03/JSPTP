@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ page import="DTO.NoticeDTO, DAO.NoticeDAO" %>
+<%@ page import="DTO.NoticeDTO, DAO.NoticeDAO, DAO.AdminDAO" %>
 <%
     // 공지사항 ID 가져오기
     int noticeId = 0;
@@ -10,14 +10,19 @@
         return;
     }
     
-    // 공지사항 상세 정보 가져오기
+    // 공지사항 상세 정보 가져오기 (관리자용)
     NoticeDAO noticeDAO = new NoticeDAO();
-    NoticeDTO notice = noticeDAO.getNotice(noticeId);
+    NoticeDTO notice = noticeDAO.getNoticeForAdmin(noticeId);
     
     if (notice == null) {
         response.sendRedirect("admin_notice.jsp");
         return;
     }
+    
+    // 작성자 이름 가져오기
+    AdminDAO adminDAO = new AdminDAO();
+    String adminId = notice.getAdmin_id();
+    String adminName = adminDAO.getAdminName(adminId);
     
     // 공지사항 정보 설정
     String title = notice.getNoti_title();
@@ -62,6 +67,10 @@
         border: 1px solid #ddd;
         border-radius: 4px;
         resize: vertical;
+        white-space: pre-wrap;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.5;
     }
     
     .radio-group {
@@ -111,8 +120,15 @@
                     </div>
                     
                     <div class="form-group">
+                        <label>작성자</label>
+                        <div style="padding: 10px; background-color: #f5f5f5; border-radius: 4px;">
+                            <%= adminName %> (<%= adminId %>)
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
                         <label for="noticeContent">내용</label>
-                        <textarea id="noticeContent" name="noticeContent" required><%= content %></textarea>
+                        <textarea id="noticeContent" name="noticeContent" required><%= content.replace("<", "&lt;").replace(">", "&gt;") %></textarea>
                     </div>
                     
                     <div class="form-group">
@@ -135,6 +151,5 @@
             </div>
         </div>
     </main>
-
 </body>
 </html> 

@@ -14,18 +14,22 @@ public class UserDTO {
 	private String user_phone;
 	private String user_account_state;
 	private String user_wd_date;
+	private String user_wd_reason;
+	private String user_wd_detail_reason;
 	private int user_fail_login;
 	private String user_lock_state;
 	private String user_marketing_state;
 	private int user_point;
 	private String user_rank;
-	
-	public UserDTO() {}
+
+	public UserDTO() {
+	}
 
 	public UserDTO(String user_id, String user_pwd, String user_type, String user_name, String user_birth,
 			String user_gender, int user_height, int user_weight, String user_email, String created_at,
-			String user_phone, String user_account_state, String user_wd_date, int user_fail_login,
-			String user_lock_state, String user_marketing_state, int user_point, String user_rank) {
+			String user_phone, String user_account_state, String user_wd_date, String user_wd_reason,
+			String user_wd_detail_reason, int user_fail_login, String user_lock_state, String user_marketing_state,
+			int user_point, String user_rank) {
 		super();
 		this.user_id = user_id;
 		this.user_pwd = user_pwd;
@@ -40,6 +44,8 @@ public class UserDTO {
 		this.user_phone = user_phone;
 		this.user_account_state = user_account_state;
 		this.user_wd_date = user_wd_date;
+		this.user_wd_reason = user_wd_reason;
+		this.user_wd_detail_reason = user_wd_detail_reason;
 		this.user_fail_login = user_fail_login;
 		this.user_lock_state = user_lock_state;
 		this.user_marketing_state = user_marketing_state;
@@ -151,6 +157,22 @@ public class UserDTO {
 		this.user_wd_date = user_wd_date;
 	}
 
+	public String getUser_wd_reason() {
+		return user_wd_reason;
+	}
+
+	public void setUser_wd_reason(String user_wd_reason) {
+		this.user_wd_reason = user_wd_reason;
+	}
+
+	public String getUser_wd_detail_reason() {
+		return user_wd_detail_reason;
+	}
+
+	public void setUser_wd_detail_reason(String user_wd_detail_reason) {
+		this.user_wd_detail_reason = user_wd_detail_reason;
+	}
+
 	public int getUser_fail_login() {
 		return user_fail_login;
 	}
@@ -190,6 +212,5 @@ public class UserDTO {
 	public void setUser_rank(String user_rank) {
 		this.user_rank = user_rank;
 	}
-	
-	
+
 }
