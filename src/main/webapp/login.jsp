@@ -3,6 +3,11 @@
 <%@page import="DAO.UserDAO"%>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%
+		String redirect = request.getParameter("redirect");
+		if (redirect == null || redirect.equals("")) {
+		    redirect = "main2.jsp"; // 기본 리디렉션
+		}
+		
 		String errorMessage = "";
 		String error = request.getParameter("error");
 		int fail = 0;
@@ -50,7 +55,7 @@
     <span class="divider-bar">|</span>
     <a href="findPwd.jsp">비밀번호 찾기</a>
   </div>
-
+<input type="hidden" name="redirect" value="<%= redirect %>">
   <button type="submit" class="login-btn">Login</button>
 </form>
     <% if (!errorMessage.isEmpty()) { %>

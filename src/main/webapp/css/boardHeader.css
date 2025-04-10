@@ -96,11 +96,11 @@ body {
 
 /* 로고 */
 .logo-wrap {
-	position: fixed;
-	top: 80px; /* 햄버거 버튼과 nav-right보다 아래로 */
-	left: 50%;
-	transform: translate(-50%, -30px);
-	z-index: 1000;
+	position: relative; /* 또는 생략 가능 */
+	top: -100px;                   /* 상단 여백 조정 */
+	left: 50%;                   /* 수평 중앙으로 */
+	transform: translateX(-50%); /* 정확한 가운데 정렬 */
+	z-index: 1000;               /* 다른 요소보다 위에 오도록 */
 	display: flex;
 	justify-content: center;
 	margin: 0;
