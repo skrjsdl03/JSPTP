@@ -1,0 +1,463 @@
+/* 기본 설정 */
+body {
+  font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+  margin: 0;
+  background-color: #fff;
+  color: #333;
+}
+
+/* 상단 메뉴 아이콘 */
+.back-btn-wrap {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+}
+.menu-icon {
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* 로고 */
+.logo-wrap {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+.logo-img {
+  width: 150px;
+}
+
+/* 상단 오른쪽 링크 */
+.nav-links {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+.nav-links a {
+  margin-left: 15px;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: bold;
+  color: #000;
+}
+
+/* MYPAGE */
+.mypage-text {
+  text-align: center;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+/* 주문 컨테이너 */
+.order-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 20px 40px;
+}
+
+/* 제목 */
+.order-title {
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* 섹션 타이틀 */
+.section-title {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+/* 상품 박스 */
+.product-box {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.product-img {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.product-detail {
+  flex: 1;
+  margin-left: 15px;
+}
+
+.product-name {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.product-option {
+  font-size: 14px;
+  color: #555;
+}
+
+.quantity-control {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.quantity-control button {
+  width: 25px;
+  height: 25px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.quantity-control input {
+  width: 30px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.product-price-box {
+  text-align: right;
+}
+
+.option-change {
+  font-size: 13px;
+  text-decoration: underline;
+  color: #333;
+}
+
+.product-price {
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+/* 주문자 정보 */
+.order-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.order-form input,
+.order-form select {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f7fafd;
+}
+
+/* 주소 입력 줄 */
+.address-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* label 아래에 바로 나오는 입력 영역에 공통 여백 부여 */
+.info-section label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.input-button-group,
+.address-group,
+.address-sub {
+  margin-top: 6px;
+}
+
+.gray-btn {
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+}
+
+.address-group input[type="text"],
+.address-sub input[type="text"] {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f7fafd;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.address-sub input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f7fafd;
+  box-sizing: border-box;
+}
+
+.search-btn,
+.gray-btn {
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 8px;
+  white-space: nowrap;
+  cursor: pointer;
+  height: 42px;
+  box-sizing: border-box;
+}
+
+.search-btn {
+  padding: 10px 14px;
+  background-color: #000;
+  color: #fff;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  height: 100%;
+  white-space: nowrap;
+}
+
+/* 기본 주소 + 상세 주소 */
+.address-sub {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.phone-group {
+  display: flex;
+  gap: 10px;
+}
+
+.phone-group select,
+.phone-group input {
+  flex: 1;
+}
+
+/* 라디오 버튼 */
+.radio-group {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.radio-group input[type="radio"] {
+  margin-right: 4px;
+}
+
+/* 입력칸 + 버튼을 같은 줄에 */
+.input-button-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.address-combined {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* 너비 계산: 우편번호/별칭: 25%, 버튼: 12.5% */
+.address-combined input.zipcode,
+.address-combined input.alias {
+  width: 25%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f7fafd;
+  box-sizing: border-box;
+}
+
+.address-combined .addr-btn {
+  width: 12.5%;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: bold;
+  border-radius: 8px;
+  white-space: nowrap;
+  cursor: pointer;
+  height: 42px;
+  box-sizing: border-box;
+}
+
+.addr-btn:first-of-type {
+  background-color: #000;
+  color: #fff;
+  border: none;
+}
+
+.addr-btn:last-of-type {
+  background-color: #f7f7f7;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+/* 왼쪽: 유동 너비 입력칸 */
+.input-button-group input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f7fafd;
+  box-sizing: border-box;
+}
+
+/* 인라인 그룹 (쿠폰/적립금 입력 + 버튼) */
+.inline-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.inline-group input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+  background-color: #f7fafd;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+/* 회색 버튼 */
+.gray-btn {
+  padding: 0 14px;
+  background-color: #f7f7f7;
+  color: #333;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* 결제 정보 정렬 */
+.payment-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+.payment-info div {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* 최종 결제 금액 */
+.final-price {
+  margin-top: 30px;
+  font-weight: bold;
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* 결제 버튼 */
+.pay-btn {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px 0;
+  font-size: 15px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #000;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* 주소 필드 정렬용 grid: 우편번호, 주소검색, 별칭, 저장 버튼 한 줄 */
+.address-row-grid {
+  display: grid;
+  grid-template-columns: 1fr 100px 1fr 80px; /* 좌우 정렬 맞춤 */
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.address-row-grid input[type="text"],
+.address-row-grid button {
+  height: 42px;
+  font-size: 14px;
+  border-radius: 8px;
+  padding: 0 12px;
+  box-sizing: border-box;
+}
+
+/* 검정 버튼: 주소 검색 */
+.address-row-grid .search-btn {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+/* 회색 버튼: 저장 */
+.address-row-grid .gray-btn {
+  background-color: #f7f7f7;
+  color: #333;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+/* 두 번째 줄: 기본주소 + 상세주소 정렬 */
+.address-row-grid.address-sub {
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 10px;
+}
+
+.address-sub input[type="text"] {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f7fafd;
+  box-sizing: border-box;
+}
+
+/* 배송지 유형 버튼 */
+.delivery-types {
+  display: flex;
+  gap: 10px;
+  margin: 12px 0 20px;
+}
+
+.tag-btn {
+  padding: 6px 18px;
+  border: 1px solid #ccc;
+  border-radius: 18px;
+  background-color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+input.readonly {
+  background-color: #f7fafd;
+}
+
+.delete-icon {
+  display: inline;
+}
+
+.tag-btn:hover .delete-icon {
+  display: inline;
+}
+
+/* 하단 푸터 */
+.footer {
+  text-align: center;
+  font-size: 12px;
+  color: #aaa;
+  margin: 40px 0 20px;
+}
+
