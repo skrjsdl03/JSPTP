@@ -1,8 +1,10 @@
+<%@page import="DTO.InquiryReplyDTO"%>
 <%@page import="DTO.InquiryDTO"%>
 <%@page import="java.util.Vector"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <jsp:useBean id="qDao" class="DAO.QnaDAO"/>
 <%
+		String user_id = (String)session.getAttribute("id");
 		Vector<InquiryDTO> qlist = qDao.showAllQna();
 		int totalData = qlist.size();      // 일반 공지의 수
 		int itemsPerPage = 7;                // 한 페이지당 7개
@@ -16,6 +18,17 @@
 		int start = (currentPage - 1) * itemsPerPage;
 		int end = start + itemsPerPage;
 		if (end > totalData) end = totalData;
+		
+		String onclickWrite = "onclick=\"location.href='qnaFormForCommon.jsp'\"";
+		if(user_id == null){
+			// 현재 페이지 경로를 얻기 위한 코드
+			String fullUrl = request.getRequestURI();
+			String queryString = request.getQueryString();
+			if (queryString != null) {
+				fullUrl += "?" + queryString;
+			}
+			onclickWrite = "onclick=\"location.href='login.jsp?redirect=" + java.net.URLEncoder.encode(fullUrl, "UTF-8") + "'\"";
+		}
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -30,7 +43,7 @@
 	<%@ include file="includes/header.jsp"%>
 
 	<section class="content2">
-	<h3>Q&A</h3>
+	<h3>Q&A</h3> 
 	</section>
 
 	<div class="container">
@@ -46,46 +59,67 @@
 		<section class="content">
 			<table class="notice-table" id="notice-table">
 				<tbody>
-<<<<<<< HEAD
 					<tr style="border-bottom: 2px solid #BBBBBB;">
 						<td class="title">제목</td>
 						<td>답변 현황</td>
 						<td class="date">작성 일시</td>
 						<td class="type">작성자</td>
-=======
-					<tr>
-						<td class="title"><a href="qnaAnswerEx1.jsp">&#128274; 배송관련 문의입니다.</a></td>
-						<td>답변 예정</td>
-						<td class="date">2025-03-30</td>
-						<td class="type">배송 문의</td>
->>>>>>> branch 'main' of https://github.com/skrjsdl03/JSPTP.git
 					</tr>
 				<%for(int i = start;i<end;i++){ 
 						InquiryDTO qna = qlist.get(i);
+						InquiryReplyDTO qnaReply = qDao.showOneQnaReply(qna.getI_id());
 						
-						if(qna.getI_isPrivate().equals("Y")){
+					    String onclick = "";
+					    String onclickReply = "";
+					    if (qna.getUser_id().equals(user_id)) {
+					        onclick = "onclick=\"location.href='qnaDetail.jsp?i_id=" + qna.getI_id() + "'\"";
+					        onclickReply = "onclick=\"location.href='qnaDetail.jsp?i_id=" + qna.getI_id() + "&reply=Y'\"";					        
+					    }
+						
+						if(qna.getI_isPrivate().equals("Y")){			/* 비밀글이라면 */
 				%>
 					<tr>
-						<td class="title">&#128274; <%=qna.getI_title()%></td>
-						<td><%=qna.getI_status()%></td>
+						<td class="title" <%=onclick%>><%=qlist.size() - i%>. &#128274; <%=qna.getI_title()%></td>
+						<td style="<%= qna.getI_status().equals("답변완료") ? "color: green; font-weight: bold;" : "" %>">
+						  <%=qna.getI_status()%>
+						</td>
 						<td class="date"><%=qna.getCreated_at()%></td>
 						<td class="type"><%=qna.getUser_id()%></td>
 					</tr>
-				<%} else{ %>
-					<tr>
-						<td class="title"><%=qna.getI_title()%></td>
-						<td><%=qna.getI_status()%></td>
+				<%if(qnaReply != null){ %>		<!-- 댓글이 있다면 -->
+					<tr style="background-color: #F0F0F0;">
+						<td class="title" <%=onclickReply%>><strong>&nbsp;&nbsp; └[답변] &#128274; <%=qna.getI_title()%></strong></td>
+						<td> </td>
+						<td class="date"> </td>
+						<td class="type"> </td>
+					</tr>
+					<%} %>
+				<%} else{ %>			<!-- 비밀글이 아니라면 -->
+					<tr onclick="location.href='qnaDetail.jsp?i_id=<%=qna.getI_id()%>'">
+						<td class="title"><%=qlist.size() - i%>. <%=qna.getI_title()%></td>
+						<td style="<%= qna.getI_status().equals("답변완료") ? "color: green; font-weight: bold;" : "" %>">
+						  <%=qna.getI_status()%>
+						</td>
 						<td class="date"><%=qna.getCreated_at()%></td>
 						<td class="type"><%=qna.getUser_id()%></td>
 					</tr>
-				<%		} 
-						}	
+				<%if(qnaReply != null){ %>		<!-- 댓글이 있다면 -->
+					<tr onclick="location.href='qnaDetail.jsp?i_id=<%=qna.getI_id()%>&reply=Y'" style="background-color: #F0F0F0;">
+						<td class="title" ><strong>&nbsp;&nbsp; └[답변] <%=qna.getI_title()%></strong></td>
+						<td> </td>
+						<td class="date"> </td>
+						<td class="type"> </td>
+					</tr>
+				<%	
+						}
+					} 
+				}	
 				%>
 				</tbody>
 			</table>
 
 			<div class="write-btn-wrapper">
-				<button class="write-btn" onclick="location.href='qnaFormForCommon.jsp'">작성하기</button>
+				<button class="write-btn" <%=onclickWrite%>>작성하기</button>
 			</div>
 
 
