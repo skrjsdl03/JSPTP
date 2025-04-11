@@ -1139,14 +1139,6 @@ public class UserDAO {
 			rs.close();
 			pstmt.close();
 
-			// 5. 이메일 인증 여부 판단
-			boolean verified = true;
-			if (user.getUser_email() == null || user.getUser_email().trim().isEmpty()
-					|| "이메일 미인증".equals(user.getUser_account_state())) {
-				verified = false;
-			}
-			crmInfo.setEmailVerified(verified);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -1154,6 +1146,25 @@ public class UserDAO {
 		}
 
 		return crmInfo;
+	}
+
+	// 탈퇴회원 정상회원으로 복구
+	public void restoreWithdrawnUser(String user_id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		try {
+			con = pool.getConnection();
+			sql = "UPDATE user SET user_account_state = '정상', user_lock_state = 'N', user_fail_login = 0, "
+					+ "user_wd_date = NULL, user_wd_reason = NULL, user_wd_detail_reason = NULL " + "WHERE user_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, user_id);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
 	}
 
 }

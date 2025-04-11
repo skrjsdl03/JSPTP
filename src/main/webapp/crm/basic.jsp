@@ -31,8 +31,6 @@ UserAddrDTO addr = crm.getAddr();
 		<tr>
 			<th>이메일</th>
 			<td><%=user.getUser_email() == null ? "-" : user.getUser_email()%></td>
-			<th>이메일 인증 여부</th>
-			<td><%=crm.isEmailVerified() ? "✅ 인증됨" : "❌ 미인증"%></td>
 		</tr>
 		<tr>
 			<th>전화번호</th>

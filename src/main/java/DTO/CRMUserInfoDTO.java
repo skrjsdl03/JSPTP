@@ -7,16 +7,14 @@ public class CRMUserInfoDTO {
     private UserAddrDTO addr;           // 기본 배송지
     private int totalOrderAmount;       // 누적 결제 금액
     private String lastLoginDate;       // 마지막 로그인 일자
-    private boolean emailVerified;      // 이메일 인증 여부
 
     public CRMUserInfoDTO() {}
 
-    public CRMUserInfoDTO(UserDTO user, UserAddrDTO addr, int totalOrderAmount, String lastLoginDate, boolean emailVerified) {
+    public CRMUserInfoDTO(UserDTO user, UserAddrDTO addr, int totalOrderAmount, String lastLoginDate) {
         this.user = user;
         this.addr = addr;
         this.totalOrderAmount = totalOrderAmount;
         this.lastLoginDate = lastLoginDate;
-        this.emailVerified = emailVerified;
     }
 
     public UserDTO getUser() {
@@ -49,13 +47,5 @@ public class CRMUserInfoDTO {
 
     public void setLastLoginDate(String lastLoginDate) {
         this.lastLoginDate = lastLoginDate;
-    }
-
-    public boolean isEmailVerified() {
-        return emailVerified;
-    }
-
-    public void setEmailVerified(boolean emailVerified) {
-        this.emailVerified = emailVerified;
     }
 }
