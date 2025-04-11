@@ -1,3 +1,4 @@
+<!-- admin_order_list.css -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -5,100 +6,148 @@
   <meta charset="UTF-8">
   <title>주문 내역 조회 | everyWEAR</title>
   <link rel="icon" type="image/png" href="images/fav-icon.png">
-  <link rel="stylesheet" href="css/admin_header.css">
   <link rel="stylesheet" href="css/admin_member.css">
   <link rel="stylesheet" href="css/admin_order_list.css">
 </head>
 <body>
 <header>
-  <div class="header-container">
+  <div class="header-container">  
     <nav class="admin-nav">
       <ul class="main-menu">
-        <li><a href="#">대시보드</a></li>
+        <li><a href="admin_main.jsp">대시보드</a></li>
         <li><a href="#">주문</a></li>
         <li><a href="#">상품</a></li>
         <li><a href="#">회원</a></li>
-        <li><a href="#">게시판</a></li>
-        <li><a href="#">통계</a></li>
+        <li><a href="admin_notice.jsp">게시판</a></li>
       </ul>
       <div class="megamenu">
-        <div class="menu-column"></div>
+        <div class="menu-column"></div> <!-- 레이아웃 유지 -->
         <div class="menu-column">
-          <a href="#">주문 내역 조회</a>
-          <a href="#">주문 취소/환불</a>
+          <a href="admin_order_list.jsp">주문 내역 조회</a>
+          <a href="admin_order_refund.jsp">주문 취소/환불</a>
+          <a href="admin_order_delivery.jsp">배송 상태 변경</a>
         </div>
         <div class="menu-column">
           <a href="#">상품 관리</a>
           <a href="#">상품 등록</a>
         </div>
         <div class="menu-column">
-          <a href="#">회원 목록 조회</a>
-          <a href="#">회원 관리</a>
+          <a href="admin_member.jsp">회원 목록 조회</a>
+          <a href="admin_member_manage.jsp">회원 관리</a>
         </div>
         <div class="menu-column">
           <a href="#">공지사항</a>
           <a href="#">리뷰</a>
           <a href="#">Q&A</a>
         </div>
-        <div class="menu-column">
-          <a href="#">매출 분석</a>
-          <a href="#">상품 분석</a>
-        </div>
       </div>
     </nav>
   </div>
 </header>
-
 <main>
   <div class="container">
-    <div class="order-header">
-      <h2>주문 내역 조회</h2>
-      <select class="custom-select">
-        <option>전체</option>
-      </select>
-    </div>
+<div class="order-header">
+  <h2>주문 내역 조회</h2>
+  <div class="filter-group">
+<input type="text" id="search-input" placeholder="주문번호/ID/상품명 입력" class="search-input">
+    <button class="search-button" onclick="applyFilters()">검색</button>
+    <select class="custom-select" id="sort-select" onchange="applyFilters()">
+      <option value="latest">최신순</option>
+      <option value="oldest">오래된 순</option>
+    </select>
+  </div>
+</div>
 
-    <table class="order-table">
-      <thead>
-        <tr>
-          <th><input type="checkbox"></th>
-          <th>No.</th>
-          <th>배송지명</th>
-          <th>송장번호</th>
-          <th>택배사명</th>
-          <th>배송상태</th>
-          <th>배송시작일</th>
-          <th>배송완료일</th>
-          <th>메모내용</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%-- 반복 예시 --%>
-        <c:forEach var="i" begin="1" end="9">
-          <tr>
-            <td><input type="checkbox"></td>
-            <td>${i}</td>
-            <td>동의대 중앙도서관</td>
-            <td>89884086567</td>
-            <td>CJ대한통운</td>
-            <td>
-              <select class="custom-select">
-                <option>배송중</option>
-                <option>배송완료</option>
-              </select>
-            </td>
-            <td>2025-04-20</td>
-            <td>2025-04-21</td>
-            <td><a href="#">메모 내용</a></td>
-          </tr>
-        </c:forEach>
-      </tbody>
-    </table>
 
-    <div class="order-footer">
-      <button class="save-button">저장</button>
-    </div>
+
+	<table class="order-table">
+	  <thead>
+	    <tr>
+	      <th><input type="checkbox" id="check-all"></th>
+	      <th>No.</th>
+	      <th>주문번호</th>
+	      <th>주문회원ID</th>
+	      <th>상품명</th>
+	      <th>날짜</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    <c:forEach var="i" begin="1" end="9">
+	      <tr>
+	        <td><input type="checkbox" class="check-item"></td>
+	        <td>${i}</td>
+	        <td>ORD20250411${i}</td>
+	        <td>user${i}</td>
+	        <td>예시 상품명 ${i}</td>
+	        <td>2025-04-11</td>
+	      </tr>
+	    </c:forEach>
+	  </tbody>
+	</table>
+	<div class="pagination-container">
+  <ul class="pagination">
+    <li><a href="#">Prev</a></li>
+    <li class="active"><a href="#">1</a></li>
+    <li><a href="#">2</a></li>
+    <li><a href="#">3</a></li>
+    <li><a href="#">4</a></li>
+    <li><a href="#">5</a></li>
+    <li><a href="#">Next</a></li>
+  </ul>
+</div>
   </div>
 </main>
+
+<script>
+  // 상단 체크박스를 클릭하면 모든 하위 체크박스 토글
+  document.getElementById("check-all").addEventListener("change", function () {
+    const isChecked = this.checked;
+    const checkboxes = document.querySelectorAll(".check-item");
+    checkboxes.forEach(cb => cb.checked = isChecked);
+  });
+  // 상단 전체 선택 기능
+   document.getElementById("check-all").addEventListener("change", function () {
+    const isChecked = this.checked;
+    document.querySelectorAll(".check-item").forEach(cb => cb.checked = isChecked);
+  });
+
+  function applyFilters() {
+    const keyword = document.getElementById("search-input").value.trim().toLowerCase();
+    const sortOption = document.getElementById("sort-select").value;
+    const rows = Array.from(document.querySelectorAll(".order-table tbody tr"));
+
+    // 검색 필터
+    rows.forEach(row => {
+      const userId = row.children[3].textContent.toLowerCase();
+      const product = row.children[4].textContent.toLowerCase();
+      const match = userId.includes(keyword) || product.includes(keyword);
+      row.style.display = match ? "" : "none";
+    });
+
+    // 정렬 처리
+    const visibleRows = rows.filter(row => row.style.display !== "none");
+    visibleRows.sort((a, b) => {
+      const dateA = new Date(a.children[5].textContent);
+      const dateB = new Date(b.children[5].textContent);
+      return sortOption === "latest" ? dateB - dateA : dateA - dateB;
+    });
+
+    const tbody = document.querySelector(".order-table tbody");
+    visibleRows.forEach(row => tbody.appendChild(row)); // 정렬된 순서로 재배치
+  }
+  const searchInput = document.getElementById("search-input");
+  const defaultPlaceholder = "주문번호/ID/상품명 입력";
+
+  searchInput.addEventListener("focus", function () {
+    this.setAttribute("placeholder", "");
+  });
+
+  searchInput.addEventListener("blur", function () {
+    if (this.value.trim() === "") {
+      this.setAttribute("placeholder", defaultPlaceholder);
+    }
+  });
+</script>
+
 </body>
 </html>
