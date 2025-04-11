@@ -72,14 +72,31 @@
 					    String onclick = "";
 					    String onclickReply = "";
 					    if (qna.getUser_id().equals(user_id)) {
-					        onclick = "onclick=\"location.href='qnaDetail.jsp?i_id=" + qna.getI_id() + "'\"";
-					        onclickReply = "onclick=\"location.href='qnaDetail.jsp?i_id=" + qna.getI_id() + "&reply=Y'\"";					        
+					        onclick = "goDetail('" + qna.getI_id() + "')";
+					        onclickReply = "goDetailReply('" + qna.getI_id() + "')";
 					    }
 						
 						if(qna.getI_isPrivate().equals("Y")){			/* 비밀글이라면 */
 				%>
 					<tr>
-						<td class="title" <%=onclick%>><%=qlist.size() - i%>. &#128274; <%=qna.getI_title()%></td>
+						<td class="title"><a href="javascript:<%=onclick%>"><%=qlist.size() - i%>. <%=qna.getI_title()%> &#128274;</a></td>
+						<td style="<%= qna.getI_status().equals("답변완료") ? "color: green; font-weight: bold;" : "" %>">
+						  <%=qna.getI_status()%>
+						</td>
+						<td class="date"><%=qna.getCreated_at()%></td>
+						<td class="type"><%=qna.getUser_id()%></td>
+					</tr>
+				<%if(qnaReply != null){ %>		<!-- 댓글이 있다면 -->
+					<tr style="background-color: #F0F0F0;" <%=onclickReply%>>
+						<td class="title"><strong>&nbsp;&nbsp; <a href="javascript:<%=onclickReply%>">└[답변] <%=qna.getI_title()%> &#128274;</a></strong></td>
+						<td> </td>
+						<td class="date"> </td>
+						<td class="type"> </td>
+					</tr>
+					<%} %>
+				<%} else{ %>			<!-- 비밀글이 아니라면 -->
+					<tr>
+						<td class="title"><a href="javascript:goDetail('<%=qna.getI_id()%>')"><%=qlist.size() - i%>. <%=qna.getI_title()%></a></td>
 						<td style="<%= qna.getI_status().equals("답변완료") ? "color: green; font-weight: bold;" : "" %>">
 						  <%=qna.getI_status()%>
 						</td>
@@ -88,24 +105,7 @@
 					</tr>
 				<%if(qnaReply != null){ %>		<!-- 댓글이 있다면 -->
 					<tr style="background-color: #F0F0F0;">
-						<td class="title" <%=onclickReply%>><strong>&nbsp;&nbsp; └[답변] &#128274; <%=qna.getI_title()%></strong></td>
-						<td> </td>
-						<td class="date"> </td>
-						<td class="type"> </td>
-					</tr>
-					<%} %>
-				<%} else{ %>			<!-- 비밀글이 아니라면 -->
-					<tr onclick="location.href='qnaDetail.jsp?i_id=<%=qna.getI_id()%>'">
-						<td class="title"><%=qlist.size() - i%>. <%=qna.getI_title()%></td>
-						<td style="<%= qna.getI_status().equals("답변완료") ? "color: green; font-weight: bold;" : "" %>">
-						  <%=qna.getI_status()%>
-						</td>
-						<td class="date"><%=qna.getCreated_at()%></td>
-						<td class="type"><%=qna.getUser_id()%></td>
-					</tr>
-				<%if(qnaReply != null){ %>		<!-- 댓글이 있다면 -->
-					<tr onclick="location.href='qnaDetail.jsp?i_id=<%=qna.getI_id()%>&reply=Y'" style="background-color: #F0F0F0;">
-						<td class="title" ><strong>&nbsp;&nbsp; └[답변] <%=qna.getI_title()%></strong></td>
+						<td class="title" ><strong>&nbsp;&nbsp; <a href="javascript:goDetailReply('<%=qna.getI_id()%>')">└[답변] <%=qna.getI_title()%></a></strong></td>
 						<td> </td>
 						<td class="date"> </td>
 						<td class="type"> </td>
@@ -121,7 +121,15 @@
 			<div class="write-btn-wrapper">
 				<button class="write-btn" <%=onclickWrite%>>작성하기</button>
 			</div>
-
+			
+			<form action="qnaDetail.jsp" method="post" id="detailForm">
+				<input type="hidden" id="hidden_i_id" name="i_id">
+			</form>
+			
+			<form action="qnaDetail.jsp" method="post" id="detailForm2">
+				<input type="hidden" id="hidden_i_id2" name="i_id">
+				<input type="hidden" id="reply" name="reply" value="Y">
+			</form>
 
 		       <!-- 🔻 페이징 처리 -->
 		<div class="pagination" id="pagination">
@@ -150,8 +158,16 @@
 		</section>
 	</div>
 
-	<script>
-
+<script>
+	function goDetail(i_id){
+		document.getElementById("hidden_i_id").value = i_id;
+		document.getElementById("detailForm").submit();
+	}
+	
+	function goDetailReply(i_id){
+		document.getElementById("hidden_i_id2").value = i_id;
+		document.getElementById("detailForm2").submit();
+	}
 </script>
 
 </body>
