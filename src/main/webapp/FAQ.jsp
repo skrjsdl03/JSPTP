@@ -31,9 +31,9 @@ if (end > totalData)
 
 	<%@ include file="includes/header.jsp"%>
 
-	<section2 class="content2">
+	<section class="content2">
 	<h3>FAQ</h3>
-	</section2>
+	</section>
 
 	<div class="container">
 		<aside class="sidebar2">
@@ -46,17 +46,20 @@ if (end > totalData)
 		</aside>
 
 	<section class="content">
-      <% for (int i = start; i < end; i++) {
-        FaqDTO faq = flist.get(i);
-      %>
-        <div class="faq-item">
-          <span><%=faq.getFaq_title()%></span>
-          <span class="arrow">▼</span>
-        </div>
-        <div class="faq-content" style="display: none;">
-          <%=faq.getFaq_content()%>
-        </div>
-      <% } %>
+	<% for (int i = start; i < end; i++) {
+	     FaqDTO faq = flist.get(i);
+	%>
+	  <div class="faq-item">
+	    <div class="question">
+	      <span><%=faq.getFaq_title()%></span>
+	      <span class="arrow">▼</span>
+	    </div>
+	    <div class="faq-content">
+	      <%=faq.getFaq_content()%>
+	    </div>
+	  </div>
+	<% } %>
+
     
        <!-- 🔻 페이징 처리 -->
 <div class="pagination" id="pagination">
@@ -84,32 +87,28 @@ if (end > totalData)
 			</div>
 		</section>
 	</div>
+	
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(function () {
+    $(".question").on("click", function () {
+      const $item = $(this).closest(".faq-item");
+      const $content = $item.find(".faq-content");
 
-	<script>
-  /* 새로운 부분 */
-  window.onload = function() {
-      const items = document.querySelectorAll('.faq-item');
+      if ($item.hasClass("active")) {
+        $item.removeClass("active");
+        $content.stop().slideUp(300);
+      } else {
+        $(".faq-item").removeClass("active").find(".faq-content").stop().slideUp(300);
+        $item.addClass("active");
+        $content.stop().slideDown(300);
+      }
+    });
+  });
+</script>
 
-      items.forEach(item => {
-          item.addEventListener('click', function() {
-              const content = this.nextElementSibling;
 
-              // 이미 열려있으면 닫기
-              if (this.classList.contains('active')) {
-                  this.classList.remove('active');
-                  content.style.display = 'none';
-              } else {
-                  // 다른 항목 닫기
-                  items.forEach(i => i.classList.remove('active'));
-                  document.querySelectorAll('.faq-content').forEach(c => c.style.display = 'none');
 
-                  // 현재 항목 열기
-                  this.classList.add('active');
-                  content.style.display = 'block';
-              }
-          });
-      });
-  }
-	</script>
+
 
 </body>

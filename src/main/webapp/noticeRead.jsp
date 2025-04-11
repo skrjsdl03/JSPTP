@@ -94,7 +94,7 @@
 				</tr>
 			</table>
 			<div class="list-wrapper">
-				<button class="list">목록</button>
+				<button class="list" onclick="window.history.back()">목록</button>
 			</div>
 
 <!-- 			<div class="pagination">
