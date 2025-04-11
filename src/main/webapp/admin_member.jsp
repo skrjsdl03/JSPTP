@@ -1,3 +1,5 @@
+<!-- admin_member.jsp -->
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -5,13 +7,12 @@
   <meta charset="UTF-8">
   <title>회원 목록 조회 | everyWEAR</title>
   <link rel="icon" type="image/png" href="images/fav-icon.png">
-  <link rel="stylesheet" href="css/admin_main.css">
   <link rel="stylesheet" href="css/admin_member.css">
   <link rel="stylesheet" href="css/admin_order_list.css">
 </head>
 <body>
 <header>
-  <div class="header-container">
+  <div class="header-container">  
     <nav class="admin-nav">
       <ul class="main-menu">
         <li><a href="#">대시보드</a></li>
@@ -19,13 +20,13 @@
         <li><a href="#">상품</a></li>
         <li><a href="#">회원</a></li>
         <li><a href="#">게시판</a></li>
-        <li><a href="#">통계</a></li>
       </ul>
       <div class="megamenu">
         <div class="menu-column"></div>
         <div class="menu-column">
           <a href="#">주문 내역 조회</a>
           <a href="#">주문 취소/환불</a>
+          <a href="#">배송 상태 변경</a>
         </div>
         <div class="menu-column">
           <a href="#">상품 관리</a>
@@ -40,10 +41,7 @@
           <a href="#">리뷰</a>
           <a href="#">Q&A</a>
         </div>
-        <div class="menu-column">
-          <a href="#">매출 분석</a>
-          <a href="#">상품 분석</a>
-        </div>
+
       </div>
     </nav>
   </div>

@@ -1,3 +1,4 @@
+<!-- admin_member_manage.jsp -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -5,13 +6,12 @@
   <meta charset="UTF-8">
   <title>회원 관리 | everyWEAR</title>
   <link rel="icon" type="image/png" href="images/fav-icon.png">
-  <link rel="stylesheet" href="css/admin_main.css">
   <link rel="stylesheet" href="css/admin_member.css">
   <link rel="stylesheet" href="css/admin_order_list.css">
 </head>
 <body>
 <header>
-  <div class="header-container">
+  <div class="header-container">  
     <nav class="admin-nav">
       <ul class="main-menu">
         <li><a href="#">대시보드</a></li>
@@ -25,6 +25,7 @@
         <div class="menu-column">
           <a href="#">주문 내역 조회</a>
           <a href="#">주문 취소/환불</a>
+          <a href="#">배송 상태 변경</a>
         </div>
         <div class="menu-column">
           <a href="#">상품 관리</a>
@@ -39,7 +40,6 @@
           <a href="#">리뷰</a>
           <a href="#">Q&A</a>
         </div>
-
       </div>
     </nav>
   </div>
@@ -110,7 +110,7 @@
     
     <div class="order-footer">
 	  <button class="delete-button" onclick="confirmDelete()">삭제</button>
-	  <button class="save-button">저장</button>
+	  <button class="save-button" onclick="saveMemberChanges()">저장</button>
 	</div>
 	
     <div class="pagination-container">
@@ -143,13 +143,18 @@ function confirmDelete() {
     return;
   }
 
-  if (confirm("선택한 회원을 삭제하시겠습니까?")) {
-    selected.forEach(cb => {
-      const row = cb.closest("tr");
-      if (row) row.remove();
-    });
-    alert("선택한 회원이 삭제되었습니다.");
-  }
+  if (!confirm("선택한 회원을 삭제하시겠습니까?")) return;
+
+  selected.forEach(cb => {
+    const row = cb.closest("tr");
+    if (row) {
+      row.style.backgroundColor = "#ffe6e6";
+      row.style.textDecoration = "line-through";
+      cb.disabled = true;
+    }
+  });
+
+  alert("선택한 회원이 삭제되었습니다.");
 }
 
 // 필터링 기능
@@ -175,6 +180,31 @@ function filterTable() {
     row.style.display = (matchGrade && matchStatus) ? "" : "none";
   });
 }
+function saveMemberChanges() {
+	  const rows = document.querySelectorAll(".order-table tbody tr");
+	  const changedData = [];
+
+	  rows.forEach(row => {
+	    const checkbox = row.querySelector(".check-item");
+	    if (checkbox.checked) {
+	      const email = row.children[3].textContent;
+	      const grade = row.querySelector(".grade-select").value;
+	      const status = row.querySelector(".state-select").value;
+
+	      changedData.push({ email, grade, status });
+	    }
+	  });
+
+	  if (changedData.length === 0) {
+	    alert("변경할 회원을 선택해주세요.");
+	    return;
+	  }
+
+	  console.log("변경 내용:", changedData);
+	  alert("변경된 회원 정보가 저장되었습니다.");
+	  // 실제 저장 로직은 Ajax로 백엔드 서블릿 또는 JSP에 전달 필요
+
+	}
 </script>
 
 </body>

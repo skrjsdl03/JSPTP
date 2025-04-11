@@ -1,3 +1,5 @@
+/* admin_member.css */
+
 @charset "UTF-8";
 
 /* ===== 공통 스타일 ===== */
@@ -154,7 +156,9 @@ main {
 }
 
 .container {
-    max-width: 3000px;
+    max-width: 1200px;
+    width: 90%;
+    min-width: 1000px;
     margin: 0 auto;
     background-color: white;
     padding: 30px;
@@ -242,19 +246,34 @@ main {
   background-color: #2c3e50;
 }
 
-.delete-button {
-  background-color: #888;
+.delete-button,
+.save-button {
+  background-color: #111;
   color: #fff;
-  border: none;
-  padding: 10px 20px;
+  padding: 10px 20px;      /* 동일한 패딩 */
   font-size: 14px;
-  cursor: pointer;
+  border: none;
   border-radius: 4px;
-  margin-right: 10px;
+  cursor: pointer;
+  min-width: 100px;         /* 동일한 너비 보장 (선택사항) */
+}
+
+
+/* 저장 버튼 배경색 따로 지정 */
+.save-button {
+  background-color: #111;
+}
+
+.save-button:hover {
+  background-color: #333;
+}
+
+.delete-button {
+  background-color: #666;
 }
 
 .delete-button:hover {
-  background-color: #555;
+  background-color: #444;
 }
 
 .order-header {
@@ -303,7 +322,6 @@ main {
 
 .pagination li.active a {
   font-weight: bold;
- 
 }
 
 

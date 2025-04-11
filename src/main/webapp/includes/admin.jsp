@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <link rel="icon" type="image/png" href="images/fav-icon.png">
-  <link rel="stylesheet" href="css/admin_main.css">
   <link rel="stylesheet" href="css/admin_member.css">
   <link rel="stylesheet" href="css/admin_order_list.css">
 </head>
@@ -28,6 +27,7 @@
       <div class="menu-column">
         <a href="#">주문 내역 조회</a>
         <a href="#">주문 취소/환불</a>
+        <a href="#">배송 상태 변경</a>
       </div>
       <div class="menu-column">
         <a href="#">상품 관리</a>
