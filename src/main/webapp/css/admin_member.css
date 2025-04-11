@@ -1,24 +1,13 @@
 @charset "UTF-8";
 
-/* 전체 레이아웃 기본 설정 */
-body {
-  font-family: '맑은 고딕', sans-serif;
-  background-color: #fff;
-  margin: 0;
-  padding: 40px;
-}
-
-/* 메인 콘텐츠 영역 */
-main {
-  max-width: 1200px;
-  margin: 0 auto;
-}
+/* 공통 스타일은 admin_styles.jsp에서 관리됨 */
 
 /* 테이블 */
 .user-table {
   border-collapse: collapse;
   width: 100%;
-  margin-top: 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .user-table th, .user-table td {
@@ -37,24 +26,48 @@ main {
   background-color: #f0f8ff;
 }
 
-/* 페이징 */
-main div {
+/* 필터 선택 스타일 */
+.user-table select {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  background-color: #f9f9f9;
+}
+
+/* 팝업 관련 스타일 */
+.detail-popup {
+  max-width: 480px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.detail-popup h3 {
+  margin-top: 0;
+  color: #2c3e50;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.detail-info {
   margin-top: 20px;
 }
 
-main a {
-  color: #333;
-  text-decoration: none;
+.detail-info dt {
   font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
 }
 
-main a:hover {
-  color: #1abc9c;
-  text-decoration: underline;
+.detail-info dd {
+  margin-left: 0;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #eee;
 }
 
-/* 강조된 페이지 번호 */
-main strong {
-  color: #1abc9c;
-  font-weight: bold;
+.detail-info dd:last-child {
+  border-bottom: none;
 }
