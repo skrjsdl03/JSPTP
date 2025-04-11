@@ -528,8 +528,10 @@ public class UserDAO {
 		String sql = null;
 		try {
 			con = pool.getConnection();
-			sql = "update user set user_pwd = ?, user_name = ?, user_phone = ?, user_email = ?, user_gender = ?, user_height = ?, user_weight = ?, user_birth = ?"
-					+ "where user_id = ?";
+			sql = "UPDATE user SET user_pwd = ?, user_name = ?, user_phone = ?, user_email = ?, "
+					+ "user_gender = ?, user_height = ?, user_weight = ?, user_birth = ?, "
+					+ "user_account_state = ?, user_lock_state = ?, user_marketing_state = ?, user_rank = ?, "
+					+ "user_wd_date = ?, user_wd_reason = ?, user_wd_detail_reason = ? " + "WHERE user_id = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, user.getUser_pwd());
 			pstmt.setString(2, user.getUser_name());
@@ -539,7 +541,14 @@ public class UserDAO {
 			pstmt.setInt(6, user.getUser_height());
 			pstmt.setInt(7, user.getUser_weight());
 			pstmt.setString(8, user.getUser_birth());
-			pstmt.setString(9, id);
+			pstmt.setString(9, user.getUser_account_state());
+			pstmt.setString(10, user.getUser_lock_state());
+			pstmt.setString(11, user.getUser_marketing_state());
+			pstmt.setString(12, user.getUser_rank());
+			pstmt.setString(13, user.getUser_wd_date());
+			pstmt.setString(14, user.getUser_wd_reason());
+			pstmt.setString(15, user.getUser_wd_detail_reason());
+			pstmt.setString(16, id);
 			pstmt.executeUpdate();
 
 		} catch (Exception e) {
@@ -1040,7 +1049,7 @@ public class UserDAO {
 
 		try {
 			con = pool.getConnection();
-			String sql = "SELECT COUNT(*) FROM user WHERE user_account_state NOT IN ('탈퇴', '휴먼')";
+			String sql = "SELECT COUNT(*) FROM user WHERE user_account_state NOT IN ('탈퇴')";
 			pstmt = con.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
@@ -1067,7 +1076,7 @@ public class UserDAO {
 			con = pool.getConnection();
 			String sql = "SELECT user_id, user_name, user_type, user_rank, created_at, "
 					+ "user_account_state, user_point, user_marketing_state " + "FROM user "
-					+ "WHERE user_account_state NOT IN ('탈퇴', '휴먼') " + "ORDER BY created_at DESC " + "LIMIT ?, ?";
+					+ "WHERE user_account_state NOT IN ('탈퇴') " + "ORDER BY created_at DESC " + "LIMIT ?, ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, offset);
 			pstmt.setInt(2, pageSize);
@@ -1142,59 +1151,59 @@ public class UserDAO {
 
 	// CRM 고객 관계 관리 → 한 명의 회원에 대한 전체 정보를 관리할 메소드
 	public CRMUserInfoDTO getCRMUserInfo(String user_id, String user_type) {
-	    Connection con = null;
-	    PreparedStatement pstmt = null;
-	    ResultSet rs = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 
-	    CRMUserInfoDTO crmInfo = new CRMUserInfoDTO();
-	    try {
-	        con = pool.getConnection();
+		CRMUserInfoDTO crmInfo = new CRMUserInfoDTO();
+		try {
+			con = pool.getConnection();
 
-	        // 1. 기본 회원 정보
-	        UserDTO user = getUserById(user_id, user_type);
-	        crmInfo.setUser(user);
+			// 1. 기본 회원 정보
+			UserDTO user = getUserById(user_id, user_type);
+			crmInfo.setUser(user);
 
-	        // 2. 기본 배송지
-	        UserAddrDTO addr = showOneAddr(user_id);
-	        crmInfo.setAddr(addr);
+			// 2. 기본 배송지
+			UserAddrDTO addr = showOneAddr(user_id);
+			crmInfo.setAddr(addr);
 
-	        // 3. 누적 결제 금액
-	        String sqlTotal = "SELECT IFNULL(SUM(o_total_amount), 0) FROM orders WHERE user_id = ?";
-	        pstmt = con.prepareStatement(sqlTotal);
-	        pstmt.setString(1, user_id);
-	        rs = pstmt.executeQuery();
-	        if (rs.next()) {
-	            crmInfo.setTotalOrderAmount(rs.getInt(1));
-	        }
-	        rs.close();
-	        pstmt.close();
+			// 3. 누적 결제 금액
+			String sqlTotal = "SELECT IFNULL(SUM(o_total_amount), 0) FROM orders WHERE user_id = ?";
+			pstmt = con.prepareStatement(sqlTotal);
+			pstmt.setString(1, user_id);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				crmInfo.setTotalOrderAmount(rs.getInt(1));
+			}
+			rs.close();
+			pstmt.close();
 
-	        // 4. 최근 로그인 일자
-	        String sqlLogin = "SELECT MAX(log_date) FROM user_log WHERE user_id = ? AND log_type = '로그인'";
-	        pstmt = con.prepareStatement(sqlLogin);
-	        pstmt.setString(1, user_id);
-	        rs = pstmt.executeQuery();
-	        if (rs.next()) {
-	            crmInfo.setLastLoginDate(rs.getString(1));  // null 처리 X: JSP에서 "-" 처리
-	        }
-	        rs.close();
-	        pstmt.close();
+			// 4. 최근 로그인 일자
+			String sqlLogin = "SELECT MAX(log_date) FROM user_log WHERE user_id = ? AND log_type = '로그인'";
+			pstmt = con.prepareStatement(sqlLogin);
+			pstmt.setString(1, user_id);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				crmInfo.setLastLoginDate(rs.getString(1)); // null 처리 X: JSP에서 "-" 처리
+			}
+			rs.close();
+			pstmt.close();
 
-	        // 5. 이메일 인증 여부 판단
-	        boolean verified = true;
-	        if (user.getUser_email() == null || user.getUser_email().trim().isEmpty()
-	                || "이메일 미인증".equals(user.getUser_account_state())) {
-	            verified = false;
-	        }
-	        crmInfo.setEmailVerified(verified);
+			// 5. 이메일 인증 여부 판단
+			boolean verified = true;
+			if (user.getUser_email() == null || user.getUser_email().trim().isEmpty()
+					|| "이메일 미인증".equals(user.getUser_account_state())) {
+				verified = false;
+			}
+			crmInfo.setEmailVerified(verified);
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    } finally {
-	        pool.freeConnection(con, pstmt, rs);
-	    }
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
 
-	    return crmInfo;
+		return crmInfo;
 	}
-	
+
 }
