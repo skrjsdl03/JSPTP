@@ -18,7 +18,7 @@
 	<!-- 하위 네비 -->
 	<nav class="sub-nav">
 		<ul>
-			<li><a href="#">ALL</a></li>
+			<li><a href="pdListAll.jsp" class="active">ALL</a></li>
 			<li><a href="#">OUTER</a></li>
 			<li><a href="#">TOP</a></li>
 			<li><a href="#">BOTTOM</a></li>
@@ -28,14 +28,59 @@
 
 	<!-- 상품 목록 영역 -->
 	<section class="product-list">
-		<c:forEach var="product" items="${productList}">
-			<div class="product-card">
-				<img src="${product.imagePath}" alt="${product.name}">
-				<p class="product-name">${product.name}</p>
-				<p class="product-price">KRW ${product.price}</p>
-			</div>
-		</c:forEach>
+		<div class="product-card">
+			<img src="images/main-cloth1.png" alt="상품1">
+			<p class="product-name">I ♥ JDJ</p>
+			<p class="product-price">KRW 88,000</p>
+		</div>
+		<div class="product-card">
+			<img src="images/main-cloth1.png" alt="상품2">
+			<p class="product-name">I ♥ JDJ</p>
+			<p class="product-price">KRW 88,000</p>
+		</div>
+		<div class="product-card">
+			<img src="images/main-cloth1.png" alt="상품3">
+			<p class="product-name">I ♥ JDJ</p>
+			<p class="product-price">KRW 88,000</p>
+		</div>
+		<div class="product-card">
+			<img src="images/main-cloth1.png" alt="상품4">
+			<p class="product-name">I ♥ JDJ</p>
+			<p class="product-price">KRW 88,000</p>
+		</div>
+		<div class="product-card">
+			<img src="images/main-cloth1.png" alt="상품1">
+			<p class="product-name">I ♥ JDJ</p>
+			<p class="product-price">KRW 88,000</p>
+		</div>
+		<div class="product-card">
+			<img src="images/main-cloth1.png" alt="상품2">
+			<p class="product-name">I ♥ JDJ</p>
+			<p class="product-price">KRW 88,000</p>
+		</div>
+		<div class="product-card">
+			<img src="images/main-cloth1.png" alt="상품3">
+			<p class="product-name">I ♥ JDJ</p>
+			<p class="product-price">KRW 88,000</p>
+		</div>
+		<div class="product-card">
+			<img src="images/main-cloth1.png" alt="상품4">
+			<p class="product-name">I ♥ JDJ</p>
+			<p class="product-price">KRW 88,000</p>
+		</div>
+		<div class="product-card">
+			<img src="images/main-cloth1.png" alt="상품3">
+			<p class="product-name">I ♥ JDJ</p>
+			<p class="product-price">KRW 88,000</p>
+		</div>
+		<div class="product-card">
+			<img src="images/main-cloth1.png" alt="상품4">
+			<p class="product-name">I ♥ JDJ</p>
+			<p class="product-price">KRW 88,000</p>
+		</div>
+
 	</section>
+
 
 	<!-- 더 보기 버튼 -->
 	<div class="load-more-wrap">
