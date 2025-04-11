@@ -33,6 +33,7 @@
 				<li><a href="cart2.jsp">장바구니</a></li>
 				<li><a href="wishList2.jsp">찜 상품</a></li>
 				<li><a href="postMn.jsp">게시물 관리</a></li>
+				<li><a href="deliveryMn.jsp">배송지 관리</a></li>
 			</ul>
 		</aside>
 
