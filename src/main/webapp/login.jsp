@@ -41,6 +41,7 @@
 
 
 <%@ include file="includes/loginHeader.jsp" %>
+
 <div class="login-container">
 <form action="login" method="post" autocomplete="off">
   <label for="userId">ID</label>
@@ -51,6 +52,10 @@
 
   <!-- 아이디/비밀번호 찾기 영역 -->
   <div class="find-links">
+  <%if("human".equals(error) || "lock".equals(error)){ %>
+   	<a href="lockOutAccount.jsp">잠긴 계정 풀기</a>
+   	<span class="divider-bar">|</span>
+  <%} %>
     <a href="findId.jsp">아이디 찾기</a>
     <span class="divider-bar">|</span>
     <a href="findPwd.jsp">비밀번호 찾기</a>
@@ -59,11 +64,7 @@
   <button type="submit" class="login-btn">Login</button>
 </form>
     <% if (!errorMessage.isEmpty()) { %>
-        <p style="font-size: 12px; color: red;"><%= errorMessage %><br>
-        <%if("human".equals(error) || "lock".equals(error)){ %>
-        	<a href="#" style="font-size: 10px;">잠긴 계정 풀기</a>
-        <%} %>
-            </p>
+        <p style="font-size: 12px; color: red;"><%= errorMessage %><br></p>
     <% } else{%>
     	<p style="font-size: 12px;">&nbsp;</p>
     <%} %>

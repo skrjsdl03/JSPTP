@@ -53,7 +53,7 @@ public class GoogleLoginServlet extends HttpServlet {
             if ("Google".equals(sessionType) && email.equals(sessionId)) {
                 // 동일한 Google 로그인 세션이 이미 존재함
                 System.out.println("세션 로그인 상태");
-                response.sendRedirect("main.jsp");
+                response.sendRedirect("main2.jsp");
                 return;
             }
 
@@ -62,7 +62,7 @@ public class GoogleLoginServlet extends HttpServlet {
                 session.setAttribute("id", email);
                 System.out.println("이미 가입한 계정");
                 userDao.insertLog(email, "로그인");
-                response.sendRedirect("main.jsp");
+                response.sendRedirect("main2.jsp");
             } else {
                 // 첫 가입
                 session.setAttribute("id", email);

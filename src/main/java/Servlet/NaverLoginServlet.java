@@ -58,7 +58,7 @@ public class NaverLoginServlet extends HttpServlet {
         session.setAttribute("naverEmail", email);
 
         // 4. 로그인 완료 후 메인 페이지로 이동
-        response.sendRedirect("main.jsp");
+        response.sendRedirect("main2.jsp");
     }
 
     private String get(String apiURL) throws IOException {

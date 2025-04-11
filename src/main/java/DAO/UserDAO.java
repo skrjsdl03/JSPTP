@@ -314,6 +314,32 @@ public class UserDAO {
 			pool.freeConnection(con, pstmt);
 		}
 	}
+	
+	//계정 잠금을 풀기 위한 확인
+	public boolean isLockUser(String id, String birth, String phone) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "select * from user where user_id = ? and user_birth = ? and user_phone = ? and user_type = '일반'";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, birth);
+			pstmt.setString(3, phone);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				flag = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return flag;
+	}
 
 	// 로그아웃
 	public void logout(String id) {

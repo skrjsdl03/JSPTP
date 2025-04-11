@@ -1,6 +1,13 @@
 <!-- header.jsp -->
 <%
 String id = (String) session.getAttribute("id");
+
+// 현재 페이지 경로를 얻기 위한 코드
+String fullUrl = request.getRequestURI();
+String queryString = request.getQueryString();
+if (queryString != null) {
+	fullUrl += "?" + queryString;
+}
 %>
 <head>
 <link rel="stylesheet" type="text/css" href="css/header.css">
@@ -31,13 +38,13 @@ String id = (String) session.getAttribute("id");
 		if (id == null) {
 		%>
 		<div class="nav-right">
-			<a href="login.jsp">LOGIN</a> <a href="#">CART</a>
+			<a href="login.jsp?redirect=<%= java.net.URLEncoder.encode(fullUrl, "UTF-8") %>">LOGIN</a> <a href="#">CART</a>
 		</div>
 		<%
 		} else {
 		%>
 		<div class="nav-right">
-			<a href="logout.jsp">LOGOUT</a> <a href="#">CART</a>
+			<a href="logout.jsp?redirect=<%= java.net.URLEncoder.encode(fullUrl, "UTF-8") %>">LOGOUT</a> <a href="#">CART</a>
 		</div>
 		<%
 		}
