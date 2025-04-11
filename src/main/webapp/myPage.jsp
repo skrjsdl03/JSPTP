@@ -35,8 +35,8 @@ if (userId == null)
 			<ul>
 				<li><a href="myPage.jsp">회원 정보 수정</a></li>
 				<li><a href="orderHistory2.jsp">주문 내역</a></li>
-				<li><a href="cart.jsp">장바구니</a></li>
-				<li><a href="wishList.jsp">찜 상품</a></li>
+				<li><a href="cart2.jsp">장바구니</a></li>
+				<li><a href="wishList2.jsp">찜 상품</a></li>
 				<li><a href="postMn.jsp">게시물 관리</a></li>
 			</ul>
 		</aside>
