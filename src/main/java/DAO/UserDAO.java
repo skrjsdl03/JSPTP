@@ -209,6 +209,30 @@ public class UserDAO {
 		}
 		return state;
 	}
+	
+	// 계정상태 출력(소셜로그인)
+	public String showSocialAccountState(String id, String type) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		String state = "";
+		try {
+			con = pool.getConnection();
+			sql = "select user_account_state from user where user_id = ? and user_type = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, type);
+			rs = pstmt.executeQuery();
+			if (rs.next())
+				state = rs.getString(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return state;
+	}
 
 	// 계정상태 변경
 	public void updateAccountState(String id, String state) {

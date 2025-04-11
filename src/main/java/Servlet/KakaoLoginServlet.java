@@ -63,10 +63,16 @@ public class KakaoLoginServlet extends HttpServlet {
 			
 			if (userDao.isSocialUserExists(email, "Kakao")) {
 			    // 이미 가입한 카카오 계정
-			    session.setAttribute("id", email);
-			    System.out.println("이미 가입한 카카오 계정");
-			    userDao.insertLog(email, "로그인");
-			    response.sendRedirect("main2.jsp");
+				if(userDao.showSocialAccountState(email, "Kakao").equals("정상")) {
+					session.setAttribute("id", email);
+					System.out.println("이미 가입한 카카오 계정");
+					userDao.insertLog(email, "로그인");
+					response.sendRedirect("main2.jsp");					
+				} else if(userDao.showSocialAccountState(email, "Kakao").equals("휴먼")) {
+            		response.sendRedirect("login.jsp?error=human");
+            	} else if(userDao.showSocialAccountState(email, "Kakao").equals("탈퇴")) {
+            		response.sendRedirect("login.jsp?error=resign");
+            	}
 			} else {
 			    // 첫 가입
 			    session.setAttribute("id", email);
