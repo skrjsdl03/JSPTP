@@ -9,7 +9,7 @@ CRMUserInfoDTO crm = dao.getCRMUserInfo(user_id, user_type);
 UserDTO user = crm.getUser();
 UserAddrDTO addr = crm.getAddr();
 
-String[] birthParts = user.getUser_birth() != null ? user.getUser_birth().split("-") : new String[]{"", "", ""};
+String[] birthParts = user.getUser_birth() != null ? user.getUser_birth().split("-") : new String[] { "", "", "" };
 String birthY = birthParts.length > 0 ? birthParts[0] : "";
 String birthM = birthParts.length > 1 ? birthParts[1] : "";
 String birthD = birthParts.length > 2 ? birthParts[2] : "";
@@ -154,9 +154,10 @@ String birthD = birthParts.length > 2 ? birthParts[2] : "";
 			<tr>
 				<th>성별</th>
 				<td colspan="3"><input type="radio" name="user_gender"
-					value="남자" <%=user.getUser_gender().equals("남자") ? "checked" : ""%>>
+					value="남자"
+					<%="남자".equals(user.getUser_gender()) ? "checked" : ""%>>
 					남자 <input type="radio" name="user_gender" value="여자"
-					<%=user.getUser_gender().equals("여자") ? "checked" : ""%>>
+					<%="여자".equals(user.getUser_gender()) ? "checked" : ""%>>
 					여자</td>
 			</tr>
 			<tr>

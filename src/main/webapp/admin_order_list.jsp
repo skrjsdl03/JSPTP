@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <title>주문 내역 조회 | everyWEAR</title>
   <link rel="icon" type="image/png" href="images/fav-icon.png">
-  <link rel="stylesheet" href="css/admin_main.css">
+  <link rel="stylesheet" href="css/admin_header.css">
   <link rel="stylesheet" href="css/admin_member.css">
   <link rel="stylesheet" href="css/admin_order_list.css">
 </head>

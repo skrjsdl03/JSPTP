@@ -67,7 +67,6 @@
     <% } else{%>
     	<p style="font-size: 12px;">&nbsp;</p>
     <%} %>
-
   <div class="divider">Or</div>
 
     <%
