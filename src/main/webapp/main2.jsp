@@ -17,7 +17,7 @@
 	<!-- 하위 네비 -->
 	<nav class="sub-nav">
 		<ul>
-			<li><a href="#">ALL</a></li>
+			<li><a href="pdListAll.jsp">ALL</a></li>
 			<li><a href="#">OUTER</a></li>
 			<li><a href="#">TOP</a></li>
 			<li><a href="#">BOTTOM</a></li>
