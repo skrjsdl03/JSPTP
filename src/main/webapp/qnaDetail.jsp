@@ -63,7 +63,7 @@
 			<%if("Y".equals(isReply)){%>
 				<%if(qna.getI_isPrivate().equals("Y")){ %>
 					<tr class="normal">
-						<td class="title"><strong>[답변] &#128274; <%=qna.getI_title()%></strong></td>
+						<td class="title"><strong>[답변] <%=qna.getI_title()%> &#128274;</strong></td>
 						<td class="date"><%=qnaReply.getCreated_at()%></td>
 						<td class="views"><%=qnaReply.getAdmin_id()%></td>
 					</tr>
@@ -77,7 +77,7 @@
 			<%}else{ %>
 				<%if(qna.getI_isPrivate().equals("Y")){ %>
 					<tr class="normal">
-						<td class="title">&#128274; <%=qna.getI_title()%></td>
+						<td class="title"><%=qna.getI_title()%> &#128274;</td>
 						<td class="date"><%=qna.getCreated_at()%></td>
 						<td class="views"><%=qna.getUser_id()%></td>
 					</tr>

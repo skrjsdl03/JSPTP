@@ -82,15 +82,9 @@ function setupAccountStateSync() {
 
 	    if (selected === "정상") {
 	      lockSelect.value = "N";
-	    } else if (
-	      selected === "휴먼" ||
-	      selected === "이용 정지" ||
-	      selected === "탈퇴" ||
-	      selected === "로그인 연속 실패로 인한 잠금"
-	    ) {
+	    } else {
 	      lockSelect.value = "Y";
 	    }
-	    // "이메일 인증 미완료"는 아무 동작 없음
 	  });
 	}
 	

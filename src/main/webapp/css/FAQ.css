@@ -11,7 +11,8 @@ body {
 h3 {
 	text-align: center;
 	font-size: 20px;
-	margin-bottom: 20px;
+	margin-top: -30px;
+	margin-bottom: 10px;
 }
 
 .container {
@@ -23,10 +24,11 @@ h3 {
 
 .sidebar2 {
 	position: fixed;
-	top: 0;
+	top: 50%;
 	left: 150px;
+	transform: translateY(-50%);
 	width: 180px;
-	height: 700px;
+	height: auto; /* 고정 높이 안 줘도 괜찮으면 auto 추천 */
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -140,11 +142,45 @@ h2 {
 	color: #FFFFFF;
 }
 
+/* FAQ 아이템 전체는 block 배치 */
 .faq-item {
+  border-bottom: 1px solid #ccc;
+  /* padding: 10px 0; */
+}
+
+/* 질문 줄에만 flex 적용 */
+.question {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 20px 5px;
+}
+
+/* 답변 내용 */
+.faq-content {
+  display: none;
+  padding: 20px;
+  background-color: #f0f0f0;
+  /* background-color: #f9f9f9; */
+  font-size: 14px;
+  border-top: 1px solid #ccc;
+}
+
+/* 화살표 */
+.arrow {
+  transition: transform 0.3s ease;
+}
+.faq-item.active .arrow {
+  transform: rotate(180deg);
+}
+
+
+/* .faq-item {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 14px 10px;
+	padding: 20px 10px;
 	cursor: pointer;
 	font-weight: bold;
 	border-bottom: 1px solid #ddd;
@@ -158,20 +194,29 @@ h2 {
 }
 
 .faq-item.active .arrow {
-	transform: rotate(180deg); /* 아래 → 위 */
+	transform: rotate(180deg); 아래 → 위
 }
 
 .faq-content {
-	display: none;
-	padding: 20px;
-	background-color: #f9f9f9;
-	border-bottom: 1px solid #ddd;
-	background-color: #f2f2f2; /* 기존보다 조금 더 어둡게 */
-	margin: 0 15px 15px 15px; /* 좌우 여백 및 아래 마진 */
+  display: none;
+  padding: 15px;
+  background-color: #f9f9f9;
+  font-size: 14px;
 }
 
-.faq-item.active+.faq-content {
-	display: block;
+.arrow {
+  float: right;
+  transition: transform 0.3s ease;
 }
+
+.faq-item.active .arrow {
+  transform: rotate(180deg);
+} */
+
+
+/* .faq-item.active+.faq-content {
+	display: block;
+	
+} */
 
 

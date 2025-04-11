@@ -99,103 +99,113 @@ h3 {
 .order-content {
 	flex: 1;
 	max-width: 750px;
-	margin: 0 auto 0 auto;
+	margin: 40px auto 0 auto;
 }
 
-.order-filter {
-	display: flex;
-	justify-content: flex-end;
-	align-items: center;
-	margin: 10px 0 20px 0;
+.delivery-title-wrap {
+	margin-top: 40px;
+	text-align: center;
 }
 
-.order-filter select {
-	font-size: 13px;
-	padding: 6px 10px;
-	border: 1px solid #ccc;
-	border-radius: 6px;
-	background-color: white;
-	cursor: pointer;
-}
-
-.order-list {
-	display: flex;
-	flex-direction: column;
-	gap: 0;
-}
-
-/* 주문 아이템 구조 */
-.order-row {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 15px 5px;
-	border-bottom: 1px solid #ddd;
-}
-
-/* 이미지 스타일 */
-.order-row img {
-	width: 60px;
-	height: 60px;
-	object-fit: cover;
-	margin-right: 16px;
-}
-
-/* 상품 정보 */
-.order-info {
-	flex: 1;
-}
-
-.item-name {
+.delivery-title {
+	font-size: 18px;
 	font-weight: bold;
-	font-size: 14px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #888;
+	display: inline-block;
+	width: 90%;
 }
 
-.item-option, .item-count {
-	font-size: 13px;
-	color: #666;
-}
-
-/* 주문 정보 */
-.order-meta {
-	text-align: right;
-	font-size: 13px;
-}
-
-.order-date {
-	margin-bottom: 4px;
-	color: #666;
-}
-
-/* 상태별 컬러 */
-.order-status.shipping {
-	color: #015FC1;
-}
-
-.order-status.cancel {
-	color: #E63946;
-}
-
-.order-status.done {
-	color: #2CA02C;
-}
-
-.review-button {
-	/* padding: 6px 12px; */
-	background-color: #015FC1;
-	color: white;
+.readonly-field {
+	color: #000;
+	background-color: transparent;
 	border: none;
-	border-radius: 4px;
+	outline: none;
+	pointer-events: none; /* 클릭 불가 */
+}
+
+.delivery-box {
+	margin-top: 10px;
+}
+
+.delivery-top {
+	margin-bottom: 10px;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.delivery-inputs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-bottom: 8px;
+}
+
+.input-tag, .input-zipcode, .input-full {
+	border: 1px solid #e2e2e2;
+	background-color: #f7fbff;
+	border-radius: 10px;
+	padding: 10px 12px;
+	font-size: 13px;
+	color: #333;
+	box-sizing: border-box;
+}
+
+.input-tag {
+	width: 80px;
+}
+
+.input-zipcode {
+	width: 120px;
+}
+
+.input-full {
+	flex: 1;
+	min-width: 250px;
+}
+
+input[readonly] {
+	pointer-events: none;
+	background-color: #f7fbff;
+	color: #333;
+}
+
+.btn-search:disabled {
+	background-color: #eee;
+	color: #999;
+	cursor: not-allowed;
+}
+
+/* 주소 검색 버튼 스타일 */
+.btn-search {
+	background-color: #f7fbff;
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	padding: 6px 12px;
+	font-size: 13px;
+	color: black;
 	cursor: pointer;
-	font-size: 12px;
-	transition: background-color 0.3s;
+	height: 38px;
+	box-sizing: border-box;
 }
 
-.review-button:hover {
-	background-color: #0146a3;
+.action-group {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-left: auto;
 }
 
-.review-button a {
+.btn-edit {
+	color: #015FC1;
+	font-size: 13px;
 	text-decoration: none;
-	color: white;
+	cursor: pointer;
+}
+
+.btn-delete {
+	color: #ccc;
+	font-size: 13px;
+	text-decoration: none;
+	cursor: pointer;
 }

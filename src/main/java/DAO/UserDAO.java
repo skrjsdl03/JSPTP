@@ -1188,7 +1188,7 @@ public class UserDAO {
 			}
 			rs.close();
 			pstmt.close();
-			
+
 			// 5. 이메일 인증 여부 판단
 						boolean verified = true;
 						if (user.getUser_email() == null || user.getUser_email().trim().isEmpty()
@@ -1196,6 +1196,7 @@ public class UserDAO {
 							verified = false;
 						}
 						crmInfo.setEmailVerified(verified);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -1224,4 +1225,6 @@ public class UserDAO {
 		}
 	}
 
+
 }
+

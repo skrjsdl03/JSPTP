@@ -1,0 +1,71 @@
+body {
+	font-family: 'Malgun Gothic', sans-serif;
+	padding-top: 120px;
+}
+
+/* 하위 네비 */
+.sub-nav ul {
+	display: flex;
+	justify-content: center;
+	gap: 40px; /* 항목 간 간격 */
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.sub-nav ul li a {
+	text-decoration: none;
+	color: black;
+	font-size: 14px;
+	font-family: 'Malgun Gothic', sans-serif;
+	font-weight: bold;
+}
+
+.sub-nav ul li a:hover {
+	color: #015FC1;
+}
+
+/* 상품 목록 */
+.product-list {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr); /* 4개씩 정렬 */
+	gap: 40px 20px;
+	max-width: 1200px;
+	margin: 40px auto;
+	padding: 0 20px;
+}
+
+.product-card {
+	text-align: center;
+}
+
+.product-card img {
+	width: 100%;
+	max-width: 200px;
+	height: auto;
+	margin-bottom: 10px;
+}
+
+.product-name {
+	font-size: 13px;
+	margin: 6px 0;
+}
+
+.product-price {
+	font-size: 12px;
+	color: #555;
+}
+
+/* VIEW MORE 버튼 */
+.load-more-wrap {
+	text-align: center;
+	margin: 40px 0;
+}
+
+.load-more {
+	padding: 6px 14px;
+	border: 1px solid #333;
+	background-color: transparent;
+	cursor: pointer;
+	font-size: 12px;
+}

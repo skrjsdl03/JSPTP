@@ -71,9 +71,6 @@ String birthD = birthParts.length > 2 ? birthParts[2] : "";
 						<option
 							<%=user.getUser_account_state().equals("탈퇴") ? "selected" : ""%>>탈퇴</option>
 						<option
-							<%=user.getUser_account_state().equals("이메일 인증 미완료") ? "selected" : ""%>>이메일
-							인증 미완료</option>
-						<option
 							<%=user.getUser_account_state().equals("로그인 연속 실패로 인한 잠금") ? "selected" : ""%>>로그인
 							연속 실패로 인한 잠금</option>
 				</select></td>

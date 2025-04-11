@@ -1,137 +1,149 @@
 <!-- deliveryManagement.jsp -->
 
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java"%>
 
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>배송지 관리 | everyWEAR</title>
-  <link rel="stylesheet" type="text/css" href="css/delivery.css">
-  <link rel="stylesheet" type="text/css" href="css/header.css">
-  <link rel="icon" type="image/png" href="images/logo-white.png">
+<meta charset="UTF-8">
+<title>배송지 관리 | everyWEAR</title>
+<link rel="stylesheet" type="text/css" href="css/delivery.css">
+<link rel="stylesheet" type="text/css" href="css/header.css">
+<link rel="icon" type="image/png" href="images/logo-white.png">
 </head>
 <body>
 
-<%@ include file="includes/mypageHeader.jsp" %>
+	<%@ include file="includes/mypageHeader.jsp"%>
 
-<div class="order-container">
-    <div class="sidebar">
-  <div class="user-box">
-    <p class="username">정시영 님</p>
-    <div class="user-info">
-      <div class="label">적립금</div><div class="value">25,000 ￦</div>
-      <div class="label">쿠폰</div><div class="value">2 개</div>
-    </div>
-  </div>
+	<div class="order-container">
+		<div class="sidebar">
+			<div class="user-box">
+				<p class="username">정시영 님</p>
+				<div class="user-info">
+					<div class="label">적립금</div>
+					<div class="value">25,000 ￦</div>
+					<div class="label">쿠폰</div>
+					<div class="value">2 개</div>
+				</div>
+			</div>
 
-  <ul class="side-menu">
-    <li>회원 정보 수정</li>
-    <li>주문 내역</li>
-    <li>장바구니</li>
-    <li>찜 상품</li>
-    <li>게시글 관리</li>
-    <li class="active">배송지 관리</li>
-  </ul>
-</div>
+			<ul class="side-menu">
+				<li>회원 정보 수정</li>
+				<li>주문 내역</li>
+				<li>장바구니</li>
+				<li>찜 상품</li>
+				<li>게시글 관리</li>
+				<li class="active">배송지 관리</li>
+			</ul>
+		</div>
 
-<!-- 배송지 관리 본문 시작 -->
- <div class="order-content">
-   <!-- 타이틀 + 경계선 -->
-    <div class="delivery-title-wrap">
-      <h2 class="delivery-title">배송지 관리</h2>
-    </div>
+		<!-- 배송지 관리 본문 시작 -->
+		<div class="order-content">
+			<!-- 타이틀 + 경계선 -->
+			<div class="delivery-title-wrap">
+				<h2 class="delivery-title">배송지 관리</h2>
+			</div>
 
-	<!-- 기본 배송지 -->
-	<div class="delivery-box">
-	  <div class="delivery-top">
-	    <label><input type="radio" name="selected" checked> 기본 배송지</label>
-	  </div>
-	  <div class="delivery-inputs">
-	    <input type="text" id="alias" class="input-tag" value="회사" readonly>
-	    <input type="text" id="zipcode" class="input-zipcode" value="47340" readonly>
-	    <button id="searchAddressBtn" class="btn-search" disabled>주소 검색</button>
-	  </div>
-	  <div class="delivery-inputs">
-	    <input type="text" id="address1" class="input-full" value="부산광역시 부산진구 엄광로 176" readonly>
-	    <input type="text" id="address2" class="input-full" value="동의대학교 중앙도서관" readonly>
-	    <a href="#" class="btn-edit" onclick="enableBasicEdit()">수정</a>
-	  </div>
+			<!-- 기본 배송지 -->
+			<div class="delivery-box">
+				<div class="delivery-top">
+					<label><input type="radio" name="selected" checked>
+						기본 배송지</label>
+				</div>
+				<div class="delivery-inputs">
+					<input type="text" id="alias" class="input-tag" value="회사" readonly>
+					<input type="text" id="zipcode" class="input-zipcode" value="47340"
+						readonly>
+					<button id="searchAddressBtn" class="btn-search" disabled>주소
+						검색</button>
+				</div>
+				<div class="delivery-inputs">
+					<input type="text" id="address1" class="input-full"
+						value="부산광역시 부산진구 엄광로 176" readonly> <input type="text"
+						id="address2" class="input-full" value="동의대학교 중앙도서관" readonly>
+					<a href="#" class="btn-edit" onclick="enableBasicEdit()">수정</a>
+				</div>
+			</div>
+
+			<hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
+
+			<!-- 다른 배송지 예시 -->
+			<div class="delivery-box">
+				<div class="delivery-top">
+					<label><input type="radio" name="selected"> 다른 배송지</label>
+				</div>
+				<div class="delivery-inputs">
+					<input type="text" class="input-tag" value="학교" readonly> <input
+						type="text" class="input-zipcode" value="12345" readonly>
+					<button class="btn-search" disabled>주소 검색</button>
+				</div>
+				<div class="delivery-inputs">
+					<input type="text" class="input-full" value="부산광역시 부산진구 양정로 99"
+						readonly> <input type="text" class="input-full"
+						value="컴퓨터공학관 202호" readonly>
+					<div class="action-group">
+						<a href="#" class="btn-edit" onclick="enableEdit(this)">수정</a> <a
+							href="#" class="btn-delete" onclick="deleteAddress(this)">삭제</a>
+					</div>
+				</div>
+			</div>
+
+			<!-- 다른 배송지 2 -->
+			<div class="delivery-box">
+				<div class="delivery-top">
+					<label><input type="radio" name="selected"
+						onclick="promoteToDefault(this)"> 다른 배송지</label>
+				</div>
+				<div class="delivery-inputs">
+					<input type="text" class="input-tag" value="집" readonly> <input
+						type="text" class="input-zipcode" value="67890" readonly>
+					<button class="btn-search" disabled>주소 검색</button>
+				</div>
+				<div class="delivery-inputs">
+					<input type="text" class="input-full" value="서울특별시 강남구 테헤란로 100"
+						readonly> <input type="text" class="input-full"
+						value="101동 202호" readonly>
+					<div class="action-group">
+						<a href="#" class="btn-edit" onclick="enableEdit(this)">수정</a> <a
+							href="#" class="btn-delete" onclick="deleteAddress(this)">삭제</a>
+					</div>
+				</div>
+			</div>
+
+			<!-- 다른 배송지 3 -->
+			<div class="delivery-box">
+				<div class="delivery-top">
+					<label><input type="radio" name="selected"
+						onclick="promoteToDefault(this)"> 다른 배송지</label>
+				</div>
+				<div class="delivery-inputs">
+					<input type="text" class="input-tag" value="친구집" readonly>
+					<input type="text" class="input-zipcode" value="54321" readonly>
+					<button class="btn-search" disabled>주소 검색</button>
+				</div>
+				<div class="delivery-inputs">
+					<input type="text" class="input-full" value="대구광역시 수성구 동대구로 120"
+						readonly> <input type="text" class="input-full"
+						value="아파트 3단지 305호" readonly>
+					<div class="action-group">
+						<a href="#" class="btn-edit" onclick="enableEdit(this)">수정</a> <a
+							href="#" class="btn-delete" onclick="deleteAddress(this)">삭제</a>
+					</div>
+				</div>
+			</div>
+
+
+
+		</div>
 	</div>
 
-    <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
+	<footer>2025©everyWEAR</footer>
 
-    <!-- 다른 배송지 예시 -->
-    <div class="delivery-box">
-      <div class="delivery-top">
-        <label><input type="radio" name="selected"> 다른 배송지</label>
-      </div>
-      <div class="delivery-inputs">
-        <input type="text" class="input-tag" value="학교" readonly>
-        <input type="text" class="input-zipcode" value="12345" readonly>
-        <button class="btn-search" disabled>주소 검색</button>
-      </div>
-      <div class="delivery-inputs">
-        <input type="text" class="input-full" value="부산광역시 부산진구 양정로 99" readonly>
-        <input type="text" class="input-full" value="컴퓨터공학관 202호" readonly>
-        <div class="action-group">
-          <a href="#" class="btn-edit" onclick="enableEdit(this)">수정</a>
-          <a href="#" class="btn-delete" onclick="deleteAddress(this)">삭제</a>
-        </div>
-      </div>
-    </div>
+	<!-- Daum 주소 API -->
+	<script
+		src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
-	<!-- 다른 배송지 2 -->
-	<div class="delivery-box">
-	  <div class="delivery-top">
-	    <label><input type="radio" name="selected" onclick="promoteToDefault(this)"> 다른 배송지</label>
-	  </div>
-	  <div class="delivery-inputs">
-	    <input type="text" class="input-tag" value="집" readonly>
-	    <input type="text" class="input-zipcode" value="67890" readonly>
-	    <button class="btn-search" disabled>주소 검색</button>
-	  </div>
-	  <div class="delivery-inputs">
-	    <input type="text" class="input-full" value="서울특별시 강남구 테헤란로 100" readonly>
-	    <input type="text" class="input-full" value="101동 202호" readonly>
-	    <div class="action-group">
-	      <a href="#" class="btn-edit" onclick="enableEdit(this)">수정</a>
-	      <a href="#" class="btn-delete" onclick="deleteAddress(this)">삭제</a>
-	    </div>
-	  </div>
-	</div>
-
-	<!-- 다른 배송지 3 -->
-	<div class="delivery-box">
-	  <div class="delivery-top">
-	    <label><input type="radio" name="selected" onclick="promoteToDefault(this)"> 다른 배송지</label>
-	  </div>
-	  <div class="delivery-inputs">
-	    <input type="text" class="input-tag" value="친구집" readonly>
-	    <input type="text" class="input-zipcode" value="54321" readonly>
-	    <button class="btn-search" disabled>주소 검색</button>
-	  </div>
-	  <div class="delivery-inputs">
-	    <input type="text" class="input-full" value="대구광역시 수성구 동대구로 120" readonly>
-	    <input type="text" class="input-full" value="아파트 3단지 305호" readonly>
-	    <div class="action-group">
-	      <a href="#" class="btn-edit" onclick="enableEdit(this)">수정</a>
-	      <a href="#" class="btn-delete" onclick="deleteAddress(this)">삭제</a>
-	    </div>
-	  </div>
-	</div>
-	
-
-
-    </div>
-  </div>
-
-  <footer>2025©everyWEAR</footer>
-  
-  <!-- Daum 주소 API -->
-<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-
-<script>
+	<script>
   // 기본 배송지 전용 수정
   function enableBasicEdit() {
     document.getElementById('alias').removeAttribute('readonly');
