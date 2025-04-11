@@ -26,6 +26,10 @@ body {
 	color: #015FC1;
 }
 
+.sub-nav ul li a.active {
+	color: #015FC1; /* 호버와 동일한 색상 */
+}
+
 /* 메인 컬렉션 */
 .main-collection {
 	display: flex;
