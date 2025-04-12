@@ -3,6 +3,7 @@ package DTO;
 public class UserAddrDTO {
 	private int addr_id;
 	private String user_id;
+	private String user_type;
 	private String addr_zipcode;
 	private String addr_road;
 	private String addr_detail;
@@ -12,11 +13,12 @@ public class UserAddrDTO {
 	
 	public UserAddrDTO() {}
 
-	public UserAddrDTO(int addr_id, String user_id, String addr_zipcode, String addr_road, String addr_detail,
+	public UserAddrDTO(int addr_id, String user_id, String user_type, String addr_zipcode, String addr_road, String addr_detail,
 			String addr_isDefault, String created_at, String addr_label) {
 		super();
 		this.addr_id = addr_id;
 		this.user_id = user_id;
+		this.user_type = user_type;
 		this.addr_zipcode = addr_zipcode;
 		this.addr_road = addr_road;
 		this.addr_detail = addr_detail;
@@ -39,6 +41,14 @@ public class UserAddrDTO {
 
 	public void setUser_id(String user_id) {
 		this.user_id = user_id;
+	}
+
+	public String getUser_type() {
+		return user_type;
+	}
+
+	public void setUser_type(String user_type) {
+		this.user_type = user_type;
 	}
 
 	public String getAddr_zipcode() {
@@ -88,6 +98,8 @@ public class UserAddrDTO {
 	public void setAddr_label(String addr_label) {
 		this.addr_label = addr_label;
 	}
+
+	
 	
 	
 }

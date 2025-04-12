@@ -29,6 +29,7 @@ public class Login extends HttpServlet {
 		
 		if(result.equals("success")) {	//로그인 성공
 			session.setAttribute("id", id);		//세션에 ID 저장
+			session.setAttribute("userType", "일반");
             if (redirect != null && !redirect.equals("")) {
                 response.sendRedirect(redirect);
             } else {

@@ -25,6 +25,35 @@ public class UserDAO {
 	public UserDAO() {
 		pool = DBConnectionMgr.getInstance();
 	}
+	
+	//한 사람의 정보 출력
+	public UserDTO getOneUser(String id, String type) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		UserDTO user = null;
+		try {
+			con = pool.getConnection();
+			sql = "select * from user where user_id = ? and user_type = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, type);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				user = new UserDTO(rs.getString(1), rs.getString(2), rs.getString(3), 
+						rs.getString(4), rs.getString(5), rs.getString(6), rs.getInt(7), 
+						rs.getInt(8), rs.getString(9), rs.getString(10), rs.getString(11), 
+						rs.getString(12), rs.getString(13), rs.getString(14), rs.getString(15), 
+						rs.getInt(16), rs.getString(17), rs.getString(18), rs.getInt(19), rs.getString(20));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return user;
+	}
 
 	// 회원가입
 	public void insertUser(UserDTO user, UserAddrDTO addr) {
@@ -520,6 +549,30 @@ public class UserDAO {
 			pool.freeConnection(con, pstmt);
 		}
 	}
+	
+	//일반 사용자의 비밀번호 일치 여부 확인
+	public boolean isPwd(String id, String pwd) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "select * from user where user_id = ? and user_pwd = ? and user_type = '일반'";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, pwd);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return flag;
+	}
 
 	// 회원 수정
 	public void updateUser(UserDTO user, String id) {
@@ -666,7 +719,7 @@ public class UserDAO {
 	}
 
 	// 전체 배송지 출력 (기본 배송지가 가장 먼저 나오고 나머지 주소들은 생성일 순서대로 출력)
-	public Vector<UserAddrDTO> showAllAddr(String id) {
+	public Vector<UserAddrDTO> showAllAddr(String id, String type) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -674,13 +727,14 @@ public class UserDAO {
 		Vector<UserAddrDTO> vlist = new Vector<UserAddrDTO>();
 		try {
 			con = pool.getConnection();
-			sql = "select * from user_address where user_id = ? order by (addr_isDefault = 'Y') desc, created_at desc";
+			sql = "select * from user_address where user_id = ? and user_type = ? order by (addr_isDefault = 'Y') desc, created_at desc";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
+			pstmt.setString(2, type);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				vlist.add(new UserAddrDTO(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
-						rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8)));
+						rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9)));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -691,7 +745,7 @@ public class UserDAO {
 	}
 
 	// 기본 배송지 출력
-	public UserAddrDTO showOneAddr(String id) {
+	public UserAddrDTO showOneAddr(String id, String type) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -699,13 +753,14 @@ public class UserDAO {
 		UserAddrDTO addr = null;
 		try {
 			con = pool.getConnection();
-			sql = "select * from user_address where user_id = ? and addr_isDefault = 'Y'";
+			sql = "select * from user_address where user_id = ? and user_type = ? and addr_isDefault = 'Y'";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
+			pstmt.setString(2, type);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				addr = new UserAddrDTO(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-						rs.getString(6), rs.getString(7), rs.getString(8));
+						rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -716,7 +771,7 @@ public class UserDAO {
 	}
 
 	// 기본배송지 제외 리스트 출력
-	public Vector<UserAddrDTO> showRestAddr(String id) {
+	public Vector<UserAddrDTO> showRestAddr(String id, String type) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -724,13 +779,14 @@ public class UserDAO {
 		Vector<UserAddrDTO> vlist = new Vector<UserAddrDTO>();
 		try {
 			con = pool.getConnection();
-			sql = "select * from user_address where user_id = ? and addr_isDefault = 'N' order by created_at desc";
+			sql = "select * from user_address where user_id = ? and user_type = ? and addr_isDefault = 'N' order by created_at desc";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
+			pstmt.setString(2, type);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				vlist.add(new UserAddrDTO(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
-						rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8)));
+						rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9)));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -802,6 +858,30 @@ public class UserDAO {
 			pool.freeConnection(con, pstmt, rs);
 		}
 		return flag;
+	}
+	
+	//한 유저의 미사용 쿠폰 수 출력
+	public int showOneUserCoupon(String id, String type) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		int cnt = 0;
+		try {
+			con = pool.getConnection();
+			sql = "select count(*) from user_coupon where user_id = ? and user_type = ? and cp_using_state = 'N'";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, type);
+			rs = pstmt.executeQuery();
+			while(rs.next())
+				cnt = rs.getInt(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return cnt;
 	}
 
 	// 신규주문 수
@@ -1164,7 +1244,7 @@ public class UserDAO {
 			crmInfo.setUser(user);
 
 			// 2. 기본 배송지
-			UserAddrDTO addr = showOneAddr(user_id);
+			UserAddrDTO addr = showOneAddr(user_id, user_type);
 			crmInfo.setAddr(addr);
 
 			// 3. 누적 결제 금액

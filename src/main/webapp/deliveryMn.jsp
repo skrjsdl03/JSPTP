@@ -1,4 +1,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%
+		String userId = (String) session.getAttribute("id");
+		String userType = (String) session.getAttribute("userType");
+		if(userId == null || userId == ""){
+			// 현재 페이지 경로를 얻기 위한 코드
+			String fullUrl = request.getRequestURI();
+			String queryString = request.getQueryString();
+			if (queryString != null) {
+				fullUrl += "?" + queryString;
+			}
+			response.sendRedirect("login.jsp?redirect=" + java.net.URLEncoder.encode(fullUrl, "UTF-8"));
+			return;
+		}
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>

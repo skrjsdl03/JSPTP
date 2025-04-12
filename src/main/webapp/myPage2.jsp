@@ -31,7 +31,7 @@
 <meta charset="UTF-8">
 <title>에브리웨어 | everyWEAR</title>
 <link rel="icon" type="image/png" href="images/fav-icon.png">
-<link rel="stylesheet" type="text/css" href="css/myPage.css?v=5646574">
+<link rel="stylesheet" type="text/css" href="css/myPage2.css?v=5646574">
 </head>
 <body>
 
@@ -69,23 +69,21 @@
 			<div class="edit-content">
 				<form>
 					<!-- ID -->
-					<%if(userType.equals("일반")){ %>
-					<div class="form-group">
-						<label>ID <span style="color: red;">*</span></label>
-						<div class="id-box">
-							<span class="id-text"><%=userId%></span>
-						</div>
-					</div>
+				    <label for="id">ID</label>
+				    <input type="text" id="id" name="id" value="<%=userDto.getUser_name()%>" disabled>
 
+				<%if(userType.equals("일반")){ %>
 					<!-- 기존 비밀번호 -->
-					<div class="form-group">
-						<label>비밀번호</label>
-						<div class="phone-group">
-							<!-- 휴대전화 입력 스타일을 재활용 -->
-							<input type="password" name="password" id="password" class="readonly-password">
-							<button type="button" class="btn-change" onclick="togglePasswordChange()">변경</button>
-						</div>
-					</div>
+				    <label for="currentPw">비밀번호</label>
+			        <div class="input-group">
+				      <input type="password" id="currentPw" placeholder="기존 비밀번호">
+				      <button class="change-btn" onclick="togglePasswordChange()">변경</button>
+				    </div>
+<!-- 					<div class="phone-group">
+						휴대전화 입력 스타일을 재활용
+						<input type="password" name="password" id="password" class="readonly-password">
+						<button type="button" class="btn-change" onclick="togglePasswordChange()">변경</button>
+					</div> -->
 
 					<!-- 새 비밀번호 입력 영역 (처음엔 숨김) -->
 					<div id="newPwBox" style="display: none;">
@@ -115,50 +113,44 @@
 					<%} %>
 
 					<!-- 이름 -->
-					<div class="form-group">
-						<label>이름 <span style="color: red;">*</span></label> 
-						<input type="text" value="<%=userDto.getUser_name()%>" placeholder="이름을 입력하세요" required>
-					</div>
+				    <label for="name">NAME <span style="color: red;">*</span></label>
+				    <input type="text" id="name" name="name" value="<%=userDto.getUser_name()%>">
 
 					<!-- 휴대전화 -->
-					<div class="form-group">
-						<label>휴대전화 <span style="color: red;">*</span></label>
-						<div class="phone-group">
-							<input type="text" value="010" readonly> 
-							<input type="text" id="phone2" value="<%=phone2%>"> 
-							<input type="text" id="phone3" value="<%=phone3%>">
-							<button type="button" class="btn-change" onclick="showAuthBox()">인증</button>
-						</div>
-
-						<!-- 인증번호 입력 영역 (처음엔 숨김) -->
-						<label for="authCode">인증번호</label>
-					  	<input type="text" id="authCode" placeholder="인증번호를 입력하세요">
-					  	<div class="auth-btns">
-					    	<button type="button" class="resend-btn" onclick="showAuthBox()">재전송</button>
-					    	<button type="button" class="confirm-btn" onclick="checkCode()">확인</button>
-					  	</div>
-
+					<label for="phone">휴대전화 <span style="color: red;">*</span></label>
+    				<div class="input-group">	
+						<input type="text" maxlength="3" value="010" readonly> 
+						<input type="text" maxlength="4" id="phone2" value="<%=phone2%>"> 
+						<input type="text" maxlength="4" id="phone3" value="<%=phone3%>">
+						<button type="button" class="change-btn" onclick="showAuthBox()">인증</button>
 					</div>
+
+					<!-- 인증번호 입력 영역 (처음엔 숨김) -->
+					<label for="authCode">인증번호</label>
+				  	<input type="text" id="authCode" placeholder="인증번호를 입력하세요">
+				  	<div class="auth-btns">
+				    	<button type="button" class="resend-btn" onclick="showAuthBox()">재전송</button>
+				    	<button type="button" class="confirm-btn" onclick="checkCode()">확인</button>
+				  	</div>
+
 
 					<!-- 이메일 -->
-					<div class="form-group">
-						<label>이메일</label> 
-						<input type="email" value="<%=userDto.getUser_email().isEmpty() ? "" : userDto.getUser_email()%>">
-					</div>
+				    <label for="email">이메일</label>
+				    <input type="email" id="email" value="<%=userDto.getUser_email().isEmpty() ? "" : userDto.getUser_email()%>">
 
 					<!-- 성별 -->
-					<div class="form-group">
-						<label>성별 <span style="color: red;">*</span></label> 
-						<label><input type="radio" name="gender" <%=userDto.getUser_gender().equals("남자") ? "checked" : ""%>> 남자</label> 
-						<label><input type="radio" name="gender" <%=userDto.getUser_gender().equals("여자") ? "checked" : ""%>> 여자</label>
-						<div class="form-group">
-							<label>키 & 몸무게</label>
-							<div class="hw-group">
-								<input type="text" placeholder="cm" min="0" id="height" name="height" value="<%=userDto.getUser_height() == 0 ? "" : userDto.getUser_height()%>"> 
-								<input type="text" placeholder="kg" min="0" id="weight" name="weight" value="<%=userDto.getUser_weight() == 0 ? "" : userDto.getUser_weight()%>">
-							</div>
-						</div>
+					<label>성별 <span style="color: red;">*</span></label> 
+				    <div class="radio-group">
+					<label><input type="radio" name="gender" <%=userDto.getUser_gender().equals("남자") ? "checked" : ""%>> 남자</label> 
+					<label><input type="radio" name="gender" <%=userDto.getUser_gender().equals("여자") ? "checked" : ""%>> 여자</label>
 					</div>
+					
+					<!-- 키 & 몸무게 -->
+				    <label for="height">키</label>
+				    <input type="text" id="height" name="height" placeholder="cm" value="<%=userDto.getUser_height()==0 ? "" : userDto.getUser_height() + "cm"%>">
+				
+				    <label for="weight">몸무게</label>
+				    <input type="text" id="weight" name="weight" placeholder="kg" value="<%=userDto.getUser_weight()==0 ? "" : userDto.getUser_weight() + "kg"%>">
 
 					<!-- 키 & 몸무게 -->
 <%-- 					<div class="form-group">
@@ -170,16 +162,14 @@
 					</div> --%>
 
 					<!-- 생년월일 -->
-					<div class="form-group">
-						<label>생년월일 <span style="color: red;">*</span></label>
-						<div class="birth-group">
-					        <input type="text" name="year" id="year" maxlength="4" placeholder="년" required>
-					        <span class="birth-label">년</span>
-					        <input type="text" name="month" id="month" maxlength="2" placeholder="월" required>
-					        <span class="birth-label">월</span>
-					        <input type="text" name="day" id="day" maxlength="2" placeholder="일" required>
-					        <span class="birth-label">일</span>
-						</div>
+					<label>생년월일 <span style="color: red;">*</span></label>
+					<div class="birth-group">
+				        <input type="text" name="year" id="year" maxlength="4" placeholder="년" required>
+				        <span class="birth-label">년</span>
+				        <input type="text" name="month" id="month" maxlength="2" placeholder="월" required>
+				        <span class="birth-label">월</span>
+				        <input type="text" name="day" id="day" maxlength="2" placeholder="일" required>
+				        <span class="birth-label">일</span>
 					</div>
 
 					<button type="submit" class="submit-btn">회원 정보 수정</button>

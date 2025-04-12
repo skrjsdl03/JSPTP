@@ -56,14 +56,21 @@ public class GoogleLoginServlet extends HttpServlet {
                 response.sendRedirect("main2.jsp");
                 return;
             }
+            
+            String redirect = request.getParameter("redirect");
 
             if (userDao.isSocialUserExists(email, "Google")) {
                 // 이미 가입한 구글 계정
             	if(userDao.showSocialAccountState(email, "Google").equals("정상")) {
             		session.setAttribute("id", email);
+            		session.setAttribute("userType", "Google");
             		System.out.println("이미 가입한 계정");
             		userDao.insertLog(email, "로그인");
-            		response.sendRedirect("main2.jsp");
+            		 if (redirect != null && !redirect.equals("")) {
+                         response.sendRedirect(redirect);
+                     } else {
+                         response.sendRedirect("main2.jsp");
+                     }
             	} else if(userDao.showSocialAccountState(email, "Google").equals("휴먼")) {
             		response.sendRedirect("login.jsp?error=human");
             	} else if(userDao.showSocialAccountState(email, "Google").equals("탈퇴")) {

@@ -3,6 +3,7 @@ package DTO;
 public class UserCouponDTO {
 	private int user_cp_id;
 	private String user_id;
+	private String user_type;
 	private int cp_id;
 	private String cp_provide_date;
 	private String cp_using_date;
@@ -10,11 +11,12 @@ public class UserCouponDTO {
 	
 	public UserCouponDTO() {}
 
-	public UserCouponDTO(int user_cp_id, String user_id, int cp_id, String cp_provide_date, String cp_using_date,
-			String cp_using_state) {
+	public UserCouponDTO(int user_cp_id, String user_id, String user_type, int cp_id, String cp_provide_date,
+			String cp_using_date, String cp_using_state) {
 		super();
 		this.user_cp_id = user_cp_id;
 		this.user_id = user_id;
+		this.user_type = user_type;
 		this.cp_id = cp_id;
 		this.cp_provide_date = cp_provide_date;
 		this.cp_using_date = cp_using_date;
@@ -35,6 +37,14 @@ public class UserCouponDTO {
 
 	public void setUser_id(String user_id) {
 		this.user_id = user_id;
+	}
+
+	public String getUser_type() {
+		return user_type;
+	}
+
+	public void setUser_type(String user_type) {
+		this.user_type = user_type;
 	}
 
 	public int getCp_id() {
@@ -68,6 +78,7 @@ public class UserCouponDTO {
 	public void setCp_using_state(String cp_using_state) {
 		this.cp_using_state = cp_using_state;
 	}
+
 	
 	
 }
