@@ -235,7 +235,7 @@ p {
 /* 상위 메뉴 */
 .main-menu {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     list-style: none;
     margin: 0;
     padding: 0;
@@ -287,11 +287,16 @@ p {
     background-color: white;
     box-shadow: var(--shadow-lg);
     z-index: 1000;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 0;
     padding: 25px 0;
     border-radius: 0 0 8px 8px;
     transition: all 0.3s;
+}
+
+/* 대시보드 메뉴에 대해서는 하위 메뉴를 표시하지 않음 */
+.main-menu > li:first-child:hover + .megamenu {
+    display: none;
 }
 
 .admin-nav:hover .megamenu {
