@@ -27,6 +27,7 @@
 		</div>
 
 		<aside class="sidebar2">
+		<br>
 			<ul>
 				<li><a href="myPage.jsp">회원 정보 수정</a></li>
 				<li><a href="orderHistory2.jsp">주문 내역</a></li>

@@ -79,7 +79,7 @@ public class UserDAO {
 			pstmt.setString(12, user.getUser_marketing_state());
 			pstmt.setInt(13, user.getUser_point());
 			pstmt.executeUpdate();
-			insertAddr(addr, user.getUser_id(), "Y");
+			insertAddr(addr, user.getUser_id(), user.getUser_type(), "Y");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -662,16 +662,17 @@ public class UserDAO {
 	}
 
 	// 기본 배송지 여부 (배송지 추가 후 기본배송지로 할 경우, 기존에 기본 배송지가 있으면 N으로 변경)
-	public void isDefaultAddr(String id) {
+	public void isDefaultAddr(String id, String type) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
 		try {
 			con = pool.getConnection();
-			sql = "select addr_id from user_address where user_id = ? and addr_isDefault = 'Y'";
+			sql = "select addr_id from user_address where user_id = ? and user_type = ? and addr_isDefault = 'Y'";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
+			pstmt.setString(2, type);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				int addrId = rs.getInt("addr_id");
@@ -691,23 +692,24 @@ public class UserDAO {
 	}
 
 	// 주소 입력
-	public void insertAddr(UserAddrDTO addr, String id, String isDefault) {
+	public void insertAddr(UserAddrDTO addr, String id, String type, String isDefault) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
 		try {
 			if (isDefault.equals("Y")) {
-				isDefaultAddr(id);
+				isDefaultAddr(id, type);
 			}
 			con = pool.getConnection();
-			sql = "insert user_address values (null, ?, ?, ?, ?, ?, now(), ?)";
+			sql = "insert user_address values (null, ?, ?, ?, ?, ?, ?, now(), ?)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
-			pstmt.setString(2, addr.getAddr_zipcode());
-			pstmt.setString(3, addr.getAddr_road());
-			pstmt.setString(4, addr.getAddr_detail());
-			pstmt.setString(5, isDefault);
-			pstmt.setString(6, (addr.getAddr_label() == null || addr.getAddr_label() == "") ? addr.getAddr_road()
+			pstmt.setString(2, type);
+			pstmt.setString(3, addr.getAddr_zipcode());
+			pstmt.setString(4, addr.getAddr_road());
+			pstmt.setString(5, addr.getAddr_detail());
+			pstmt.setString(6, isDefault);
+			pstmt.setString(7, (addr.getAddr_label() == null || addr.getAddr_label() == "") ? addr.getAddr_road()
 					: addr.getAddr_label());
 			pstmt.executeUpdate();
 
@@ -797,13 +799,13 @@ public class UserDAO {
 	}
 
 	// 배송지 수정
-	public void updateAddr(String id, int addr_id, UserAddrDTO addr) {
+	public void updateAddr(String id, String type, int addr_id, UserAddrDTO addr) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
 		try {
 			if (addr.getAddr_isDefault().equals("Y"))
-				isDefaultAddr(id);
+				isDefaultAddr(id, type);
 			con = pool.getConnection();
 			sql = "update user_address set "
 					+ "addr_zipcode = ?, addr_road = ?, addr_detail = ?, addr_isDefault = ?, addr_label = ? where addr_id = ?";

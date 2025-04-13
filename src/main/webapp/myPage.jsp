@@ -17,7 +17,7 @@
 			return;
 		}
 		UserDTO userDto = userDao.getOneUser(userId, userType);
-		int couponCnt = userDao.showOneUserCoupon(userId);
+		int couponCnt = userDao.showOneUserCoupon(userId, userType);
 		String phone2 = userDto.getUser_phone().split("-")[1];
 		String phone3 = userDto.getUser_phone().split("-")[2];
 		
