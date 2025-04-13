@@ -140,11 +140,13 @@
 
 					</div>
 
+					<%if(userType.equals("일반")){ %>
 					<!-- 이메일 -->
 					<div class="form-group">
 						<label>이메일</label> 
 						<input type="email" value="<%=userDto.getUser_email().isEmpty() ? "" : userDto.getUser_email()%>">
 					</div>
+					<%} %> 
 
 					<!-- 성별 -->
 					<div class="form-group">

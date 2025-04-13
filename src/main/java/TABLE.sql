@@ -12,6 +12,8 @@ CREATE TABLE `user` (
   `user_phone` varchar(15),
   `user_account_state` varchar(20),
   `user_wd_date` datetime,
+  `user_wd_reason` varchar(30),
+  `user_wd_detail_reason` varchar(100),
   `user_fail_login` int NOT NULL DEFAULT 0,
   `user_lock_state` varchar(5) NOT NULL,
   `user_marketing_state` varchar(5) NOT NULL,
@@ -30,6 +32,7 @@ CREATE TABLE `user_log` (
 CREATE TABLE `user_address` (
   `addr_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `user_id` varchar(30) NOT NULL,
+  `user_type` varchar(10) NOT NULL,
   `addr_zipcode` varchar(10) NOT NULL,
   `addr_road` varchar(100) NOT NULL,
   `addr_detail` varchar(100),
@@ -70,7 +73,8 @@ CREATE TABLE `coupon` (
 
 CREATE TABLE `user_coupon` (
   `user_cp_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(20) NOT NULL,
+  `user_id` varchar(30) NOT NULL,
+  `user_type` varchar(10) NOT NULL,
   `cp_id` int NOT NULL,
   `cp_provide_date` datetime NOT NULL,
   `cp_using_date` datetime,
@@ -129,10 +133,10 @@ CREATE TABLE `payment` (
   `user_id` varchar(30) NOT NULL,
   `pay_status` varchar(10) NOT NULL,
   `paid_at` datetime,
-  `transaction_id` varchar(100),
-  `approval_code` varchar(50),
-  `card_company` varchar(50),
-  `request_id` varchar(100) UNIQUE NOT NULL
+  `pay_trans_id` varchar(100),
+  `pay_appr_code` varchar(50),
+  `pay_card_com` varchar(50),
+  `pay_req_id` varchar(100) UNIQUE NOT NULL
 );
 
 CREATE TABLE `refund` (
@@ -189,7 +193,7 @@ CREATE TABLE `review` (
   `pd_id` int NOT NULL,
   `r_content` text NOT NULL,
   `r_rating` int NOT NULL,
-  `r_reply` text,
+  `r_heart` int,
   `created_at` datetime NOT NULL,
   `updated_at` datetime,
   `r_report_count` int DEFAULT 0,
@@ -222,7 +226,10 @@ CREATE TABLE `review_report` (
   `rr_target_type` varchar(10) NOT NULL,
   `rr_reason_code` varchar(20) NOT NULL,
   `rr_reason_text` text,
-  `reported_at` datetime NOT NULL DEFAULT (CURRENT_DATE)
+  `reported_at` datetime NOT NULL DEFAULT (CURRENT_DATE),
+  `admin_id` varchar(20),
+  `proc_at` datetime,
+  `proc_state` varchar(10) DEFAULT '처리 대기'
 );
 
 CREATE TABLE `notice` (
@@ -273,6 +280,12 @@ CREATE TABLE `event` (
   `e_isActive` char(1) NOT NULL DEFAULT 'Y'
 );
 
+CREATE TABLE `faq` (
+  `faq_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  `faq_title` varchar(50) NOT NULL,
+  `faq_content` text NOT NULL
+);
+
 CREATE UNIQUE INDEX `favorite_index_0` ON `favorite` (`user_id`, `pd_id`, `f_type`);
 
 CREATE UNIQUE INDEX `review_report_index_1` ON `review_report` (`user_id`, `rr_target_id`, `rr_target_type`);
@@ -285,9 +298,13 @@ ALTER TABLE `user_log` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 
 ALTER TABLE `user_address` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
+ALTER TABLE `user_address` ADD FOREIGN KEY (`user_type`) REFERENCES `user` (`user_id`);
+
 ALTER TABLE `admin_log` ADD FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`);
 
 ALTER TABLE `user_coupon` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+ALTER TABLE `user_coupon` ADD FOREIGN KEY (`user_type`) REFERENCES `user` (`user_id`);
 
 ALTER TABLE `user_coupon` ADD FOREIGN KEY (`cp_id`) REFERENCES `coupon` (`cp_id`);
 
@@ -330,6 +347,8 @@ ALTER TABLE `review_image` ADD FOREIGN KEY (`r_id`) REFERENCES `review` (`r_id`)
 ALTER TABLE `review_comment` ADD FOREIGN KEY (`r_id`) REFERENCES `review` (`r_id`);
 
 ALTER TABLE `review_report` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+ALTER TABLE `review_report` ADD FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`);
 
 ALTER TABLE `notice` ADD FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`);
 
