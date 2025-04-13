@@ -71,13 +71,13 @@
 				<label><strong><%=defaultAddr.getAddr_label()%></strong> <span>기본 배송지</span></label>
 				<div class="vede">
 					<button type="button" class="modifyBtn" onclick="modifyBtn('<%=defaultAddr.getAddr_label()%>', '<%=defaultAddr.getAddr_zipcode()%>', '<%=defaultAddr.getAddr_road()%>', '<%=defaultAddr.getAddr_detail()%>', '<%=defaultAddr.getAddr_isDefault()%>', '<%=defaultAddr.getAddr_id()%>')">수정</button>
-					<%-- <button class="deleteBtn"  onclick="openModal('<%=defaultAddr.getAddr_id()%>')">삭제</button> --%>
 				</div>
 			</div>
 			<div class="address-default2">
-				<p><%=userDto.getUser_phone()%></p>
+				<p><%=userDto.getUser_name()%> | <%=userDto.getUser_phone()%></p>
 				<label><%=defaultAddr.getAddr_road()%>, <%=defaultAddr.getAddr_detail()%> (<%=defaultAddr.getAddr_zipcode()%>)</label>
 			</div>
+			
 		
 			<%for(UserAddrDTO addr : restAddr){ %>
 			<hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
@@ -89,7 +89,7 @@
 				</div>
 			</div>
 			<div class="address-default2">
-				<p><%=userDto.getUser_phone()%></p>
+				<p><%=userDto.getUser_name()%> | <%=userDto.getUser_phone()%></p>
 				<label><%=addr.getAddr_road()%>, <%=addr.getAddr_detail()%> (<%=addr.getAddr_zipcode()%>)</label>
 			</div>
 		

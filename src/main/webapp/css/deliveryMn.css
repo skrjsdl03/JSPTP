@@ -146,7 +146,7 @@ h3 {
 	background-color: #f7fbff;
 	border-radius: 10px;
 	padding: 10px 12px;
-	font-size: 13px;
+	font-size: 16px;
 	color: #333;
 	box-sizing: border-box;
 	width: 750px;
@@ -255,32 +255,32 @@ color: white;
 }
 
 .modifyBtn{
-	color: black;
-	background-color: white;
-	border: 1px solid gray;
+	color: #404048;
+	background-color: #f3f5f7;
+	border: 0px;
+	border-color: #f3f5f7;
 	border-radius: 5px;
 	padding: 5px;
-}
-
-.modifyBtn:hover {
-	color: black;
-	background-color: #F1F1F1;
+	cursor: pointer;
+	    font-weight: 500;
+    line-height: 28px;
 }
 
 .deleteBtn{
-	color: black;
+	background-color: transparent;
 	background-color: white;
-	border: 1px solid gray;
-	border-radius: 5px;
 	padding: 5px;
+	cursor: pointer;
+	border: 1px solid #dcdee0;
+    border-radius: 6px;
+    font-weight: 500;
+    line-height: 28px;
+    color: #1e1e23;
 }
 
 .deleteBtn:hover {
 	color: red;
-	background-color: #F1F1F1;
 }
-
-
 
 .circle-checkbox {
   display: flex;
