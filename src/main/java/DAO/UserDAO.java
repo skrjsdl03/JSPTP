@@ -531,23 +531,148 @@ public class UserDAO {
 	}
 
 	// 비밀번호 변경
-	public void updatePwd(String id, String pwd) {
+	public boolean updatePwd(String id, String pwd) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
+		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "update user set user_pwd = ? where user_id = ?";
+			sql = "update user set user_pwd = ? where user_id = ? and user_type='일반'";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, pwd);
 			pstmt.setString(2, id);
-			pstmt.executeUpdate();
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			pool.freeConnection(con, pstmt);
 		}
+		return flag;
+	}
+	
+	//이름 변경
+	public boolean updateName(String name, String id, String type) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "update user set user_name = ? where user_id = ? and user_type = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, name);
+			pstmt.setString(2, id);
+			pstmt.setString(3, type);
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
+	
+	//전화번호 변경
+	public boolean updatePhone(String id, String phone, String type) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "update user set user_phone = ? where user_id = ? and user_type = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, phone);
+			pstmt.setString(2, id);
+			pstmt.setString(3, type);
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
+	
+	//이메일 변경
+	public boolean updateEmail(String id, String type, String email) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "update user set user_email = ? where user_id = ? and user_type = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, email);
+			pstmt.setString(2, id);
+			pstmt.setString(3, type);
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
+	
+	//성별, 키, 몸무게 변경
+	public boolean updateGender(String gender, int height, int weight, String id, String type) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "update user set user_gender = ?, user_height = ?, user_weight = ? where user_id = ? and user_type = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, gender);
+			pstmt.setInt(2, height);
+			pstmt.setInt(3, weight);
+			pstmt.setString(4, id);
+			pstmt.setString(5, type);
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
+	
+	//생년월일 변경
+	public boolean updateBirth(String id, String type, String birth) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "update user set user_birth = ? where user_id = ? and user_type = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, birth);
+			pstmt.setString(2, id);
+			pstmt.setString(3, type);
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
 	}
 	
 	//일반 사용자의 비밀번호 일치 여부 확인
@@ -639,26 +764,30 @@ public class UserDAO {
 	}
 
 	// 회원 탈퇴
-	public void deleteUser(String id, String reason, String detail) {
+	public boolean deleteUser(String id, String type, String reason, String detail) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
+		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "update user set user_account_state = ?, user_wd_date = now(), user_lock_state = ?, user_wd_reason = ?, user_wd_detail_reason = ? where user_id = ?";
+			sql = "update user set user_account_state = ?, user_wd_date = now(), user_lock_state = ?, user_wd_reason = ?, user_wd_detail_reason = ? where user_id = ? and user_type = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, "탈퇴");
 			pstmt.setString(2, "Y");
 			pstmt.setString(3, reason); // 탈퇴 사유 5개 중 하나
 			pstmt.setString(4, detail); // 탈퇴 상세 사유
 			pstmt.setString(5, id);
-			pstmt.executeUpdate();
+			pstmt.setString(6, type);
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			pool.freeConnection(con, pstmt);
 		}
+		return flag;
 	}
 
 	// 기본 배송지 여부 (배송지 추가 후 기본배송지로 할 경우, 기존에 기본 배송지가 있으면 N으로 변경)
