@@ -1,3 +1,4 @@
+<!-- admin.member.jsp -->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="DAO.UserDAO, DTO.UserDTO"%>
@@ -124,7 +125,7 @@ request.setAttribute("subMenu", "member_list");
 		function openCRM(id, type) {
 			const url = "crm/userCRM.jsp?user_id=" + id + "&user_type=" + type;
 			window.open(url, "CRM상세",
-					"width=1000,height=700,left=150,top=100,scrollbars=yes");
+					"width=1000,height=565,left=150,top=100,scrollbars=yes");
 		}
 	</script>
 </body>

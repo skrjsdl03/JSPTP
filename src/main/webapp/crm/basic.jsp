@@ -1,3 +1,4 @@
+<!-- basic.jsp -->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page
@@ -14,7 +15,7 @@ UserAddrDTO addr = crm.getAddr();
 %>
 
 <div class="crm-section">
-	<h3>👤 기본 정보 요약</h3>
+	<h3>👤 회원 정보</h3>
 	<table>
 		<tr>
 			<th>아이디</th>
