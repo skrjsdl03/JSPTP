@@ -49,6 +49,7 @@ public class GoogleLoginServlet extends HttpServlet {
             String sessionType = (String) session.getAttribute("userType");
 
             UserDAO userDao = new UserDAO();
+            
 
             if ("Google".equals(sessionType) && email.equals(sessionId)) {
                 // 동일한 Google 로그인 세션이 이미 존재함
@@ -57,7 +58,8 @@ public class GoogleLoginServlet extends HttpServlet {
                 return;
             }
             
-            String redirect = request.getParameter("redirect");
+			 String redirect = (String)session.getAttribute("redirect");
+			 System.out.println(redirect);
 
             if (userDao.isSocialUserExists(email, "Google")) {
                 // 이미 가입한 구글 계정
