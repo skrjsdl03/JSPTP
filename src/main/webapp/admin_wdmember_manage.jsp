@@ -129,7 +129,7 @@ request.setAttribute("subMenu", "member_manage");
 	<script>
 		function openPopup(id) {
 			const url = "withdrawalDetail.jsp?user_id=" + id;
-			window.open(url, "탈퇴회원상세", "width=500,height=500,left=200,top=200");
+			window.open(url, "탈퇴회원상세", "width=500,height=430,left=200,top=200");
 		}
 	</script>
 </body>

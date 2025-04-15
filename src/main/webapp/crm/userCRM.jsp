@@ -1,46 +1,20 @@
+<!-- userCRM.jsp -->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="DAO.UserDAO, DTO.CRMUserInfoDTO"%>
 <%
 String user_id = request.getParameter("user_id");
 String user_type = request.getParameter("user_type");
+
+UserDAO dao = new UserDAO();
+CRMUserInfoDTO crm = dao.getCRMUserInfo(user_id, user_type);
 %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>CRM - 고객 상세 관리</title>
-<style>
-.crm-layout {
-	display: flex;
-	gap: 20px;
-}
-
-.crm-sidebar {
-	width: 180px;
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-}
-
-.crm-sidebar button {
-	padding: 10px;
-	border: 1px solid #ccc;
-	background-color: #f4f4f4;
-	cursor: pointer;
-}
-
-.crm-sidebar button:hover {
-	background-color: #eaeaea;
-}
-
-.crm-content {
-	flex: 1;
-	border: 1px solid #ddd;
-	padding: 20px;
-	background: #fff;
-}
-</style>
-<!-- userCRM.jsp -->
+<link rel="stylesheet" href="CRM.css/userCRM.css">
 <script>
 
 // 비밀번호 ↔ 비밀번호 확인 일치검사 메소드로 detail.jsp에서 호출해서 사용함
@@ -160,45 +134,129 @@ function setupBirthValidation() {
 
 
 function loadTab(tab) {
-  let url = "";
-  if (tab === 'basic') {
-    url = `basic.jsp?user_id=<%=user_id%>&user_type=<%=user_type%>`;
-  } else if (tab === 'detail') {
-    url = `detail.jsp?user_id=<%=user_id%>&user_type=<%=user_type%>`;
-  }
+	  const contentArea = document.getElementById("content-area");
+	  let url = "";
 
-  fetch(url)
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById("content-area").innerHTML = html;
+	  // 탭에 따라 URL 및 클래스 다르게 설정
+	  if (tab === 'basic') {
+	    url = `basic.jsp?user_id=<%=user_id%>&user_type=<%=user_type%>`;
+	    contentArea.className = "crm-content";  // ✅ 기본 구조 유지
+	  } else if (tab === 'detail') {
+	    url = `detail.jsp?user_id=<%=user_id%>&user_type=<%=user_type%>`;
+	    contentArea.className = "detail-content";  // ✅ 회원 정보 수정 탭 전용 클래스
+	  } else if (tab === 'delivery') {
+	    url = `delivery.jsp?user_id=<%=user_id%>&user_type=<%=user_type%>`;
+	    contentArea.className = "delivery-content";  // ✅ 배송지 탭 전용 클래스
+	  } else if (tab === 'post') {
+		  url = `post.jsp?user_id=<%=user_id%>&user_type=<%=user_type%>`;
+		  contentArea.className = "post-content";
+	  } else {
+	    url = ""; // 기타 탭 미구현
+	  }
 
-      // detail.jsp가 로드된 후 setupPasswordCheck, setupAccountStateStnc, setupBirthValidation 호출
-      if (tab === 'detail') {
-    	  setTimeout(() => {
-    	    setupPasswordCheck();      // 비밀번호 확인
-    	    setupAccountStateSync();   // 계정상태-잠금 연동
-    	    setupBirthValidation();	   // 생년월일 유효성 검사
-    	  }, 100);
-    	}
-    });
-}
+	  if (!url) return;
+
+	  fetch(url)
+	    .then(res => res.text())
+	    .then(html => {
+	      contentArea.innerHTML = html;
+
+	      // detail.jsp만 로딩 시 스크립트 후처리
+	      if (tab === 'detail') {
+	        setTimeout(() => {
+	          setupPasswordCheck();
+	          setupAccountStateSync();
+	          setupBirthValidation();
+	        }, 100);
+	      }
+	    });
+	}
+
+
 
 window.onload = function () {
-  loadTab('basic');
-}
-</script>
+	  const urlParams = new URLSearchParams(window.location.search);
+	  const tab = urlParams.get("tab") || "basic";
+	  loadTab(tab);
+	}
 
+
+//배송지 삭제
+function deleteAddr(addrId) {
+  if (confirm("배송지를 삭제하시겠습니까?")) {
+    var url = "deliveryDelete.jsp?addr_id=" + addrId + 
+              "&user_id=" + "<%=user_id%>" + 
+              "&user_type=" + "<%=user_type%>";
+    location.href = url;
+  }
+}
+
+// 배송지 수정 팝업 - 화면 정중앙에 열기
+function openModifyPopup(addrId) {
+  var width = 550;
+  var height = 410;
+  var left = (screen.width - width) / 2;
+  var top = (screen.height - height) / 2;
+
+  var url = "deliveryModify.jsp?addr_id=" + addrId + 
+            "&user_id=" + "<%=user_id%>" + 
+            "&user_type=" + "<%=user_type%>";
+  var option = "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top;
+
+  window.open(url, "deliveryModify", option);
+}
+
+
+
+// 배송지 추가 팝업 - 화면 정중앙에 열기
+function openAddPopup() {
+  const width = 550;
+  const height = 410;
+  const left = (screen.width - width) / 2;
+  const top = (screen.height - height) / 2;
+
+  const url = "deliveryAdd.jsp?user_id=" + "<%=user_id%>" + "&user_type=" + "<%=user_type%>";
+  const option = "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top;
+
+  window.open(url, "deliveryAdd", option);
+}
+
+
+</script>
 </head>
 <body>
-	<div style="text-align: right; margin-bottom: 10px;">
-		<button onclick="window.close()" style="padding: 5px 10px;">닫기
-			✖</button>
+	<div class="crm-header">
+		<h2>EVERYWEAR 고객 관리 시스템</h2>
+		<button class="close-btn" onclick="window.close()">닫기 ✖</button>
 	</div>
-	<h2>EVERYWEAR 고객 관리</h2>
+
+
 	<div class="crm-layout">
 		<div class="crm-sidebar">
+
+			<!-- 회원 요약 정보 -->
+			<div class="user-summary">
+				<div>
+					<strong><%=crm.getUser().getUser_name()%></strong> 님
+				</div>
+				<div>
+					등급 :
+					<%=crm.getUser().getUser_rank()%></div>
+				<div>
+					최종 방문일 :
+					<%=crm.getLastLoginDate() != null ? crm.getLastLoginDate() : "-"%></div>
+				<div>
+					가입일 :
+					<%=crm.getUser().getCreated_at()%></div>
+			</div>
+
 			<button onclick="loadTab('basic')">CRM 홈</button>
 			<button onclick="loadTab('detail')">회원 정보 수정</button>
+			<button onclick="loadTab('delivery')">회원 배송지 정보</button>
+			<button onclick="loadTab('post')">회원 게시글 정보</button>
+			<button onclick="loadTab('')">회원 적립금/쿠폰 정보</button>
+			<button onclick="loadTab('')">회원 관심상품 정보</button>
+			<button onclick="loadTab('')">회원 로그인 로그</button>
 			<!-- 추후 확장: 배송지, 게시글, 포인트 등 -->
 		</div>
 
