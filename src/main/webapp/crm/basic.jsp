@@ -15,7 +15,7 @@ UserAddrDTO addr = crm.getAddr();
 %>
 
 <div class="crm-section">
-	<h3>👤 회원 정보</h3>
+	<h2>👤 회원 정보</h2>
 	<table>
 		<tr>
 			<th>아이디</th>

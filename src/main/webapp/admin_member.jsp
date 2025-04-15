@@ -121,12 +121,12 @@ request.setAttribute("subMenu", "member_list");
 	<!-- 푸터 포함 -->
 	<jsp:include page="/includes/admin_footer.jsp" />
 
-	<script>
-		function openCRM(id, type) {
-			const url = "crm/userCRM.jsp?user_id=" + id + "&user_type=" + type;
-			window.open(url, "CRM상세",
-					"width=1000,height=565,left=150,top=100,scrollbars=yes");
-		}
-	</script>
+<script>
+  function openCRM(id, type) {
+    const url = "<%=request.getContextPath()%>/crm/userCRM.jsp?user_id=" + id + "&user_type=" + type;  // ✅ 절대 경로
+    window.open(url, "CRM상세", "width=1000,height=610,left=150,top=100,scrollbars=yes");
+  }
+</script>
+
 </body>
 </html>
