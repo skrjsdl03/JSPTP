@@ -1,6 +1,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%
 		String user_id = (String)session.getAttribute("id");
+		if(user_id == null || user_id == ""){
+			// 현재 페이지 경로를 얻기 위한 코드
+			String fullUrl = request.getRequestURI();
+			String queryString = request.getQueryString();
+			if (queryString != null) {
+				fullUrl += "?" + queryString;
+			}
+			response.sendRedirect("login.jsp?redirect=" + java.net.URLEncoder.encode(fullUrl, "UTF-8"));
+			return;
+		}
+		
 		String i_id = request.getParameter("i_id");
 %>
 <!DOCTYPE html>
