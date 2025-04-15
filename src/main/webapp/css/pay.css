@@ -116,26 +116,64 @@ h3 {
 }
 
 .quantity-control {
-  margin-top: 6px;
   display: flex;
   align-items: center;
-  gap: 5px;
-}
-
-.quantity-control button {
-  width: 25px;
-  height: 25px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  cursor: pointer;
+  gap: 10px;
+  font-size: 16px;
   font-weight: bold;
 }
 
-.quantity-control input {
-  width: 30px;
+.qty-btn {
+  background: none;
+  border: none;
+  color: #000;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 4px 8px;
+}
+
+.qty-btn:hover {
+  color: #015FC1;
+}
+
+.qty-value {
+  background: none;
+  border: none;
+  width: 24px;
   text-align: center;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  font-size: 16px;
+  pointer-events: none;  /* 클릭 비활성화 */
+}
+
+.qty-wrapper {
+  display: flex;
+  align-items: center;  /* 수직 정렬 맞춤 */
+  gap: 12px;            /* 라벨과 컨트롤 사이 간격 */
+  margin-top: 6px;
+}
+
+.qty-text-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #000;
+}
+
+.qty-action {
+  cursor: pointer;
+  user-select: none;
+}
+
+.qty-action:hover {
+  color: #015FC1;
+}
+
+.qty-number {
+  min-width: 20px;
+  text-align: center;
+  user-select: none;
 }
 
 .product-price-box {
@@ -248,12 +286,24 @@ h3 {
 
 .phone-group {
   display: flex;
-  gap: 10px;
+  gap: 6px;
+  align-items: center;
 }
 
-.phone-group select,
 .phone-group input {
-  flex: 1;
+  flex: none;
+  width: 202px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px;
+  background-color: #f7fafd;
+}
+
+.phone-divider {
+  font-size: 16px;
+  font-weight: bold;
+  color: #555;
 }
 
 /* 라디오 버튼 */
@@ -275,9 +325,16 @@ h3 {
 }
 
 .address-combined {
+  width: 345px;
   display: flex;
   gap: 10px;
+  margin-left: 4px;
   margin-bottom: 10px;
+}
+
+#alias-list,
+#alias-input-row {
+  display: none;
 }
 
 /* 너비 계산: 우편번호/별칭: 25%, 버튼: 12.5% */
@@ -389,12 +446,83 @@ h3 {
   cursor: pointer;
 }
 
+.address-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.address-row-top {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.address-row-top input#zipcode {
+  width: 230px;
+  flex: none;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f7fafd;
+  box-sizing: border-box;
+  height: 42px; 
+}
+
+.address-row-top .addr-btn {
+  width: 100px;
+  min-width: 80px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 8px;
+  background-color: #f7f7f7;
+  color: #333;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  height: 42px;
+}
+
+.address-row-top input.alias {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f7fafd;
+  box-sizing: border-box;
+  height: 42px;
+}
+
+.address-row-top input[type="text"]:not(#zipcode) {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f7fafd;
+  box-sizing: border-box;
+  height: 42px;
+}
+
+.address-row input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f7fafd;
+  box-sizing: border-box;
+}
+
 /* 주소 필드 정렬용 grid: 우편번호, 주소검색, 별칭, 저장 버튼 한 줄 */
 .address-row-grid {
   display: grid;
   grid-template-columns: 1fr 100px 1fr 80px; /* 좌우 정렬 맞춤 */
   gap: 10px;
   margin-bottom: 10px;
+  height: 42px;
 }
 
 .address-row-grid input[type="text"],
@@ -428,7 +556,14 @@ h3 {
   margin-bottom: 10px;
 }
 
+.address-sub {
+  display: flex;
+  gap: 10px;
+  margin-top: 0; /* ✅ 위 줄과 자연스럽게 이어지게 */
+}
+
 .address-sub input[type="text"] {
+  flex: 1;
   padding: 10px;
   font-size: 14px;
   border: 1px solid #ccc;
@@ -451,6 +586,7 @@ h3 {
   background-color: #fff;
   font-size: 13px;
   cursor: pointer;
+  color: #000;
 }
 
 input.readonly {
@@ -458,11 +594,61 @@ input.readonly {
 }
 
 .delete-icon {
-  display: inline;
+  margin-left: 6px;
+  color: #aaa;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .tag-btn:hover .delete-icon {
   display: inline;
+}
+
+.point-hint {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #666;
+}
+
+.recommend-section {
+  margin-top: 40px;
+}
+
+.recommend-list {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: nowrap;  /* ✅ 수평 정렬 유지 */
+}
+
+.recommend-item {
+  flex: 1; /* 동일한 너비 비율 */
+  max-width: 30%; /* 3개가 한 줄에 들어오도록 제한 */
+  background-color: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.recommend-item img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.recommend-item .item-name {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.recommend-item .item-price {
+  font-size: 13px;
+  color: #015FC1;
 }
 
 /* 하단 푸터 */
