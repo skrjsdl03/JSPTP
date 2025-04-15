@@ -37,8 +37,13 @@ List<InquiryDTO> inquiries = qnaDao.showUserQna(user_id, user_type);
 			for (ReviewDTO r : reviews) {
 			%>
 			<div
-				onclick="location.href='reviewAdmin.jsp?r_id=<%=r.getR_id()%>&user_id=<%=user_id%>&user_type=<%=user_type%>'"
+				onclick="window.open(
+    'reviewAdmin.jsp?r_id=<%=r.getR_id()%>&user_id=<%=user_id%>&user_type=<%=user_type%>',
+    '_blank',
+    'width=900,height=700,left=200,top=100,resizable=yes,scrollbars=yes'
+  )"
 				style="border: 1px solid #ccc; padding: 10px; margin-bottom: 15px; border-radius: 6px; cursor: pointer;">
+
 				<%
 				String pdName = reviewDao.getProductNameByPdId(r.getPd_id());
 				String isHidden = r.getR_isHidden();

@@ -1,15 +1,18 @@
 package DAO;
 
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
-
 import DTO.ReviewDTO;
 import DTO.ReviewImgDTO;
+import DTO.ReviewReportDTO;
 import DTO.ReviewCmtDTO;
 
 public class ReviewDAO {
@@ -171,7 +174,7 @@ public class ReviewDAO {
 		} finally {
 			pool.freeConnection(con, pstmt, rs);
 		}
-		return rilist;
+    return rilist;
 	}
 	
 	// 상품이름 가져오기
@@ -196,6 +199,43 @@ public class ReviewDAO {
 	    }
 	    return name;
 	}
+	
+	// 리뷰 신고 목록
+	public List<ReviewReportDTO> getReportsByUserId(String user_id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<ReviewReportDTO> list = new ArrayList<>();
+
+		try {
+			con = pool.getConnection();
+			String sql = "SELECT * FROM review_report " +
+			             "WHERE rr_target_type = '리뷰' " +
+			             "AND rr_target_id IN (SELECT r_id FROM review WHERE user_id = ?) " +
+			             "ORDER BY reported_at DESC";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, user_id);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				ReviewReportDTO dto = new ReviewReportDTO();
+				dto.setRr_id(rs.getInt("rr_id"));
+				dto.setUser_id(rs.getString("user_id"));
+				dto.setRr_target_id(rs.getInt("rr_target_id"));
+				dto.setRr_target_type(rs.getString("rr_target_type"));
+				dto.setRr_reason_code(rs.getString("rr_reason_code"));
+				dto.setRr_reason_text(rs.getString("rr_reason_text"));
+				dto.setReported_at(rs.getString("reported_at"));
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return list;
+	}
+
 
 	// 리뷰 댓글 목록
 	public List<ReviewCmtDTO> getReviewComments(int r_id) {
@@ -225,7 +265,7 @@ public class ReviewDAO {
 		} finally {
 			pool.freeConnection(con, pstmt, rs);
 		}
-		return list;
+    return list;
 	}
 
 	//내가 쓴 리뷰의 댓글
@@ -244,8 +284,7 @@ public class ReviewDAO {
 			while(rs.next()) {
 				rclist.add(new ReviewCmtDTO(rs.getInt(1), rs.getInt(2), 
 						rs.getString(3), rs.getString(4), rs.getString(5), 
-						SDF_DATE.format(rs.getDate(6)), 
-						(rs.getDate(7) != null) ? SDF_DATE.format(rs.getDate(7)) : "", rs.getString(8)));
+						SDF_DATE.format(rs.getDate(6)), (rs.getDate(7) != null) ? SDF_DATE.format(rs.getDate(7)) : "", rs.getString(8)));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -277,7 +316,6 @@ public class ReviewDAO {
 		}
 	}
 
-
 	// 리뷰 댓글 삭제
 	public void deleteReviewComment(int rc_id) {
 		Connection con = null;
@@ -305,11 +343,11 @@ public class ReviewDAO {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, r_id);
 			pstmt.executeUpdate();
-	    } catch (Exception e) {
-	    e.printStackTrace();
-	  } finally {
-	    pool.freeConnection(con, pstmt);
-	  }
+    } catch (Exception e) {
+    e.printStackTrace();
+  } finally {
+    pool.freeConnection(con, pstmt);
+  }
 	}
 	
 	//내가 쓴 리뷰 수정
@@ -335,5 +373,84 @@ public class ReviewDAO {
 		}
 		return flag;
 	}
-}
+	
+	// 특정 회원이 작성한 리뷰에 대한 신고
+	public List<ReviewReportDTO> getReportsByReviewId(int r_id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<ReviewReportDTO> list = new ArrayList<>();
+		try {
+			con = pool.getConnection();
+			String sql = "SELECT * FROM review_report WHERE rr_target_type = '리뷰' AND rr_target_id = ? ORDER BY reported_at DESC";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, r_id);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				ReviewReportDTO dto = new ReviewReportDTO();
+				dto.setRr_id(rs.getInt("rr_id"));
+				dto.setUser_id(rs.getString("user_id"));
+				dto.setRr_target_id(rs.getInt("rr_target_id"));
+				dto.setRr_target_type(rs.getString("rr_target_type"));
+				dto.setRr_reason_code(rs.getString("rr_reason_code"));
+				dto.setRr_reason_text(rs.getString("rr_reason_text"));
+				dto.setReported_at(rs.getString("reported_at"));
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return list;
+	}
+	
+	public Set<Integer> getReportedCommentIdsByReviewId(int r_id) {
+	    Set<Integer> reportedIds = new HashSet<>();
+	    Connection conn = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
 
+	    try {
+	        conn = pool.getConnection();
+	        String sql =
+	            "SELECT DISTINCT rr.rr_target_id " +
+	            "FROM review_report rr " +
+	            "JOIN review_comment rc ON rr.rr_target_id = rc.rc_id " +
+	            "WHERE rc.r_id = ? AND rr.rr_target_type = '댓글'";
+
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setInt(1, r_id);
+	        rs = pstmt.executeQuery();
+
+	        while (rs.next()) {
+	            reportedIds.add(rs.getInt("rr_target_id"));
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(conn, pstmt, rs);
+	    }
+
+	    return reportedIds;
+	}
+
+	
+//	리뷰 댓글 삭제 처리(DB에서 삭제되는거 아님!!!)
+	public void markReviewCommentAsDeleted(int rc_id) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    try {
+	        con = pool.getConnection();
+	        String sql = "UPDATE review_comment SET rc_isDeleted = 'Y' WHERE rc_id = ?";
+	        pstmt = con.prepareStatement(sql);
+	        pstmt.setInt(1, rc_id);
+	        pstmt.executeUpdate();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(con, pstmt);
+	    }
+	}
+}
