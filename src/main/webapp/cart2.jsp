@@ -44,43 +44,21 @@
 				<!-- 상단 선택/삭제 -->
 				<div class="order-row"
 					style="justify-content: space-between; border-bottom: 1px solid #ddd;">
-					<label><input type="checkbox" checked> 전체 선택</label>
-					<div style="display: flex; align-items: center; gap: 6px;">
-						<span>선택 삭제</span> <span style="cursor: pointer;">&#10005;</span>
+					<label><input type="checkbox" id="select-all" checked> 전체 선택</label>
+					<div class="delete-box">
+					  <span class="delete-text">선택 삭제</span>
+					  <span class="delete-icon">&#10005;</span>
 					</div>
 				</div>
 
 				<!-- 상품 1 -->
 				<div class="order-row">
-					<input type="checkbox" checked> <img
-						src="images/fav-icon.png" alt="신발">
+					<input type="checkbox"class="item-checkbox" checked> 
+					<img src="images/fav-icon.png" alt="신발">
 					<div class="order-info">
 						<p class="item-name">Onitsuka Tiger Tokuten Gray</p>
 						<p class="item-option">220</p>
-						<div class="qty-control-custom">
-							<button class="btn-decrease" onclick="changeQty(this, -1)">-</button>
-							<span class="qty-value">1</span>
-							<button class="btn-increase" onclick="changeQty(this, 1)">+</button>
-						</div>
-					</div>
-					<div class="order-meta">
-						<p style="text-align: right;">
-							<a href="#"
-								style="color: #999; font-size: 13px; text-decoration: none;">삭제</a>
-							<br> <a href="#" style="font-size: 13px;">옵션 변경</a> <br>
-							<strong style="font-size: 14px;">199,000 원</strong>
-						</p>
-					</div>
-				</div>
-
-				<!-- 상품 2 -->
-				<div class="order-row">
-					<input type="checkbox" checked> <img
-						src="images/fav-icon.png" alt="가방">
-					<div class="order-info">
-						<p class="item-name">Montbell Poketable Light Pack 18 Black</p>
-						<p class="item-option">one size</p>
-						<div class="cart-quantity">
+						<div class="qty-control">
 							<button class="qty-btn" onclick="changeQty(this, -1)">-</button>
 							<span class="qty-value">1</span>
 							<button class="qty-btn" onclick="changeQty(this, 1)">+</button>
@@ -90,7 +68,30 @@
 						<p style="text-align: right;">
 							<a href="#"
 								style="color: #999; font-size: 13px; text-decoration: none;">삭제</a>
-							<br> <a href="#" style="font-size: 13px;">옵션 변경</a> <br>
+							<br> <a href="#" class="option-button">옵션 변경</a> <br>
+							<strong style="font-size: 14px;">199,000 원</strong>
+						</p>
+					</div>
+				</div>
+
+				<!-- 상품 2 -->
+				<div class="order-row">
+					<input type="checkbox" class="item-checkbox" checked> 
+					<img src="images/fav-icon.png" alt="가방">
+					<div class="order-info">
+						<p class="item-name">Montbell Poketable Light Pack 18 Black</p>
+						<p class="item-option">one size</p>
+						<div class="qty-control">
+							<button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+							<span class="qty-value">1</span>
+							<button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+						</div>
+					</div>
+					<div class="order-meta">
+						<p style="text-align: right;">
+							<a href="#"
+								style="color: #999; font-size: 13px; text-decoration: none;">삭제</a>
+							<br> <a href="#" class="option-button">옵션 변경</a> <br>
 							<strong style="font-size: 14px;">140,000 원</strong>
 						</p>
 					</div>
@@ -107,3 +108,22 @@
 	</div>
 
 </body>
+<script>
+  // 전체 선택 체크박스 클릭 시
+  document.getElementById("select-all").addEventListener("change", function () {
+    const isChecked = this.checked;
+    document.querySelectorAll(".item-checkbox").forEach(cb => {
+      cb.checked = isChecked;
+    });
+  });
+
+  // 하위 체크박스 변경 시 → 전체선택 체크박스 상태 자동 반영
+  document.querySelectorAll(".item-checkbox").forEach(cb => {
+    cb.addEventListener("change", function () {
+      const all = document.querySelectorAll(".item-checkbox").length;
+      const checked = document.querySelectorAll(".item-checkbox:checked").length;
+      document.getElementById("select-all").checked = all === checked;
+    });
+  });
+</script>
+</html>

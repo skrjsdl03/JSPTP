@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import DTO.ReviewCmtBean;
 import DTO.ReviewDTO;
 import DTO.ReviewImgDTO;
 import DTO.ReviewCmtDTO;
@@ -31,24 +32,17 @@ public class ReviewDAO {
 		Vector<ReviewDTO> rlist = new Vector<>();
 		String sql = "SELECT * FROM review WHERE user_id = ? AND user_type = ? ORDER BY created_at DESC";
 		try {
-			con = pool.getConnection();
+			con = pool.getConnection();	
+			sql = "select * from review where user_id = ? and user_type = ? order by coalesce(updated_at, created_at) desc";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			pstmt.setString(2, type);
 			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				rlist.add(new ReviewDTO(
-					rs.getInt("r_id"),
-					rs.getString("user_id"),
-					rs.getString("user_type"),
-					rs.getInt("pd_id"),
-					rs.getString("r_content"),
-					rs.getInt("r_rating"),
-					SDF_DATE.format(rs.getDate("created_at")),
-					SDF_DATE.format(rs.getDate("updated_at")),
-					rs.getInt("r_report_count"),
-					rs.getString("r_isHidden")
-				));
+			while(rs.next()) {
+				rlist.add(new ReviewDTO(rs.getInt(1), rs.getString(2), 
+						rs.getString(3), rs.getInt(4), rs.getString(5), rs.getInt(6),
+						SDF_DATE.format(rs.getDate(7)), (rs.getDate(8) != null) ? SDF_DATE.format(rs.getDate(8)) : "", 
+								rs.getInt(9), rs.getString(10)));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -147,13 +141,38 @@ public class ReviewDAO {
 					rs.getInt("r_report_count"),
 					rs.getString("r_isHidden")
 				);
+      }
+    } catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+    return review;
+	}
+	
+	//내가 쓴 리뷰의 이미지
+	public Vector<ReviewImgDTO> showUserReviewImg(int r_id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ReviewImgDTO> rilist = new Vector<ReviewImgDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from review_image where r_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, r_id);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				rilist.add(new ReviewImgDTO(rs.getInt(1), rs.getInt(2), 
+						rs.getString(3), rs.getInt(4), SDF_DATE.format(rs.getDate(5))));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			pool.freeConnection(con, pstmt, rs);
 		}
-		return review;
+    return rilist;
 	}
 	
 	// 상품이름 가져오기
@@ -178,7 +197,6 @@ public class ReviewDAO {
 	    }
 	    return name;
 	}
-
 
 	// 리뷰 댓글 목록
 	public List<ReviewCmtDTO> getReviewComments(int r_id) {
@@ -208,8 +226,33 @@ public class ReviewDAO {
 		} finally {
 			pool.freeConnection(con, pstmt, rs);
 		}
-		return list;
+    return list;
 	}
+
+	//내가 쓴 리뷰의 댓글
+	public Vector<ReviewCmtBean> showUserReviewCmt(int r_id){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ReviewCmtBean> rclist = new Vector<ReviewCmtBean>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from review_comment where r_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, r_id);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				rclist.add(new ReviewCmtBean(rs.getInt(1), rs.getInt(2), 
+						rs.getString(3), rs.getString(4), SDF_DATE.format(rs.getDate(5)), 
+						(rs.getDate(6) != null) ? SDF_DATE.format(rs.getDate(6)) : "", rs.getString(7)));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+
 
 	// 리뷰 댓글 등록
 	public void insertReviewComment(ReviewCmtDTO cmt) {
@@ -231,7 +274,8 @@ public class ReviewDAO {
 			pool.freeConnection(con, pstmt);
 		}
 	}
-
+  return rclist;
+}
 
 	// 리뷰 댓글 삭제
 	public void deleteReviewComment(int rc_id) {
@@ -260,10 +304,34 @@ public class ReviewDAO {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, r_id);
 			pstmt.executeUpdate();
+    } catch (Exception e) {
+    e.printStackTrace();
+  } finally {
+    pool.freeConnection(con, pstmt);
+  }
+	
+	//내가 쓴 리뷰 수정
+	
+	
+	//내가 쓴 리뷰 삭제
+	public boolean deleteReview() {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "delete from ";
+			pstmt = con.prepareStatement(sql);
+
+			pstmt.executeUpdate();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			pool.freeConnection(con, pstmt);
 		}
+		return flag;
 	}
 }
+
