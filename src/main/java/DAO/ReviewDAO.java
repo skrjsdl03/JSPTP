@@ -1,5 +1,6 @@
 package DAO;
 
+import java.io.File;
 import java.sql.Connection;
 
 import java.sql.PreparedStatement;
@@ -332,44 +333,51 @@ public class ReviewDAO {
 			pool.freeConnection(con, pstmt);
 		}
 	}
-
-	// 리뷰 삭제
-	public void deleteReview(int r_id) {
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		try {
-			con = pool.getConnection();
-			String sql = "DELETE FROM review WHERE r_id = ?";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, r_id);
-			pstmt.executeUpdate();
-    } catch (Exception e) {
-    e.printStackTrace();
-  } finally {
-    pool.freeConnection(con, pstmt);
-  }
-	}
+	
+	//리뷰 쓰기
+	
 	
 	//내가 쓴 리뷰 수정
 	
 	
 	//내가 쓴 리뷰 삭제
-	public boolean deleteReview() {
+	public boolean deleteReview(int r_id) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
+		ResultSet rs = null;
+		Vector<String> url = new Vector<String>();
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "delete from ";
+			sql = "select ri_url from review_image where r_id = ?";
 			pstmt = con.prepareStatement(sql);
-
-			pstmt.executeUpdate();
-
+			pstmt.setInt(1, r_id);
+			rs = pstmt.executeQuery();
+			while(rs.next()) 
+				url.add(rs.getString(1));
+			
+			if(!url.isEmpty()) {
+				File f = null;
+				for(int i = 0; i<url.size(); i++) {
+					f = new File(SAVEFOLDER+url.get(i));
+					if(f.exists())
+						f.delete();				
+				}
+			}
+			pstmt.close();
+			rs.close();
+			
+			sql = "delete from review where r_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, r_id);
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			pool.freeConnection(con, pstmt);
+			pool.freeConnection(con, pstmt, rs);
 		}
 		return flag;
 	}

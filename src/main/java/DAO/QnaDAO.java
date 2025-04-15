@@ -326,7 +326,7 @@ public class QnaDAO {
 			} finally {
 				pool.freeConnection(con, pstmt, rs);
 			}
-			return true;
+			return flag;
 		}
 		
 		//한사람이 쓴 모든 Q&A 출력
