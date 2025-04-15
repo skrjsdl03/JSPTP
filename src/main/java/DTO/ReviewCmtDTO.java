@@ -1,23 +1,25 @@
 package DTO;
 
-public class ReviewCmtBean {
+public class ReviewCmtDTO {
 	private int rc_id;
 	private int r_id;
 	private String rc_author_id;
 	private String rc_author_type;
+	private String rc_content;
 	private String created_at;
 	private String updated_at;
 	private String rc_isDeleted;
 	
-	public ReviewCmtBean() {}
+	public ReviewCmtDTO() {}
 
-	public ReviewCmtBean(int rc_id, int r_id, String rc_author_id, String rc_author_type, String created_at,
+	public ReviewCmtDTO(int rc_id, int r_id, String rc_author_id, String rc_author_type, String rc_content, String created_at,
 			String updated_at, String rc_isDeleted) {
 		super();
 		this.rc_id = rc_id;
 		this.r_id = r_id;
 		this.rc_author_id = rc_author_id;
 		this.rc_author_type = rc_author_type;
+		this.rc_content = rc_content;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.rc_isDeleted = rc_isDeleted;
@@ -49,6 +51,14 @@ public class ReviewCmtBean {
 
 	public String getRc_author_type() {
 		return rc_author_type;
+	}
+	
+	public void setRc_content(String rc_content) {
+		this.rc_content = rc_content;
+	}
+
+	public String getRc_content() {
+		return rc_content;
 	}
 
 	public void setRc_author_type(String rc_author_type) {

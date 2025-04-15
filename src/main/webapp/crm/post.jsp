@@ -1,59 +1,165 @@
-<!-- post.jsp -->
+<%@page import="DAO.QnaDAO"%>
+<%@page import="DAO.ReviewDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="java.util.*, DTO.*"%>
 <%
 String user_id = request.getParameter("user_id");
 String user_type = request.getParameter("user_type");
+
+ReviewDAO reviewDao = new ReviewDAO();
+QnaDAO qnaDao = new QnaDAO();
+
+List<ReviewDTO> reviews = reviewDao.getReviewsByUser(user_id, user_type);
+List<InquiryDTO> inquiries = qnaDao.showUserQna(user_id, user_type);
 %>
 
 <div class="crm-section">
-	<h2>📝 회원 게시글 정보</h2>
+	<h2>✍️ 회원 게시글 정보</h2>
+	<div class="post-content-box">
 
-	<!-- 탭 버튼 -->
-	<div class="tab-buttons">
-		<button onclick="loadPostTab('review')">리뷰</button>
-		<button onclick="loadPostTab('inquiry')">문의</button>
-	</div>
+		<div class="tab-buttons">
+			<button class="active" onclick="toggleTab('review')">리뷰</button>
+			<button onclick="toggleTab('inquiry')">문의</button>
+		</div>
 
-	<!-- 탭 콘텐츠 -->
-	<div id="post-content" class="post-content-box">
-		<!-- 여기에 AJAX로 콘텐츠 삽입됨 -->
+		<!-- 리뷰 탭 -->
+		<div id="reviewTab" class="post-tab">
+			<h4>📝 작성한 리뷰</h4>
+			<%
+			if (reviews.isEmpty()) {
+			%>
+			<p>작성한 리뷰가 없습니다.</p>
+			<%
+			} else {
+			%>
+			<%
+			for (ReviewDTO r : reviews) {
+			%>
+			<div
+				onclick="window.open(
+    'reviewAdmin.jsp?r_id=<%=r.getR_id()%>&user_id=<%=user_id%>&user_type=<%=user_type%>',
+    '_blank',
+    'width=900,height=700,left=200,top=100,resizable=yes,scrollbars=yes'
+  )"
+				style="border: 1px solid #ccc; padding: 10px; margin-bottom: 15px; border-radius: 6px; cursor: pointer;">
+
+				<%
+				String pdName = reviewDao.getProductNameByPdId(r.getPd_id());
+				String isHidden = r.getR_isHidden();
+				String hiddenClass = "hidden-" + isHidden.toLowerCase(); // hidden-y 또는 hidden-n
+				%>
+				<p>
+					<strong>작성일:</strong>
+					<%=r.getCreated_at()%></p>
+				<p>
+					<strong>상품명:</strong>
+					<%=pdName%>
+					(<%=r.getPd_id()%>)
+				</p>
+				<p>
+					<strong>별점:</strong> <span class="rating-stars"> <span
+						class="stars" style="--rating: <%=r.getR_rating()%>;"></span>
+					</span> (<%=r.getR_rating()%>점)
+				</p>
+				<p>
+					<strong>신고 수:</strong>
+					<%=r.getR_report_count()%></p>
+				<p>
+					<strong>숨김 여부:</strong> <span class="<%=hiddenClass%>"><%=isHidden.equals("Y") ? "숨김" : "공개"%></span>
+				</p>
+
+
+				<%
+				List<ReviewImgDTO> imgs = reviewDao.getReviewImages(r.getR_id());
+				if (!imgs.isEmpty()) {
+				%>
+				<div style="margin-top: 10px;">
+					<%
+					for (ReviewImgDTO img : imgs) {
+					%>
+					<img src="<%=img.getRi_url()%>"
+						style="max-width: 100px; margin-right: 5px;" />
+					<%
+					}
+					%>
+				</div>
+				<%
+				}
+				%>
+			</div>
+			<%
+			}
+			%>
+			<%
+			}
+			%>
+		</div>
+
+		<!-- 문의 탭 -->
+		<div id="inquiryTab" class="post-tab" style="display: none;">
+			<h4>📩 작성한 문의</h4>
+			<%
+			if (inquiries.isEmpty()) {
+			%>
+			<p>작성한 문의글이 없습니다.</p>
+			<%
+			} else {
+			%>
+			<%
+			for (InquiryDTO i : inquiries) {
+			%>
+			<div
+				onclick="location.href='inquiryEdit.jsp?i_id=<%=i.getI_id()%>&user_id=<%=user_id%>'"
+				style="border: 1px solid #ccc; padding: 10px; margin-bottom: 15px; border-radius: 6px; cursor: pointer;">
+				<p>
+					<strong>상품ID:</strong>
+					<%=i.getP_id()%></p>
+				<p>
+					<strong>주문ID:</strong>
+					<%=i.getO_id()%></p>
+				<p>
+					<strong>제목:</strong>
+					<%=i.getI_title()%></p>
+				<p>
+					<strong>내용:</strong>
+					<%=i.getI_content()%></p>
+				<p>
+					<strong>공개 여부:</strong>
+					<%=i.getI_isPrivate()%></p>
+				<p>
+					<strong>답변 상태:</strong>
+					<%=i.getI_status()%></p>
+				<p>
+					<strong>작성일:</strong>
+					<%=i.getCreated_at()%></p>
+
+				<%
+				List<InquiryImgDTO> imgs = qnaDao.showOneQnaImage(i.getI_id()) != null ? List.of(qnaDao.showOneQnaImage(i.getI_id()))
+						: List.of();
+				if (!imgs.isEmpty()) {
+				%>
+				<div style="margin-top: 10px;">
+					<%
+					for (InquiryImgDTO img : imgs) {
+					%>
+					<img src="<%=img.getIi_url()%>"
+						style="max-width: 100px; margin-right: 5px;" />
+					<%
+					}
+					%>
+				</div>
+				<%
+				}
+				%>
+			</div>
+			<%
+			}
+			%>
+			<%
+			}
+			%>
+		</div>
+
 	</div>
 </div>
-<script>
-function loadPostTab(type) {
-	  const content = document.getElementById("post-content");
-	  const userId = "<%=user_id%>";
-	  const userType = "<%=user_type%>";
-
-	  let url = "";
-
-	  if (type === "review") {
-	    url = "reviewTab.jsp?user_id=" + userId + "&user_type=" + userType;
-	  } else if (type === "inquiry") {
-	    url = "inquiryTab.jsp?user_id=" + userId + "&user_type=" + userType;
-	  }
-
-	  if (!url) return;
-
-	  fetch(url)
-	  .then(function(res) { return res.text(); })
-	  .then(function(html) {
-	    content.innerHTML = html;
-
-	    // 모든 버튼에서 active 제거
-	    document.querySelectorAll(".tab-buttons button").forEach(function(btn) {
-	      btn.classList.remove("active");
-	    });
-
-	    // 클릭한 버튼에만 active 추가
-	    document.querySelector(".tab-buttons button[onclick=\"loadPostTab('" + type + "')\"]").classList.add("active");
-	  });
-	}
-
-
-// 기본 탭 로드
-window.addEventListener("DOMContentLoaded", () => {
-  loadPostTab("review");
-});
-</script>

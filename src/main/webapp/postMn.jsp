@@ -1,3 +1,4 @@
+<%@page import="DTO.ReviewImgDTO"%>
 <%@page import="DTO.ReviewDTO"%>
 <%@page import="DTO.InquiryReplyDTO"%>
 <%@page import="DTO.InquiryImgDTO"%>
@@ -19,6 +20,7 @@
 			if (queryString != null) {
 				fullUrl += "?" + queryString;
 			}
+
 			response.sendRedirect("login.jsp?redirect=" + java.net.URLEncoder.encode(fullUrl, "UTF-8"));
 			return;
 		}
@@ -87,25 +89,64 @@
 					<%-- <jsp:include page="reviewList.jsp" /> --%>
 					<table class="notice-table" id="notice-table">
 						<tbody>
+						<%if(rlist != null){ 
+								for(int i = 0; i<rlist.size(); i++){
+									ReviewDTO reviewDto = rlist.get(i);
+									String rating = "";
+									for(int j = 0; j<reviewDto.getR_rating(); j++){
+										rating += "★";
+										if(j == reviewDto.getR_rating() -1){
+											for(int k = 0; k< (5-reviewDto.getR_rating()); k++)
+												rating += "☆";
+										}
+									}
+									Vector<ReviewImgDTO> rilist = reDao.showUserReviewImg(reviewDto.getR_id());
+									if(rilist != null){
+										ReviewImgDTO reImgDto = rilist.get(0);
+						%>
 							<tr>
 								<td class="pdInfo">
 									<div class="product-box">
-										<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET" class="product-img">
+										<img src="review_images/<%=reImgDto.getRi_url()%>" alt="ARCH LOGO VARSITY JACKET" class="product-img">
 										<div class="product-info">
 											<strong>ARCH LOGO VARSITY JACKET</strong>
 											<br> NAVY
-											<br>마음에 들어요
+											<br><%=reviewDto.getR_content()%>
 										</div>
 									</div>
 								</td>
-								<td class="date">2025-03-30<br>★★★★☆
+								<td class="date"><%=reviewDto.getCreated_at()%><br><%=rating%>
 									<div class="review-actions">
 										<a href="#" class="edit">수정</a> 
-										<a href="#" class="delete disabled">삭제</a>
+										<a href="#" class="delete disabled" onclick="openDeleteModal2(event, '<%=reviewDto.getR_id()%>')">삭제</a>
 									</div>
 								</td>
 							</tr>
-							
+							<%
+							}else{ 
+							%>
+							<tr>
+								<td class="pdInfo">
+									<div class="product-box">
+										<div class="product-info">
+											<strong>ARCH LOGO VARSITY JACKET</strong>
+											<br> NAVY
+											<br><%=reviewDto.getR_content()%>
+										</div>
+									</div>
+								</td>
+								<td class="date"><%=reviewDto.getCreated_at()%><br><%=rating%>
+									<div class="review-actions">
+										<a href="#" class="edit">수정</a> 
+										<a href="#" class="delete disabled" onclick="openDeleteModal2(event, '<%=reviewDto.getR_id()%>')">삭제</a>
+									</div>
+								</td>
+							</tr>
+						<%
+								}
+							}
+						} 
+						%>
 
 						</tbody>
 					</table>
@@ -144,7 +185,7 @@
 										</div>
 									</div>
 								</td>
-								<td class="date"><%=qnaDto.getCreated_at()%><br><%=qnaDto.getI_status()%>
+								<td class="date"><%=qnaDto.getCreated_at()%><br><label style="<%= qnaDto.getI_status().equals("답변완료") ? "color: green; font-weight: bold;" : "" %>"><%=qnaDto.getI_status()%></label>
 									<div class="review-actions">
 										<a href="#" class="edit" onclick="<%=onclick%>">수정</a> 
 										<a href="#" class="delete disabled" onclick="openDeleteModal(event, '<%=qnaDto.getI_id()%>')">삭제</a>
@@ -167,7 +208,7 @@
 										</div>
 									</div>
 								</td>
-								<td class="date"><%=qnaDto.getCreated_at()%><br><%=qnaDto.getI_status()%>
+								<td class="date"><%=qnaDto.getCreated_at()%><br><label style="<%= qnaDto.getI_status().equals("답변완료") ? "color: green; font-weight: bold;" : "" %>"><%=qnaDto.getI_status()%></label>
 									<div class="review-actions">
 										<a href="#" class="edit" onclick="<%=onclick%>">수정</a> 
 										<a href="#" class="delete disabled" onclick="openDeleteModal(event, '<%=qnaDto.getI_id()%>')">삭제</a>
@@ -193,7 +234,7 @@
 										</div>
 									</div>
 								</td>
-								<td class="date"><%=qnaDto.getCreated_at()%><br><%=qnaDto.getI_status()%>
+								<td class="date"><%=qnaDto.getCreated_at()%><br><label style="<%= qnaDto.getI_status().equals("답변완료") ? "color: green; font-weight: bold;" : "" %>"><%=qnaDto.getI_status()%></label>
 									<div class="review-actions">
 										<a href="#" class="edit" onclick="<%=onclick%>">수정</a> 
 										<a href="#" class="delete disabled" onclick="openDeleteModal(event, '<%=qnaDto.getI_id()%>')">삭제</a>
@@ -215,7 +256,7 @@
 										</div>
 									</div>
 								</td>
-								<td class="date"><%=qnaDto.getCreated_at()%><br><%=qnaDto.getI_status()%>
+								<td class="date"><%=qnaDto.getCreated_at()%><br><label style="<%= qnaDto.getI_status().equals("답변완료") ? "color: green; font-weight: bold;" : "" %>"><%=qnaDto.getI_status()%></label>
 									<div class="review-actions">
 										<a href="#" class="edit" onclick="<%=onclick%>">수정</a> 
 										<a href="#" class="delete disabled" onclick="openDeleteModal(event, '<%=qnaDto.getI_id()%>')">삭제</a>
@@ -261,12 +302,15 @@
 	  <div class="modal-content">
 	    <p>정말 삭제하시겠습니까?</p>
 	    <div class="modal-buttons">
-	      <button class="modalBtn1" onclick="closeModal()">취소</button>
+	      <button class="modalBtn1" id="modalBtn1" onclick="closeModal()">취소</button>
 	      <button id="deleteQna" class="modalBtn2" onclick="deleteQna()">삭제</button>
 	      <!-- <a id="confirmDelete" href="#">삭제</a> -->
 	    </div>
 	  </div>
 	</div>
+	
+	
+	
 	
 	<form action="qnaDetail.jsp" method="post" id="goDetail">
 		<input type="hidden" id="hidden_id" name="i_id">
@@ -318,6 +362,13 @@ function openDeleteModal(event, i_id) {
   document.getElementById("hidden_id").value = i_id;
 }
 
+function openDeleteModal2(event, r_id){
+	  event.preventDefault(); // a 태그 기본 동작 막기
+	  document.getElementById("deleteModal").style.display = "flex";
+	  document.getElementById("deleteQna").onclick = deleteReview;
+	  document.getElementById("hidden_id").value = r_id;
+}
+
 function closeModal() {
   document.getElementById("deleteModal").style.display = "none";
 }
@@ -326,6 +377,21 @@ function deleteQna(){
 	const i_id = document.getElementById("hidden_id");
 	
 	 fetch("deleteQna.jsp?i_id=" + encodeURIComponent(i_id.value))
+	    .then(res => res.json())
+	    .then(data => {
+	      if (data.result === "success") {
+	        alert("삭제되었습니다.");
+	        location.reload();
+	      } else {
+	        alert("삭제에 실패하였습니다.");
+	      }
+	    });
+}
+
+function deleteReview(){
+	const r_id = document.getElementById("hidden_id");
+	
+	 fetch("deleteReview.jsp?r_id=" + encodeURIComponent(r_id.value))
 	    .then(res => res.json())
 	    .then(data => {
 	      if (data.result === "success") {

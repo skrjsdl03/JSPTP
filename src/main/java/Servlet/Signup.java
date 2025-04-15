@@ -71,6 +71,8 @@ public class Signup extends HttpServlet {
 		String day = request.getParameter("day");
 		if(month.length()==1)
 			month = "0" + month;
+		if(day.length() == 1)
+			day = "0" + day;
 		String birth = year + "-" + month + "-" + day;
 		String phone1 = request.getParameter("phone1");
 		String phone2 = request.getParameter("phone2");

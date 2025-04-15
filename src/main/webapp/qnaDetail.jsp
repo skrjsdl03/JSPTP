@@ -79,13 +79,13 @@
 					<tr class="normal">
 						<td class="title"><%=qna.getI_title()%> &#128274;</td>
 						<td class="date"><%=qna.getCreated_at()%></td>
-						<td class="views"><%=qna.getUser_id()%></td>
+						<td class="views"><%=qna.getUser_id().substring(0, 4) + "*****"%></td>
 					</tr>
 				<%}else{ %>
 					<tr class="normal">
 						<td class="title"><%=qna.getI_title()%></td>
 						<td class="date"><%=qna.getCreated_at()%></td>
-						<td class="views"><%=qna.getUser_id()%></td>
+						<td class="views"><%=qna.getUser_id().substring(0, 4) + "*****"%></td>
 					</tr>
 				<%	} %>
 				<%} %>

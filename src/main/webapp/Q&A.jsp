@@ -84,7 +84,7 @@
 						  <%=qna.getI_status()%>
 						</td>
 						<td class="date"><%=qna.getCreated_at()%></td>
-						<td class="type"><%=qna.getUser_id()%></td>
+						<td class="type"><%=qna.getUser_id().substring(0, 4) + "*****"%></td>
 					</tr>
 				<%if(qnaReply != null){ %>		<!-- 댓글이 있다면 -->
 					<tr style="background-color: #F0F0F0;" <%=onclickReply%>>
@@ -101,7 +101,7 @@
 						  <%=qna.getI_status()%>
 						</td>
 						<td class="date"><%=qna.getCreated_at()%></td>
-						<td class="type"><%=qna.getUser_id()%></td>
+						<td class="type"><%=qna.getUser_id().substring(0, 4) + "*****"%></td>
 					</tr>
 				<%if(qnaReply != null){ %>		<!-- 댓글이 있다면 -->
 					<tr style="background-color: #F0F0F0;">
