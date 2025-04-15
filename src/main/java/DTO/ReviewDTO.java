@@ -108,6 +108,11 @@ public class ReviewDTO {
 	public void setR_isHidden(String r_isHidden) {
 		this.r_isHidden = r_isHidden;
 	}
+
+	
+	
+
+
 	
 	
 }

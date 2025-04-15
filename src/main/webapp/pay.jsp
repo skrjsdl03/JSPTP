@@ -5,28 +5,18 @@
   <meta charset="UTF-8">
   <title>주문서 작성 | everyWEAR</title>
   <link rel="icon" type="image/png" href="images/fav-icon.png">
- 
   <link rel="stylesheet" href="css/pay.css">
 </head>
 <body>
-  <!-- signup 상단과 동일한 구성 -->
-  <div class="back-btn-wrap">
-    <button class="menu-icon">&#9776;</button>
-  </div>
 
-  <div class="logo-wrap">
-    <img src="images/logo-black.png" alt="everyWEAR 로고" class="logo-img">
-  </div>
-
-  <div class="nav-links">
-    <a href="#">LOGOUT</a>
-    <a href="#">CART</a>
-  </div>
+	<%@ include file="includes/header.jsp"%>
+	
+		<section class="content2">
+		<h3>주문서 작성</h3>
+	</section>
 
   <!-- 본문 시작 -->
   <div class="order-container">
-    <h2 class="order-title">주문서 작성</h2>
-
     <!-- 주문상품 -->
     <section class="product-section">
       <p class="section-title">주문상품</p>

@@ -208,6 +208,54 @@ h3 {
 	color: #ccc; /* 회색 */
 }
 
+.QnABox{
+	cursor: pointer;
+}
+
+/* 삭제 모달 */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.modal-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.modal-buttons button {
+  padding: 8px 16px;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modalBtn1 {
+  background-color: #999;
+}
+
+.modalBtn2 {
+	  background-color: #f44336;
+}
+
+
 /* .review-actions .delete:hover {
 	color: #ccc; hover 시에도 안 바뀜
 } */

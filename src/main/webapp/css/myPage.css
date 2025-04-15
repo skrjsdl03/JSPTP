@@ -8,7 +8,7 @@ body {
 	padding: 0 30px;
 }
 
-h3 {
+h2 {
 	text-align: center;
 	font-size: 20px;
 	margin-top: -30px;
@@ -102,11 +102,15 @@ h3 {
 	margin: 58px auto 0 auto;
 }
 
-form {
+.edit-content h3{
+	margin: 0px;
+}
+
+.form {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-	width: 650px;
+	width: 500px;
 	margin: -40px auto 0 auto;
 }
 
@@ -117,19 +121,180 @@ form {
 	display: block;
 }
 
-input[type="text"], input[type="email"], input[type="number"], input[type="password"],
-	/* 비밀번호 필드 추가 */ select {
+.id-box {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  padding: 8px 0;
+}
+
+.input-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.id-box input[type="text"] {
+  border: none;
+  padding: 0;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.3s ease;
+  background: transparent;
+}
+
+.phone-group input[type="text"] {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 8px 0;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.3s ease;
+  text-align: center;
+}
+
+.name-group{
+	display: flex;
+}
+
+.name label{
+	    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 6px;
+    display: block;
+	
+}
+
+.name-group input[type="text"]{
+	  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 8px 0;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.newPwd-group input[type="password"]{
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 8px 0; 
+  width: 100%;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+/* 포커스 시 밑줄 색상 변경 */
+.newPwd-group input[type="password"]:focus {
+  border-bottom: 1px solid #000; /* 원하는 색상으로 바꾸세요 */
+}
+
+.newPwd-group label {
+	font-weight: bold;
+	font-size: 14px;
+	margin-bottom: 6px;
+	display: block;
+}
+
+.newPwd-group{
+	margin-bottom: 10px;
+}
+
+.button-group{
+    display: flex;
+  justify-content: center; /* 버튼 중앙 정렬 */
+  gap: 10px; /* 버튼 간격 */
+  margin-top: 15px;
+}
+
+.button-group button{
+	  padding: 8px 16px;
+  width: 100px;
+    border-radius: 8px;
+  cursor: pointer;   
+}
+
+.button-group .btn1{
+	  border: 1px solid #d4d4d4;
+  background-color: #fff;
+}
+
+.button-group .btn2{
+	  border: 1px solid #d4d4d4;
+  background-color: #d4d4d4;
+  color: #fff;
+}
+
+.authBtn{
+   padding: 10px 12px;
+   font-size: 14px;
+   background-color: black;
+   color: white;
+   border-radius: 8px;
+   border: none;
+   cursor: pointer;
+   white-space: nowrap;
+   width: 100%;
+   text-align: center;
+   margin-top: 10px;
+}
+
+.emailBtn{
+   padding: 10px 12px;
+   font-size: 14px;
+   background-color: black;
+   color: white;
+   border-radius: 8px;
+   border: none;
+   cursor: pointer;
+   white-space: nowrap;
+   width: 100%;
+   text-align: center;
+}
+
+.genderBtn{
+   padding: 0px 12px;
+   font-size: 14px;
+    background-color: white;
+    color: black;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+   cursor: pointer;
+   white-space: nowrap;
+   width: 60px;
+    height: 34px;
+    margin-top: 20px;
+    margin-left: 35px;
+   text-align: center;
+}
+
+.birthBtn{
+   padding: 0px 12px;
+   font-size: 14px;
+    background-color: white;
+    color: black;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+   cursor: pointer;
+   white-space: nowrap;
+   width: 60px;
+    height: 34px;
+    margin-left: 38px;
+   text-align: center;
+}
+
+/* input[type="text"], input[type="email"], input[type="number"], input[type="password"],
+	비밀번호 필드 추가 select {
 	padding: 10px;
 	font-size: 14px;
 	border-radius: 8px;
-	border: 1px solid #ccc;
+	border: 0px;
 	box-sizing: border-box;
 	width: 100%;
 	color: #000;
 }
 
 input[type="text"], input[type="number"], select {
-	color: #000; /* 이름 입력 필드 텍스트 검정색 */
+	color: #000; 이름 입력 필드 텍스트 검정색
 }
 
 input::placeholder {
@@ -139,9 +304,9 @@ input::placeholder {
 
 input:focus::placeholder {
 	opacity: 0;
-}
+} */
 
-.id-box.with-icon {
+/* .id-box.with-icon {
 	display: flex;
 	align-items: center;
 	background-color: #f7fbff;
@@ -157,7 +322,7 @@ input:focus::placeholder {
 	height: 20px;
 	margin-right: 10px;
 	border-radius: 50%;
-}
+} */
 
 /* phone, height/weight, birth groups */
 .phone-group, .hw-group, .birth-group {
@@ -166,15 +331,30 @@ input:focus::placeholder {
 	align-items: center;
 }
 
+.pwd-group{
+		display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.pwd-group input[type="text"] {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 8px 0;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
 /* ID와 이메일 readonly 박스 */
-.id-box, .email-box {
+/* .id-box, .email-box {
 	background-color: #f7fbff;
 	padding: 10px 12px;
 	border-radius: 8px;
 	border: 1px solid #ccc;
 	font-size: 14px;
 	color: #BBBBBB;
-}
+} */
 
 .verify-group {
 	display: flex;
@@ -192,15 +372,15 @@ input:focus::placeholder {
 
 /* 변경 버튼 */
 .btn-change {
-	padding: 10px 12px;
+	padding: 7px 12px;
 	font-size: 14px;
-	background-color: black;
-	color: white;
+	background-color: white;
+	color: black;
 	border-radius: 8px;
-	border: none;
+	border: 1px solid #ccc;
 	cursor: pointer;
 	white-space: nowrap; /* ✅ 줄 바꿈 방지 */
-	min-width: 64px; /* ✅ 버튼 너비 확보 (원하는 만큼 조절 가능) */
+	min-width: 60px; /* ✅ 버튼 너비 확보 (원하는 만큼 조절 가능) */
 	text-align: center;
 }
 
@@ -263,3 +443,194 @@ input:focus::placeholder {
    margin-top: 2px;
   margin-bottom: 5px;
 }
+
+.authBox input{
+	border: 1px solid #ccc;
+	border-radius: 6px;
+  padding: 8px 0;
+  width: 80%;
+    margin-top: 10px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  text-align: center;
+  display: inline-block;
+  margin-left: 50px;
+}
+
+.auth-btns {
+  display: flex;
+  flex-direction: row;  /* 👉 가로로 정렬 */
+  justify-content: center;  /* 가운데 정렬 */
+  gap: 10px;  /* 버튼 사이 간격 */
+  margin-top: 10px;
+}
+
+.auth-btns button {
+  padding: 8px 16px;
+    width: 100px;
+    border-radius: 8px;
+    cursor: pointer;
+} 
+
+.resend-btn{
+	    border: 1px solid #d4d4d4;
+    background-color: #fff;
+}
+
+.confirm-btn {
+    border: 1px solid #d4d4d4;
+    background-color: #d4d4d4;
+    color: #fff;
+}
+
+.email2{
+	display: flex;
+}
+
+.email label{
+	    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 6px;
+    display: block;
+	
+}
+
+.email input[type="email"]{
+	  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 8px 0;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.email-input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  margin-top: -10px;
+}
+
+.email-input-group input,
+.email-input-group select {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  height: 42px;
+}
+
+.email-input-group .at-symbol {
+  font-size: 14px;
+  color: #444;
+  margin-top: 2px;
+}
+
+.gender{
+	display: flex;
+}
+
+.gender label{
+	    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 6px;
+    display: block;
+	
+}
+
+.gender input[type="text"]{
+	  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 8px 0;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.birth2{
+	display: flex;
+}
+
+.birth label{
+	    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 6px;
+    display: block;
+	
+}
+
+.birth2 input[type="text"]{
+	  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 8px 0;
+  width: 120px;
+  margin-left: 10px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  text-align: center;
+}
+
+.modal {
+  display: none; 
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  justify-content: center; align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+}
+
+.modal-content label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.modal-content select,
+.modal-content textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  box-sizing: border-box;
+  resize: none;
+}
+
+.modal-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.modal-buttons button {
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 100px;
+}
+
+.cancel {
+  background-color: #ccc;
+}
+
+.confirm {
+  background-color: #ff4d4d;
+  color: #fff;
+}
+

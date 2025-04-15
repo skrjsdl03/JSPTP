@@ -51,6 +51,16 @@
 					</div>
 					<div class="wishlist-heart" onclick="removeWishlistItem(this)">❤️</div>
 				</div>
+				
+				<!-- 상품 3 -->
+				<div class="wishlist-item">
+					<img src="images/fav-icon.png" alt="백팩">
+					<div class="wishlist-info">
+						<p class="wishlist-name">Arc'teryx Konseal 15 Backpack Black</p>
+						<p class="wishlist-price">140,000 원</p>
+					</div>
+					<div class="wishlist-heart" onclick="removeWishlistItem(this)">❤️</div>
+				</div>
 
 				<!-- 상품 2 (품절) -->
 				<div class="wishlist-item soldout">
@@ -61,17 +71,7 @@
 						<p class="wishlist-price">140,000 원</p>
 					</div>
 					<div class="wishlist-heart" onclick="removeWishlistItem(this)">❤️</div>
-				</div>
 
-				<!-- 상품 3 -->
-				<div class="wishlist-item">
-					<img src="images/fav-icon.png" alt="백팩">
-					<div class="wishlist-info">
-						<p class="wishlist-name">Arc'teryx Konseal 15 Backpack Black</p>
-						<p class="wishlist-price">140,000 원</p>
-					</div>
-					<div class="wishlist-heart" onclick="removeWishlistItem(this)">❤️</div>
-				</div>
 			</div>
 		</section>
 	</div>

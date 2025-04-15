@@ -30,7 +30,7 @@ public class QnaDAO {
 		private final SimpleDateFormat SDF_DATE = new SimpleDateFormat("yyyy-MM-dd");
 		
 		//공통 Q&A 등록
-		public void insertQna(String id, HttpServletRequest req) {
+		public void insertQna(String id, String type, HttpServletRequest req) {
 			Connection con = null;
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
@@ -55,12 +55,13 @@ public class QnaDAO {
 				}
 				
 				con = pool.getConnection();
-				sql = "insert into inquiry (user_id, i_title, i_content,  created_at, i_isPrivate) values (?, ?, ?, now(), ?)";
+				sql = "insert into inquiry (user_id, user_type, i_title, i_content,  created_at, i_isPrivate) values (?, ?, ?, ?, now(), ?)";
 				pstmt = con.prepareStatement(sql);
 				pstmt.setString(1, id);
-				pstmt.setString(2, multi.getParameter("title"));
-				pstmt.setString(3, multi.getParameter("content"));
-				pstmt.setString(4, i_isPrivate);
+				pstmt.setString(2, type);
+				pstmt.setString(3, multi.getParameter("title"));
+				pstmt.setString(4, multi.getParameter("content"));
+				pstmt.setString(5, i_isPrivate);
 				pstmt.executeUpdate();
 				pstmt.close();
 				
@@ -104,8 +105,8 @@ public class QnaDAO {
 				rs = pstmt.executeQuery();
 				while(rs.next()) {
 					qlist.add(new InquiryDTO(rs.getInt(1), rs.getString(2), 
-							rs.getInt(3), rs.getInt(4), rs.getString(5),
-							rs.getString(6), SDF_DATE.format(rs.getDate(7)), rs.getString(8), rs.getString(9)));
+							rs.getString(3), rs.getInt(4), rs.getInt(5),
+							rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8)), rs.getString(9), rs.getString(10)));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -130,8 +131,8 @@ public class QnaDAO {
 				rs = pstmt.executeQuery();
 				if(rs.next()) {
 					qna = new InquiryDTO(rs.getInt(1), rs.getString(2), 
-							rs.getInt(3), rs.getInt(4), rs.getString(5), 
-							rs.getString(6), SDF_DATE.format(rs.getDate(7)), rs.getString(8), rs.getString(9));
+							rs.getString(3), rs.getInt(4), rs.getInt(5), 
+							rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8)), rs.getString(9), rs.getString(10));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -292,11 +293,12 @@ public class QnaDAO {
 
 		
 		//한 Q&A 삭제
-		public void deleteQna(int i_id) {
+		public boolean deleteQna(int i_id) {
 			Connection con = null;
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
 			String sql = null;
+			boolean flag = false;
 			String ii_url = "";
 			try {
 				con = pool.getConnection();
@@ -316,12 +318,42 @@ public class QnaDAO {
 				sql = "delete from inquiry where i_id = ?";
 				pstmt = con.prepareStatement(sql);
 				pstmt.setInt(1, i_id);
-				pstmt.executeUpdate();
+				if(pstmt.executeUpdate() == 1)
+					flag = true;
 
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
 				pool.freeConnection(con, pstmt, rs);
 			}
+			return true;
 		}
+		
+		//한사람이 쓴 모든 Q&A 출력
+		public Vector<InquiryDTO> showUserQna(String id, String type){
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			String sql = null;
+			Vector<InquiryDTO> qlist = new Vector<InquiryDTO>();
+			try {
+				con = pool.getConnection();
+				sql = "select * from inquiry where user_id = ? and user_type = ? order by created_at desc";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, id);
+				pstmt.setString(2, type);
+				rs = pstmt.executeQuery();
+				while(rs.next()) {
+					qlist.add(new InquiryDTO(rs.getInt(1), rs.getString(2), 
+							rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getString(6), 
+							rs.getString(7), SDF_DATE.format(rs.getDate(8)), rs.getString(9), rs.getString(10)));
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				pool.freeConnection(con, pstmt, rs);
+			}
+			return qlist;
+		}
+		
 }

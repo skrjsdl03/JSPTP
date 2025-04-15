@@ -245,6 +245,7 @@ CREATE TABLE `notice` (
 CREATE TABLE `inquiry` (
   `i_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `user_id` varchar(30) NOT NULL,
+  `user_type` varchar(10) NOT NULL,
   `p_id` int,
   `o_id` int,
   `i_title` varchar(100) NOT NULL,
@@ -353,6 +354,8 @@ ALTER TABLE `review_report` ADD FOREIGN KEY (`admin_id`) REFERENCES `admin` (`ad
 ALTER TABLE `notice` ADD FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`);
 
 ALTER TABLE `inquiry` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+ALTER TABLE `inquiry` ADD FOREIGN KEY (`user_type`) REFERENCES `user` (`user_type`);
 
 ALTER TABLE `inquiry` ADD FOREIGN KEY (`p_id`) REFERENCES `product` (`p_id`);
 

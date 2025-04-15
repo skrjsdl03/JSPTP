@@ -3,6 +3,7 @@ package DTO;
 public class InquiryDTO {
 	private int i_id;
 	private String user_id;
+	private String user_type;
 	private int p_id;
 	private int o_id;
 	private String i_title;
@@ -13,11 +14,12 @@ public class InquiryDTO {
 	
 	public InquiryDTO() {}
 
-	public InquiryDTO(int i_id, String user_id, int p_id, int o_id, String i_title, String i_content,
+	public InquiryDTO(int i_id, String user_id, String user_type, int p_id, int o_id, String i_title, String i_content,
 			String created_at, String i_isPrivate, String i_status) {
 		super();
 		this.i_id = i_id;
 		this.user_id = user_id;
+		this.user_type = user_type;
 		this.p_id = p_id;
 		this.o_id = o_id;
 		this.i_title = i_title;
@@ -41,6 +43,14 @@ public class InquiryDTO {
 
 	public void setUser_id(String user_id) {
 		this.user_id = user_id;
+	}
+
+	public String getUser_type() {
+		return user_type;
+	}
+
+	public void setUser_type(String user_type) {
+		this.user_type = user_type;
 	}
 
 	public int getP_id() {
@@ -98,6 +108,8 @@ public class InquiryDTO {
 	public void setI_status(String i_status) {
 		this.i_status = i_status;
 	}
+
+	
 	
 	
 }
