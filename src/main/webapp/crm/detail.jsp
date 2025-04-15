@@ -15,7 +15,7 @@ String birthM = birthParts.length > 1 ? birthParts[1] : "";
 String birthD = birthParts.length > 2 ? birthParts[2] : "";
 %>
 <div class = "crm-section">
-  <h3>👤 회원 정보 수정</h3>
+  <h2>👤 회원 정보 수정</h2>
 <div class="detail-scroll-area">
   <form action="updateUserInfo.jsp" method="post">
     <input type="hidden" name="user_id" value="<%=user_id%>">

@@ -8,6 +8,27 @@ String user_type = request.getParameter("user_type");
 
 UserDAO dao = new UserDAO();
 CRMUserInfoDTO crm = dao.getCRMUserInfo(user_id, user_type);
+
+String rank = crm.getUser().getUser_rank();
+String rankClass = "";
+
+switch (rank) {
+	case "그린" :
+		rankClass = "rank-green";
+		break;
+	case "오렌지" :
+		rankClass = "rank-orange";
+		break;
+	case "퍼플" :
+		rankClass = "rank-purple";
+		break;
+	case "에메랄드" :
+		rankClass = "rank-emerald";
+		break;
+	case "블랙" :
+		rankClass = "rank-black";
+		break;
+}
 %>
 <!DOCTYPE html>
 <html>
@@ -221,6 +242,16 @@ function openAddPopup() {
   window.open(url, "deliveryAdd", option);
 }
 
+// 회원 게시글 토글 탭
+function toggleTab(tabName) {
+	  document.getElementById("reviewTab").style.display = (tabName === "review") ? "block" : "none";
+	  document.getElementById("inquiryTab").style.display = (tabName === "inquiry") ? "block" : "none";
+
+	  const buttons = document.querySelectorAll(".tab-buttons button");
+	  buttons.forEach(btn => btn.classList.remove("active"));
+	  if (tabName === "review") buttons[0].classList.add("active");
+	  else buttons[1].classList.add("active");
+	}
 
 </script>
 </head>
@@ -240,15 +271,23 @@ function openAddPopup() {
 					<strong><%=crm.getUser().getUser_name()%></strong> 님
 				</div>
 				<div>
-					등급 :
-					<%=crm.getUser().getUser_rank()%></div>
+					등급 : <span class="user-rank <%=rankClass%>"><%=rank%></span>
+				</div>
+				<div>
+					포인트 :
+					<%=crm.getUser().getUser_point()%>
+					P
+				</div>
 				<div>
 					최종 방문일 :
-					<%=crm.getLastLoginDate() != null ? crm.getLastLoginDate() : "-"%></div>
+					<%=crm.getLastLoginDate() != null ? crm.getLastLoginDate() : "-"%>
+				</div>
 				<div>
 					가입일 :
-					<%=crm.getUser().getCreated_at()%></div>
+					<%=crm.getUser().getCreated_at()%>
+				</div>
 			</div>
+
 
 			<button onclick="loadTab('basic')">CRM 홈</button>
 			<button onclick="loadTab('detail')">회원 정보 수정</button>

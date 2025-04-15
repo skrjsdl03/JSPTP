@@ -10,10 +10,13 @@ import java.util.List;
 import java.util.Vector;
 
 import DTO.CRMUserInfoDTO;
+import DTO.InquiryDTO;
+import DTO.InquiryImgDTO;
 import DTO.UserDTO;
 import DTO.UserAddrDTO;
 import DTO.OrdersDTO;
 import DTO.ReviewDTO;
+import DTO.ReviewImgDTO;
 import DTO.UserAddrDTO;
 import DTO.UserDTO;
 
@@ -1456,6 +1459,77 @@ public class UserDAO {
 			pool.freeConnection(con, pstmt);
 		}
 	}
+	
+
+
+
+	// 특정 회원 문의 가져오기
+	public List<InquiryDTO> getInquiriesByUser(String id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<InquiryDTO> list = new ArrayList<>();
+
+		try {
+			con = pool.getConnection();
+			String sql = "SELECT * FROM inquiry WHERE user_id = ? ORDER BY created_at DESC";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				InquiryDTO dto = new InquiryDTO();
+				dto.setI_id(rs.getInt("i_id"));
+				dto.setUser_id(rs.getString("user_id"));
+				dto.setP_id(rs.getInt("p_id"));
+				dto.setO_id(rs.getInt("o_id"));
+				dto.setI_title(rs.getString("i_title"));
+				dto.setI_content(rs.getString("i_content"));
+				dto.setCreated_at(rs.getString("created_at"));
+				dto.setI_isPrivate(rs.getString("i_isPrivate"));
+				dto.setI_status(rs.getString("i_status"));
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+
+		return list;
+	}
+	
+	// 문의 이미지 조회
+	public List<InquiryImgDTO> getInquiryImages(int i_id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<InquiryImgDTO> list = new ArrayList<>();
+
+		try {
+			con = pool.getConnection();
+			String sql = "SELECT * FROM inquiry_image WHERE i_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, i_id);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				InquiryImgDTO img = new InquiryImgDTO();
+				img.setIi_id(rs.getInt("ii_id"));
+				img.setI_id(rs.getInt("i_id"));
+				img.setIi_url(rs.getString("ii_url"));
+				img.setUploaded_at(rs.getString("uploaded_at"));
+				list.add(img);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+
+		return list;
+	}
+
 
 
 }
