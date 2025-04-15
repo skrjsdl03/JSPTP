@@ -1,3 +1,4 @@
+<%@page import="DTO.ReviewImgDTO"%>
 <%@page import="DTO.ReviewDTO"%>
 <%@page import="DTO.InquiryReplyDTO"%>
 <%@page import="DTO.InquiryImgDTO"%>
@@ -87,25 +88,64 @@
 					<%-- <jsp:include page="reviewList.jsp" /> --%>
 					<table class="notice-table" id="notice-table">
 						<tbody>
+						<%if(rlist != null){ 
+								for(int i = 0; i<rlist.size(); i++){
+									ReviewDTO reviewDto = rlist.get(i);
+									String rating = "";
+									for(int j = 0; j<reviewDto.getR_rating(); j++){
+										rating += "★";
+										if(j == reviewDto.getR_rating() -1){
+											for(int k = 0; k< (5-reviewDto.getR_rating()); k++)
+												rating += "☆";
+										}
+									}
+									Vector<ReviewImgDTO> rilist = reDao.showUserReviewImg(reviewDto.getR_id());
+									if(rilist != null){
+										ReviewImgDTO reImgDto = rilist.get(0);
+						%>
 							<tr>
 								<td class="pdInfo">
 									<div class="product-box">
-										<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET" class="product-img">
+										<img src="review_images/<%=reImgDto.getRi_url()%>" alt="ARCH LOGO VARSITY JACKET" class="product-img">
 										<div class="product-info">
 											<strong>ARCH LOGO VARSITY JACKET</strong>
 											<br> NAVY
-											<br>마음에 들어요
+											<br><%=reviewDto.getR_content()%>
 										</div>
 									</div>
 								</td>
-								<td class="date">2025-03-30<br>★★★★☆
+								<td class="date"><%=reviewDto.getCreated_at()%><br><%=rating%>
 									<div class="review-actions">
 										<a href="#" class="edit">수정</a> 
 										<a href="#" class="delete disabled">삭제</a>
 									</div>
 								</td>
 							</tr>
-							
+							<%
+							}else{ 
+							%>
+							<tr>
+								<td class="pdInfo">
+									<div class="product-box">
+										<div class="product-info">
+											<strong>ARCH LOGO VARSITY JACKET</strong>
+											<br> NAVY
+											<br><%=reviewDto.getR_content()%>
+										</div>
+									</div>
+								</td>
+								<td class="date"><%=reviewDto.getCreated_at()%><br><%=rating%>
+									<div class="review-actions">
+										<a href="#" class="edit">수정</a> 
+										<a href="#" class="delete disabled">삭제</a>
+									</div>
+								</td>
+							</tr>
+						<%
+								}
+							}
+						} 
+						%>
 
 						</tbody>
 					</table>

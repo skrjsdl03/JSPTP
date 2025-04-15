@@ -71,21 +71,105 @@
 					<label for="content">내용 *</label>
 					<textarea name="content" id="content" rows="6"
 						placeholder="내용을 입력해주세요." required></textarea>
+						
+						<label>사진 첨부</label>
 
-					<label>사진 첨부</label>
+<!-- 클릭용 박스 -->
+<label for="file-upload" class="photo-box" id="photo-box">＋</label>
+<input type="file" id="file-upload" name="files" accept="image/*" multiple style="display: none;">
 
-					<!-- 클릭용 박스 -->
+<!-- 파일명 표시 -->
+<!-- <div id="file-names" style="font-size: 14px; margin-top: 8px; color: #444;"></div> -->
+
+<!-- 미리보기 + 삭제버튼 -->
+<!-- <div class="preview-wrapper" id="preview-wrapper" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;"></div> -->
+<div class="preview-wrapper" id="preview-wrapper" 
+     style="display: grid; grid-template-columns: repeat(4, 100px); gap: 10px; margin-top: 10px;">
+</div>
+
+
+<script>
+	const fileInput = document.getElementById('file-upload');
+	const previewWrapper = document.getElementById('preview-wrapper');
+	const photoBox = document.getElementById('photo-box');
+/* 	const fileNames = document.getElementById('file-names'); */
+
+	fileInput.addEventListener('change', function () {
+		const files = Array.from(this.files);
+		previewWrapper.innerHTML = '';
+/* 		fileNames.innerHTML = ''; */
+
+		if (files.length > 0) {
+			photoBox.style.display = 'none';
+
+			files.forEach((file, index) => {
+/* 				// 파일 이름 출력
+				const fileNameElem = document.createElement('p');
+				fileNameElem.innerText = file.name;
+				fileNames.appendChild(fileNameElem); */
+
+				// 이미지 미리보기
+				const reader = new FileReader();
+				reader.onload = function (e) {
+					const previewBox = document.createElement('div');
+					previewBox.style.position = 'relative';
+					previewBox.style.width = '100px';
+					previewBox.style.height = '100px';
+
+					const img = document.createElement('img');
+					img.src = e.target.result;
+					img.style.width = '100%';
+					img.style.height = '100%';
+					img.style.objectFit = 'cover';
+					img.style.borderRadius = '6px';
+
+					const deleteBtn = document.createElement('button');
+					deleteBtn.innerText = '✕';
+					deleteBtn.style.position = 'absolute';
+					deleteBtn.style.top = '-5px';
+					deleteBtn.style.right = '-5px';
+					deleteBtn.style.background = 'red';
+					deleteBtn.style.color = '#fff';
+					deleteBtn.style.border = 'none';
+					deleteBtn.style.borderRadius = '50%';
+					deleteBtn.style.width = '20px';
+					deleteBtn.style.height = '20px';
+					deleteBtn.style.cursor = 'pointer';
+					deleteBtn.setAttribute('data-index', index);
+
+					deleteBtn.addEventListener('click', () => {
+						files.splice(index, 1);
+						// 재할당해서 다시 트리거
+						const dataTransfer = new DataTransfer();
+						files.forEach(f => dataTransfer.items.add(f));
+						fileInput.files = dataTransfer.files;
+						fileInput.dispatchEvent(new Event('change'));
+					});
+
+					previewBox.appendChild(img);
+					previewBox.appendChild(deleteBtn);
+					previewWrapper.appendChild(previewBox);
+				};
+				reader.readAsDataURL(file);
+			});
+		} else {
+			photoBox.style.display = 'flex';
+		}
+	});
+</script>
+						
+						
+<!-- 					<label>사진 첨부</label>
+
+					클릭용 박스
 					<label for="file-upload" class="photo-box" id="photo-box">＋</label>
-					<input type="file" id="file-upload" name="file" accept="image/*"
-						style="display: none;">
+					<input type="file" id="file-upload" name="file" accept="image/*" style="display: none;">
 
-					<!-- 파일명 표시 -->
-					<p id="file-name"
-						style="font-size: 14px; margin-top: 8px; color: #444;"></p>
+					파일명 표시
+					<p id="file-name" style="font-size: 14px; margin-top: 8px; color: #444;"></p>
 
-					<!-- 미리보기 + 삭제버튼 -->
-					<div class="preview-wrapper" id="preview-wrapper"
-						style="display: none;">
+					미리보기 + 삭제버튼
+					<div class="preview-wrapper" id="preview-wrapper" style="display: none;">
 						<img id="preview-image" />
 						<button type="button" class="delete-btn" id="delete-btn">✕</button>
 					</div>
@@ -125,7 +209,7 @@
 							previewWrapper.style.display = 'none';
 							photoBox.style.display = 'flex';
 						});
-					</script>
+					</script> -->
 					
 				</form>
 			</div>
