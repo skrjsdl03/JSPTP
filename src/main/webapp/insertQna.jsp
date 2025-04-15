@@ -2,6 +2,7 @@
 <jsp:useBean id="qDao" class="DAO.QnaDAO"/>
 <%
 		String id = (String)session.getAttribute("id");
-		qDao.insertQna(id, request);
+		String type = (String)session.getAttribute("userType");
+		qDao.insertQna(id, type, request);
 		out.print("{\"result\":\"success\"");
 %>

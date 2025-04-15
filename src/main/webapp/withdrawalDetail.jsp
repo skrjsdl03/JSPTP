@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="DAO.UserDAO, DTO.UserDTO"%>
-
 <%
 request.setCharacterEncoding("UTF-8");
 
@@ -32,60 +31,35 @@ if (user_id != null && !user_id.trim().isEmpty()) {
 <head>
 <meta charset="UTF-8">
 <title>탈퇴회원 상세정보</title>
-<style>
-body {
-	font-family: '맑은 고딕', sans-serif;
-	padding: 20px;
-}
-
-h3 {
-	color: #333;
-	margin-bottom: 20px;
-}
-
-ul {
-	list-style: none;
-	padding: 0;
-}
-
-li {
-	margin-bottom: 10px;
-}
-
-.error {
-	color: red;
-	font-weight: bold;
-}
-</style>
+<link rel="stylesheet" href="css/withdrawlDetail.css">
 </head>
 <body>
-	<h3>탈퇴회원 상세정보</h3>
+	<div class="container">
+		<h3>탈퇴회원 상세정보</h3>
 
-	<%
-	if (user == null) {
-	%>
-	<p class="error">❗ 해당 탈퇴회원 정보를 찾을 수 없습니다.</p>
-	<%
-	} else {
-	%>
-	<ul>
-		<li><strong>회원 ID:</strong> <%=user.getUser_id()%></li>
-		<li><strong>이름:</strong> <%=user.getUser_name()%></li>
-		<li><strong>등급:</strong> <%=user.getUser_rank()%></li>
-		<li><strong>가입일:</strong> <%=user.getCreated_at()%></li>
-		<li><strong>탈퇴일:</strong> <%=user.getUser_wd_date()%></li>
-		<li><strong>탈퇴 사유:</strong> <%=user.getUser_wd_reason()%></li>
-		<li><strong>상세 사유:</strong> <%=user.getUser_wd_detail_reason()%></li>
-	</ul>
-	<form method="post" onsubmit="return confirm('정상회원으로 복구시키겠습니까?');">
-		<input type="hidden" name="action" value="restore">
-		<button type="submit"
-			style="padding: 10px 20px; background-color: #1abc9c; color: white; border: none; border-radius: 5px; cursor: pointer;">
-			정상회원으로 전환</button>
-	</form>
-
-	<%
-	}
-	%>
+		<%
+		if (user == null) {
+		%>
+		<p class="error">❗ 해당 탈퇴회원 정보를 찾을 수 없습니다.</p>
+		<%
+		} else {
+		%>
+		<ul class="info-list">
+			<li><strong>회원 ID:</strong> <%=user.getUser_id()%></li>
+			<li><strong>이름:</strong> <%=user.getUser_name()%></li>
+			<li><strong>등급:</strong> <%=user.getUser_rank()%></li>
+			<li><strong>가입일:</strong> <%=user.getCreated_at()%></li>
+			<li><strong>탈퇴일:</strong> <%=user.getUser_wd_date()%></li>
+			<li><strong>탈퇴 사유:</strong> <%=user.getUser_wd_reason()%></li>
+			<li><strong>상세 사유:</strong> <%=user.getUser_wd_detail_reason()%></li>
+		</ul>
+		<form method="post" onsubmit="return confirm('정상회원으로 복구시키겠습니까?');" class="restore-form">
+			<input type="hidden" name="action" value="restore">
+			<button type="submit" class="restore-btn">정상회원으로 전환</button>
+		</form>
+		<%
+		}
+		%>
+	</div>
 </body>
 </html>

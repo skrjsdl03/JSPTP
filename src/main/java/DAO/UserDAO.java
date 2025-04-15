@@ -13,6 +13,7 @@ import DTO.CRMUserInfoDTO;
 import DTO.UserDTO;
 import DTO.UserAddrDTO;
 import DTO.OrdersDTO;
+import DTO.ReviewDTO;
 import DTO.UserAddrDTO;
 import DTO.UserDTO;
 
@@ -990,6 +991,35 @@ public class UserDAO {
 		}
 		return flag;
 	}
+	
+	// 주소id 하나에 대한 주소정보
+	public UserAddrDTO getAddrById(int addr_id) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    String sql;
+	    UserAddrDTO addr = null;
+	    try {
+	        con = pool.getConnection();
+	        sql = "SELECT * FROM user_address WHERE addr_id = ?";
+	        pstmt = con.prepareStatement(sql);
+	        pstmt.setInt(1, addr_id);
+	        rs = pstmt.executeQuery();
+	        if (rs.next()) {
+	            addr = new UserAddrDTO(
+	                rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
+	                rs.getString(5), rs.getString(6), rs.getString(7),
+	                rs.getString(8), rs.getString(9)
+	            );
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        pool.freeConnection(con, pstmt, rs);
+	    }
+	    return addr;
+	}
+
 	
 	//한 유저의 미사용 쿠폰 수 출력
 	public int showOneUserCoupon(String id, String type) {
