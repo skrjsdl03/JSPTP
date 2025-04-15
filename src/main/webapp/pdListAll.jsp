@@ -78,9 +78,17 @@
 			<p class="product-name">I ♥ JDJ</p>
 			<p class="product-price">KRW 88,000</p>
 		</div>
-
 	</section>
 
+	<!-- 상세 패널 -->
+	<div id="product-detail-panel" class="detail-panel hidden">
+		<button class="close-btn" onclick="closeDetail()">X</button>
+		<img id="detail-image" src="images/main-cloth1.png" alt="상품 이미지">
+		<div class="btn-group">
+			<button class="add-to-bag">ADD TO BAG</button>
+			<button class="buy-now">BUY NOW</button>
+		</div>
+	</div>
 
 	<!-- 더 보기 버튼 -->
 	<div class="load-more-wrap">
