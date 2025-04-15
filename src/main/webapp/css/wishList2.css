@@ -127,6 +127,7 @@ h3 {
   border-radius: 8px;
   background-color: #fff;
   transition: background-color 0.3s ease;
+  border-bottom: 1px solid #ccc;
 }
 
 .wishlist-item.soldout {
