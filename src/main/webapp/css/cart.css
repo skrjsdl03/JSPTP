@@ -124,14 +124,47 @@ h3 {
 	gap: 0;
 }
 
+/* 기본 체크박스 숨김 + 커스텀 디자인 */
+input[type="checkbox"] {
+  appearance: none; /* 브라우저 기본 스타일 제거 */
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid #aaa;
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+/* 체크됐을 때 스타일 */
+input[type="checkbox"]:checked {
+  background-color: #000;
+  border-color: #000;
+}
+
+/* 체크 아이콘 */
+input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 4px;
+  height: 8px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
 /* 주문 아이템 구조 */
 .order-row {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	padding: 15px 5px;
-	border-bottom: 1px solid #ddd;
-}
+	border-radius: 8px;
+	background-color: #fff;
+	transition: background-color 0.3s ease;
+	border-bottom: 1px solid #ccc;}
 
 /* 이미지 스타일 */
 .order-row img {
@@ -156,6 +189,25 @@ h3 {
 	color: #666;
 }
 
+.option-button {
+  background-color: #f1f1f1;
+  color: #000;
+  text-decoration: none;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 9px;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-block;
+  transition: background-color 0.3s;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.option-button:hover {
+  background-color: #e3e3e3;
+}
+
 /* 주문 정보 */
 .order-meta {
 	text-align: right;
@@ -166,6 +218,40 @@ h3 {
 	margin-bottom: 4px;
 	color: #666;
 }
+
+.qty-control {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.qty-control button {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: background-color 0.2s;
+}
+
+.qty-control button:hover {
+  background-color: #f2f2f2;
+}
+
+.qty-control input {
+  width: 40px;
+  height: 30px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
 
 /* 상태별 컬러 */
 .order-status.shipping {
@@ -281,11 +367,20 @@ input[readonly] {
 	cursor: pointer;
 }
 
-.btn-delete {
-	color: #ccc;
-	font-size: 13px;
-	text-decoration: none;
-	cursor: pointer;
+.delete-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.delete-text {
+  font-size: 13px;
+  color: #333;
+}
+
+.delete-icon {
+  font-size: 14px;
+  cursor: pointer;
 }
 
 .divider {

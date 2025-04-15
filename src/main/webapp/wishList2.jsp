@@ -49,7 +49,7 @@
 						<p class="wishlist-name">Onitsuka Tiger Tokuten Gray</p>
 						<p class="wishlist-price">199,000 원</p>
 					</div>
-					<div class="wishlist-heart" onclick="removeWishlistItem(this)">❤️</div>
+					<div class="wishlist-heart active" onclick="toggleWishlistHeart(this)">❤️</div>
 				</div>
 				
 				<!-- 상품 3 -->
@@ -59,7 +59,7 @@
 						<p class="wishlist-name">Arc'teryx Konseal 15 Backpack Black</p>
 						<p class="wishlist-price">140,000 원</p>
 					</div>
-					<div class="wishlist-heart" onclick="removeWishlistItem(this)">❤️</div>
+					<div class="wishlist-heart active" onclick="toggleWishlistHeart(this)">❤️</div>
 				</div>
 
 				<!-- 상품 2 (품절) -->
@@ -70,9 +70,29 @@
 							Black</p>
 						<p class="wishlist-price">140,000 원</p>
 					</div>
-					<div class="wishlist-heart" onclick="removeWishlistItem(this)">❤️</div>
-
+					<div class="wishlist-heart active" onclick="toggleWishlistHeart(this)">❤️</div>
 			</div>
 		</section>
 	</div>
 </body>
+<script>
+  function toggleWishlistHeart(el) {
+    const item = el.closest(".wishlist-item");
+    const isSoldOut = item.classList.contains("soldout");
+
+    if (isSoldOut) return; // 품절 상품은 해제 불가하게 막고 싶다면 이 조건 유지
+
+    // 찜 상태 토글
+    const isActive = el.classList.contains("active");
+    if (isActive) {
+      el.classList.remove("active");
+      el.innerText = "🤍"; // 찜 해제 (빈 하트)
+    } else {
+      el.classList.add("active");
+      el.innerText = "❤️"; // 찜 상태 (채운 하트)
+    }
+
+    // TODO: 서버에 찜 상태 변경 요청 (AJAX 호출 등)
+  }
+</script>
+</html>

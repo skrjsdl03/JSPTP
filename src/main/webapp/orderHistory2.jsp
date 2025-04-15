@@ -98,7 +98,7 @@
 								주문번호<br>2025-03-30
 							</p>
 							<p class="order-status done">배송 완료</p>
-							<button class="review-button"><a href="reviewForm.jsp">리뷰 작성</a></button>
+							<button class="review-button" onclick="location.href='reviewForm.jsp'">리뷰작성</button>
 						</div>
 					</div>
 
