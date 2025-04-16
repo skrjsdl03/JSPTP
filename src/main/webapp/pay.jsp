@@ -89,6 +89,7 @@
 	  <button class="tag-btn">학교<span class="delete-icon">×</span></button>
 	  <button class="tag-btn">우리집<span class="delete-icon">×</span></button>
 	</div>
+	</div>
 
 	<!-- 주소 -->
 	<label>주소 *</label>
@@ -157,22 +158,22 @@
 		    <!-- 상품 1 -->
 		    <div class="recommend-item">
 		      <img src="images/main-cloth1.png" alt="추천 상품 1">
-		      <p class="item-name">New Balance 327 Beige</p>
+		      <p class="item-name">WL VARSITY JACKET</p>
 		      <p class="item-price">129,000 원</p>
 		    </div>
 		
 		    <!-- 상품 2 -->
 		    <div class="recommend-item">
 		      <img src="images/main-cloth2.png" alt="추천 상품 2">
-		      <p class="item-name">Nike Heritage Bag</p>
-		      <p class="item-price">49,000 원</p>
+		      <p class="item-name">PPS HAIRY CARDIGANK</p>
+		      <p class="item-price">99,000 원</p>
 		    </div>
 		
 		    <!-- 상품 3 -->
 		    <div class="recommend-item">
 		      <img src="images/main-cloth3.png" alt="추천 상품 3">
-		      <p class="item-name">Converse Chuck 70 High</p>
-		      <p class="item-price">89,000 원</p>
+		      <p class="item-name">S.D LONG SLEEVE TEE</p>
+		      <p class="item-price">49,000 원</p>
 		    </div>
 		
 		  </div>
@@ -200,96 +201,98 @@
 <script src="https://stdpay.inicis.com/stdjs/INIStdPay.js"></script>
 
 <script>
+  // 📌 배송지 별칭 → 주소 자동입력
+  const addressMap = {
+    "회사": ["06234", "서울 강남구 테헤란로 231", "OO타워 10층"],
+    "학교": ["47340", "부산 부산진구 엄광로 176", "동의대학교"],
+    "우리집": ["12345", "서울 마포구 월드컵북로 396", "XX아파트 101동 202호"]
+  };
+
+  function fillAddressByAlias(alias) {
+    const addr = addressMap[alias];
+    if (!addr) return;
+
+    document.getElementById("zipcode").value = addr[0];
+    document.getElementById("address1").value = addr[1];
+    document.getElementById("address2").value = addr[2];
+    document.getElementById("address2").readOnly = false;
+    document.querySelector(".alias").value = alias;
+  }
+
+  // 📌 주소 검색
   function execDaumPostcode() {
     new daum.Postcode({
       oncomplete: function(data) {
         document.getElementById('zipcode').value = data.zonecode;
         document.getElementById('address1').value = data.roadAddress;
         document.getElementById('address2').focus();
+        document.getElementById("address2").readOnly = false;
       }
     }).open();
   }
 
-  function toggleDeliveryAddress(show) {
-    const btn = document.getElementById('delivery-search-btn');
-    btn.style.display = show ? 'inline-block' : 'none';
-  }
-
+  // 📌 배송지 UI 전환
   function toggleDeliveryUI(show) {
-    const inputs = document.querySelectorAll('#delivery-extra input');
-    const aliasSection = document.getElementById("alias-list");
+    const aliasList = document.getElementById("alias-list");
     const aliasInputRow = document.getElementById("alias-input-row");
+    const addrInputs = document.querySelectorAll('#delivery-extra input');
 
     if (show) {
-      inputs.forEach(el => el.readOnly = false);
-      aliasSection.style.display = 'flex';
+      aliasList.style.display = 'flex';
       aliasInputRow.style.display = 'flex';
+      addrInputs.forEach(el => el.readOnly = false);
     } else {
-      applyOrdererAddress();
-      inputs.forEach(el => el.readOnly = true);
-      aliasSection.style.display = 'none';
+      copyOrdererAddress();
+      aliasList.style.display = 'none';
       aliasInputRow.style.display = 'none';
+      addrInputs.forEach(el => el.readOnly = true);
       document.querySelector(".alias").value = "";
     }
   }
 
-  function fillAddress(alias) {
-    const zipcodeField = document.getElementById("zipcode");
-    const address1Field = document.getElementById("address1");
-    const address2Field = document.getElementById("address2");
-    const aliasInput = document.querySelector("input.alias");
-
-    const addressMap = {
-      "회사": ["06234", "서울 강남구 테헤란로 231", "OO타워 10층"],
-      "학교": ["47340", "부산 부산진구 엄광로 176", "동의대학교"],
-      "우리집": ["12345", "서울 마포구 월드컵북로 396", "XX아파트 101동 202호"]
-    };
-
-    const selected = addressMap[alias];
-    if (!selected) return;
-
-    [zipcodeField.value, address1Field.value, address2Field.value] = selected;
-    aliasInput.value = alias;
-
-    [zipcodeField, address1Field, address2Field].forEach(el => el.readOnly = false);
+  // 📌 주문자 정보 복사
+  function copyOrdererAddress() {
+    document.getElementById("zipcode").value = "47340";
+    document.getElementById("address1").value = "부산광역시 부산진구 엄광로 176";
+    document.getElementById("address2").value = "동의대학교";
+    document.getElementById("address2").readOnly = true;
   }
 
+  // 📌 별칭 삭제
   function deleteAlias(event, el) {
     event.stopPropagation();
-    if (confirm("정말 이 보관지를 삭제하시겠습니까?")) {
+    if (confirm("정말 삭제할까요?")) {
       const btn = el.closest(".tag-btn");
       if (btn) btn.remove();
     }
   }
 
+  // 📌 별칭 추가
   function addAlias() {
-    const input = document.querySelector(".address-combined input.alias");
+    const input = document.querySelector(".alias");
     const value = input.value.trim();
     const aliasList = document.getElementById("alias-list");
 
-    if (value === "") {
+    if (!value) {
       alert("별칭을 입력해주세요.");
       return;
     }
 
-    const exists = Array.from(aliasList.children).some(btn => btn.textContent === value);
+    const exists = Array.from(aliasList.children).some(btn => btn.textContent.includes(value));
     if (exists) {
-      alert("이미 추가된 별칭입니다.");
+      alert("이미 있는 별칭입니다.");
       return;
     }
 
     const btn = document.createElement("button");
     btn.className = "tag-btn";
-    btn.type = "button";
-    btn.innerHTML = `
-      ${value}<span class="delete-icon" onclick="deleteAlias(event, this)">×</span>
-    `;
-    btn.addEventListener("click", () => fillAddress(value));
-
+    btn.innerHTML = value + "<span class='delete-icon' onclick='deleteAlias(event, this)'>×</span>";
+    btn.addEventListener("click", () => fillAddressByAlias(value));
     aliasList.appendChild(btn);
     input.value = "";
   }
 
+  // 📌 placeholder 관련
   function clearPlaceholder(el) {
     el.dataset.placeholder = el.placeholder;
     el.placeholder = '';
@@ -301,42 +304,34 @@
     }
   }
 
-  function fnPay() {
-    INIStdPay.pay('payForm');
-  }
-
+  // 📌 페이지 로드 시 처리
   window.addEventListener("DOMContentLoaded", () => {
-    applyOrdererAddress();
+    copyOrdererAddress(); // 기본 주소 세팅
 
-    document.getElementById("alias-list").style.display = 'none';
-    document.getElementById("alias-input-row").style.display = 'none';
+    // 라디오 버튼 UI 전환
+    document.querySelectorAll('input[name="delivery"]').forEach(radio => {
+      radio.addEventListener("change", e => {
+        toggleDeliveryUI(e.target.value === "different");
+      });
+    });
 
-    const deliveryRadio = document.querySelector('input[name="delivery"]:checked');
-    toggleDeliveryUI(deliveryRadio.value === 'different');
-
-    // 별칭 클릭 이벤트 접속
+    // 정적 별칭 클릭 → 주소 채우기
     document.getElementById("alias-list").addEventListener("click", function (e) {
       const btn = e.target.closest(".tag-btn");
-      const isDelete = e.target.classList.contains("delete-icon");
-
-      if (btn && !isDelete) {
-        const alias = btn.textContent.trim().replace("\u00D7", "").trim();
-        fillAddress(alias);
+      if (btn && !e.target.classList.contains("delete-icon")) {
+        const alias = btn.textContent.trim().replace("×", "").trim();
+        fillAddressByAlias(alias);
       }
     });
+
+    // 정적 삭제 버튼에도 이벤트 연결
+    document.querySelectorAll(".tag-btn .delete-icon").forEach(icon => {
+      icon.addEventListener("click", function (e) {
+        deleteAlias(e, this);
+      });
+    });
   });
-
-  function applyOrdererAddress() {
-    document.getElementById("zipcode").value = "47340";
-    document.getElementById("address1").value = "부산광역시 부산진구 엄광로 176";
-    document.getElementById("address2").value = "동의대학교";
-
-    const inputs = document.querySelectorAll('#delivery-extra input');
-    const buttons = document.querySelectorAll('#delivery-extra button');
-    inputs.forEach(el => el.readOnly = true);
-    buttons.forEach(btn => btn.disabled = true);
-  }
 </script>
-  
+
 </body>
 </html>
