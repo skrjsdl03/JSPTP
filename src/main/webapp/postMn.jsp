@@ -20,6 +20,7 @@
 			if (queryString != null) {
 				fullUrl += "?" + queryString;
 			}
+
 			response.sendRedirect("login.jsp?redirect=" + java.net.URLEncoder.encode(fullUrl, "UTF-8"));
 			return;
 		}

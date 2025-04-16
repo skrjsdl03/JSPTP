@@ -26,8 +26,10 @@
         String point = formatter.format(userDto.getUser_point());
         
         String pwd = "";
+        if(userDto.getUser_pwd() != null){
         for(int i = 0; i<userDto.getUser_pwd().length(); i++)
         	pwd += '●';
+        }
         
         String year = userDto.getUser_birth().split("-")[0];
         String month = userDto.getUser_birth().split("-")[1];

@@ -60,7 +60,8 @@ public class KakaoLoginServlet extends HttpServlet {
 			    return;
 			}
 
-			String redirect = request.getParameter("redirect");
+			 String redirect = (String)session.getAttribute("redirect");
+			 System.out.println(redirect);
 			
 			if (userDao.isSocialUserExists(email, "Kakao")) {
 			    // 이미 가입한 카카오 계정

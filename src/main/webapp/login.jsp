@@ -4,10 +4,12 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%
 		String redirect = request.getParameter("redirect");
+		System.out.println(redirect);
 		if (redirect == null || redirect.equals("")) {
 		    redirect = "main2.jsp"; // 기본 리디렉션
+		}else{
+			session.setAttribute("redirect", redirect);		
 		}
-		
 		String errorMessage = "";
 		String error = request.getParameter("error");
 		int fail = 0;
