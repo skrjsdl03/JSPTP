@@ -67,15 +67,15 @@
 		</div>
 
 		<!-- 상세 이미지 -->
-		<div class="product-details">
+		<!-- <div class="product-details">
 			<img src="images/main-cloth1.png" alt="디테일1">
 			<img src="images/main-cloth1.png" alt="디테일2">
 			<img src="images/item01_detail3.jpg" alt="디테일3">
 			<img src="images/item01_detail4.jpg" alt="디테일4">
-		</div>
+		</div> -->
 
 		<!-- 리뷰 -->
-		<div class="product-review">
+		<!-- <div class="product-review">
 			<h3>REVIEW (41)</h3>
 			<div class="review-score">⭐ 4.8 / 5.0</div>
 			<div class="review-graph">
@@ -83,7 +83,7 @@
 				<p>4점: ██████</p>
 				<p>3점 이하: █</p>
 			</div>
-		</div>
+		</div> -->
 	</div>
 
 </body>
