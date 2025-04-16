@@ -30,6 +30,11 @@
     String createdAt = notice.getCreated_at();
     int views = notice.getNoti_views();
     boolean isImportant = "Y".equals(notice.getNoti_isPinned());
+    
+    // 현재 페이지 표시
+    request.setAttribute("currentMenu", "board");
+    // 하위 메뉴로 공지사항 선택
+    request.setAttribute("subMenu", "notice");
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -107,22 +112,8 @@ window.onload = function() {
 </head>
 <body>
 
-    <header>
-        <div class="header-container">
-            <h1>관리자 페이지</h1>
-            <nav>
-                <ul>
-                    <li><a href="admin_main.jsp">대시보드</a></li>
-                    <li><a href="admin_notice.jsp" class="active">공지사항 관리</a></li>
-                    <li><a href="#">회원 관리</a></li>
-                    <li><a href="#">상품 관리</a></li>
-                    <li><a href="#">주문 관리</a></li>
-                    <li><a href="#">문의 관리</a></li>
-                    <li><a href="logout.jsp">로그아웃</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+<!-- 헤더 포함 -->
+<jsp:include page="/includes/admin_header.jsp" />
 
     <main>
         <div class="container">
@@ -157,6 +148,9 @@ window.onload = function() {
             </div>
         </div>
     </main>
+
+<!-- 푸터 포함 -->
+<jsp:include page="/includes/admin_footer.jsp" />
 
     <!-- 삭제 확인 모달 -->
     <div id="deleteModal" class="modal">
