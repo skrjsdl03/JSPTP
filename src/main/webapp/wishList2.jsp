@@ -49,6 +49,7 @@
 						<p class="wishlist-name">Onitsuka Tiger Tokuten Gray</p>
 						<p class="wishlist-price">199,000 원</p>
 					</div>
+					<div class="wishlist-cart" onclick="addToCart(this)">🛒</div>
 					<div class="wishlist-heart active" onclick="toggleWishlistHeart(this)">❤️</div>
 				</div>
 				
@@ -59,6 +60,7 @@
 						<p class="wishlist-name">Arc'teryx Konseal 15 Backpack Black</p>
 						<p class="wishlist-price">140,000 원</p>
 					</div>
+					<div class="wishlist-cart" onclick="addToCart(this)">🛒</div>
 					<div class="wishlist-heart active" onclick="toggleWishlistHeart(this)">❤️</div>
 				</div>
 
@@ -70,29 +72,52 @@
 							Black</p>
 						<p class="wishlist-price">140,000 원</p>
 					</div>
-					<div class="wishlist-heart active" onclick="toggleWishlistHeart(this)">❤️</div>
-			</div>
+					<div class="wishlist-heart-group">
+					  <div class="wishlist-cart" onclick="addToCart(this)">🛒</div>
+					  <div class="wishlist-heart active" onclick="toggleWishlistHeart(this)">❤️</div>
+					</div>
+				</div>
 		</section>
 	</div>
 </body>
 <script>
+
+function addToCart(el) {
+	  const item = el.closest(".wishlist-item");
+
+	  // 혹시라도 JS 쪽에서 한 번 더 체크하고 싶다면 (선택사항)
+	  if (item.classList.contains("soldout")) {
+	    alert("품절 상품은 장바구니에 담을 수 없습니다.");
+	    return;
+	  }
+
+	  const itemName = item.querySelector(".wishlist-name").innerText;
+	  alert(`'${itemName}' 상품을 장바구니에 담았습니다.`);
+
+	  // TODO: 장바구니에 실제 추가하는 로직
+	}
+  
   function toggleWishlistHeart(el) {
     const item = el.closest(".wishlist-item");
-    const isSoldOut = item.classList.contains("soldout");
-
-    if (isSoldOut) return; // 품절 상품은 해제 불가하게 막고 싶다면 이 조건 유지
-
-    // 찜 상태 토글
     const isActive = el.classList.contains("active");
+
     if (isActive) {
+      // 확인 창
+      const confirmDelete = confirm("찜 상품을 해제하시겠습니까?");
+      if (!confirmDelete) return;
+
+      // 찜 해제 처리
       el.classList.remove("active");
-      el.innerText = "🤍"; // 찜 해제 (빈 하트)
+      el.innerText = "🤍";
+      item.remove(); // DOM에서 삭제
     } else {
       el.classList.add("active");
-      el.innerText = "❤️"; // 찜 상태 (채운 하트)
+      el.innerText = "❤️";
+      // 다시 찜하기 기능은 여기에 필요 시 추가
     }
 
-    // TODO: 서버에 찜 상태 변경 요청 (AJAX 호출 등)
+    // TODO: 서버에 찜 상태 변경 요청 (AJAX 등)
   }
 </script>
+
 </html>
