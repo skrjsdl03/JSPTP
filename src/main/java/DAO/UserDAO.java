@@ -92,23 +92,24 @@ public class UserDAO {
 	}
 
 	// 추천인 적립금
-	public void updatePoint(String id) {
+	public void updatePoint(String id, String userType) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
 		try {
 			con = pool.getConnection();
-			sql = "update user set user_point = user_point + 3000 where user_id = ?";
+			sql = "UPDATE user SET user_point = user_point + 3000 WHERE user_id = ? AND user_type = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
+			pstmt.setString(2, userType);
 			pstmt.executeUpdate();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			pool.freeConnection(con, pstmt);
 		}
 	}
+
 
 	// 아이디 중복 체크
 	public boolean idCheck(String id) {
@@ -119,7 +120,7 @@ public class UserDAO {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "select user_id from user where user_id = ?";
+			sql = "select user_id from user where user_id = ? and user_type = '일반'";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
@@ -170,46 +171,62 @@ public class UserDAO {
 		String result = "";
 		String log_type = "";
 		int cnt = 0;
+		String userType = "";
+
 		try {
 			con = pool.getConnection();
-			if (idCheck(id)) { // 아이디 존재
-				if (checkLock(id)) { // 계정 잠금 여부 Y
-					if (showAccountState(id).equals("탈퇴")) {
+			if (idCheck(id)) {
+				// user_type 먼저 조회
+				sql = "SELECT user_type FROM user WHERE user_id = ?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, id);
+				rs = pstmt.executeQuery();
+				if (rs.next()) {
+					userType = rs.getString("user_type");
+				}
+				rs.close();
+				pstmt.close();
+
+				// 계정 잠금 여부 확인
+				if (checkLock(id, userType)) {
+					String state = showAccountState(id); // 이건 그대로 둬도 됨 (기본 상태만 보여줌)
+					if ("탈퇴".equals(state)) {
 						result = "resign";
 						return result;
-					} else if (showAccountState(id).equals("휴먼")) {
+					} else if ("휴먼".equals(state)) {
 						result = "human";
 						return result;
 					}
 					log_type = "잠긴 계정 로그인 시도";
 					result = "lock";
-				} else { // 계정 잠금 여부 N
-					sql = "select user_id from user where user_id = ? and user_pwd = ?";
+				} else {
+					sql = "SELECT user_id FROM user WHERE user_id = ? AND user_pwd = ?";
 					pstmt = con.prepareStatement(sql);
 					pstmt.setString(1, id);
 					pstmt.setString(2, pwd);
 					rs = pstmt.executeQuery();
-					if (rs.next()) { // 아이디 O, 비밀번호 O -> 로그인 로그 기록
+
+					if (rs.next()) {
 						result = "success";
 						log_type = "로그인";
 						cnt = 0;
-						updateFailLogin(cnt, id); // 로그인 실패 횟수 0으로 설정
-					} else { // 아이디 O, 비밀번호 X -> 로그인 시도 로그 기록
+						updateFailLogin(cnt, id, userType); // 실패횟수 초기화
+					} else {
 						result = "fail";
 						log_type = "로그인 시도";
-						cnt = showFailLogin(id);
+						cnt = showFailLogin(id, userType);
 						if (cnt < 5) {
 							int cnt2 = cnt + 1;
-							updateFailLogin(cnt2, id);
+							updateFailLogin(cnt2, id, userType);
 							if (cnt2 == 5) {
-								updateLock("Y", id);
-								updateAccountState(id, "로그인 연속 실패로 인한 잠금");
+								updateLock("Y", id, userType);
+								updateAccountState(id, userType, "로그인 연속 실패로 인한 잠금");
 							}
 						}
 					}
 				}
-				insertLog(id, log_type);
-			} else { // 아이디 존재 X
+				insertLog(id, userType, log_type); // 로그 기록
+			} else {
 				result = "none";
 			}
 		} catch (Exception e) {
@@ -219,6 +236,7 @@ public class UserDAO {
 		}
 		return result;
 	}
+
 
 	// 계정상태 출력
 	public String showAccountState(String id) {
@@ -268,16 +286,17 @@ public class UserDAO {
 	}
 
 	// 계정상태 변경
-	public void updateAccountState(String id, String state) {
+	public void updateAccountState(String id, String userType, String state) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
 		try {
 			con = pool.getConnection();
-			sql = "update user set user_account_state = ? where user_id = ?";
+			sql = "UPDATE user SET user_account_state = ? WHERE user_id = ? AND user_type = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, state);
 			pstmt.setString(2, id);
+			pstmt.setString(3, userType);
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -285,18 +304,20 @@ public class UserDAO {
 			pool.freeConnection(con, pstmt);
 		}
 	}
+
 
 	// 계정 잠금 여부 변경
-	public void updateLock(String state, String id) {
+	public void updateLock(String state, String id, String userType) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
 		try {
 			con = pool.getConnection();
-			sql = "update user set user_lock_state = ? where user_id = ?";
+			sql = "UPDATE user SET user_lock_state = ? WHERE user_id = ? AND user_type = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, state);
 			pstmt.setString(2, id);
+			pstmt.setString(3, userType);
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -305,8 +326,9 @@ public class UserDAO {
 		}
 	}
 
+
 	// 계정 잠금 여부 확인 (Y: true, N: false)
-	public boolean checkLock(String id) {
+	public boolean checkLock(String id, String userType) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -314,13 +336,13 @@ public class UserDAO {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "select user_lock_state from user where user_id = ?";
+			sql = "SELECT user_lock_state FROM user WHERE user_id = ? AND user_type = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
+			pstmt.setString(2, userType);
 			rs = pstmt.executeQuery();
-			if (rs.next()) {
-				if (rs.getString(1).equals("Y"))
-					flag = true;
+			if (rs.next() && "Y".equals(rs.getString(1))) {
+				flag = true;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -330,8 +352,9 @@ public class UserDAO {
 		return flag;
 	}
 
+
 	// 로그인 잠금 실패 횟수 출력
-	public int showFailLogin(String id) {
+	public int showFailLogin(String id, String userType) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -339,9 +362,10 @@ public class UserDAO {
 		int cnt = 0;
 		try {
 			con = pool.getConnection();
-			sql = "select user_fail_login from user where user_id = ?";
+			sql = "SELECT user_fail_login FROM user WHERE user_id = ? AND user_type = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
+			pstmt.setString(2, userType);
 			rs = pstmt.executeQuery();
 			if (rs.next())
 				cnt = rs.getInt(1);
@@ -353,17 +377,19 @@ public class UserDAO {
 		return cnt;
 	}
 
+
 	// 로그인 잠금 실패 횟수 수정
-	public void updateFailLogin(int cnt, String id) {
+	public void updateFailLogin(int cnt, String id, String userType) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
 		try {
 			con = pool.getConnection();
-			sql = "update user set user_fail_login = ? where user_id = ?";
+			sql = "UPDATE user SET user_fail_login = ? WHERE user_id = ? AND user_type = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, cnt);
 			pstmt.setString(2, id);
+			pstmt.setString(3, userType);
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -371,6 +397,7 @@ public class UserDAO {
 			pool.freeConnection(con, pstmt);
 		}
 	}
+
 	
 	//계정 잠금을 풀기 위한 확인
 	public boolean isLockUser(String id, String birth, String phone) {
@@ -399,23 +426,25 @@ public class UserDAO {
 	}
 
 	// 로그아웃
-	public void logout(String id) {
-		insertLog(id, "로그아웃");
+	public void logout(String id, String userType) {
+		insertLog(id, userType, "로그아웃");
 	}
 
+
 	// 로그인, 로그아웃, 로그인 시도 -> 사용자 로그 기록
-	public void insertLog(String id, String type) {
+	public void insertLog(String id, String userType, String logType) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
 		try {
 			InetAddress ip = InetAddress.getLocalHost();
 			con = pool.getConnection();
-			sql = "insert user_log values (null, ?, now(), ?, ?)";
+			sql = "INSERT INTO user_log VALUES (null, ?, ?, now(), ?, ?)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
-			pstmt.setString(2, type);
-			pstmt.setString(3, ip.getHostAddress());
+			pstmt.setString(2, userType);
+			pstmt.setString(3, logType);
+			pstmt.setString(4, ip.getHostAddress());
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -423,6 +452,7 @@ public class UserDAO {
 			pool.freeConnection(con, pstmt);
 		}
 	}
+
 
 	// 아이디 찾기 (전화번호) -> 해당하는 아이디가 있으면 (아이디, 등급, 생성일 출력), 없으면 null 리턴
 	public Vector<UserDTO> findIdByPhone(String name, String phone) {
@@ -703,34 +733,35 @@ public class UserDAO {
 		return flag;
 	}
 
-	// 회원 수정
-	public void updateUser(UserDTO user, String id) {
+	// 회원 수정 (비밀번호 제외)
+	public void updateUser(UserDTO user, String id, String type) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
 		try {
 			con = pool.getConnection();
-			sql = "UPDATE user SET user_pwd = ?, user_name = ?, user_phone = ?, user_email = ?, "
+			sql = "UPDATE user SET user_name = ?, user_phone = ?, user_email = ?, "
 					+ "user_gender = ?, user_height = ?, user_weight = ?, user_birth = ?, "
 					+ "user_account_state = ?, user_lock_state = ?, user_marketing_state = ?, user_rank = ?, "
-					+ "user_wd_date = ?, user_wd_reason = ?, user_wd_detail_reason = ? " + "WHERE user_id = ?";
+					+ "user_wd_date = ?, user_wd_reason = ?, user_wd_detail_reason = ? "
+					+ "WHERE user_id = ? AND user_type = ?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, user.getUser_pwd());
-			pstmt.setString(2, user.getUser_name());
-			pstmt.setString(3, user.getUser_phone());
-			pstmt.setString(4, user.getUser_email());
-			pstmt.setString(5, user.getUser_gender());
-			pstmt.setInt(6, user.getUser_height());
-			pstmt.setInt(7, user.getUser_weight());
-			pstmt.setString(8, user.getUser_birth());
-			pstmt.setString(9, user.getUser_account_state());
-			pstmt.setString(10, user.getUser_lock_state());
-			pstmt.setString(11, user.getUser_marketing_state());
-			pstmt.setString(12, user.getUser_rank());
-			pstmt.setString(13, user.getUser_wd_date());
-			pstmt.setString(14, user.getUser_wd_reason());
-			pstmt.setString(15, user.getUser_wd_detail_reason());
-			pstmt.setString(16, id);
+			pstmt.setString(1, user.getUser_name());
+			pstmt.setString(2, user.getUser_phone());
+			pstmt.setString(3, user.getUser_email());
+			pstmt.setString(4, user.getUser_gender());
+			pstmt.setInt(5, user.getUser_height());
+			pstmt.setInt(6, user.getUser_weight());
+			pstmt.setString(7, user.getUser_birth());
+			pstmt.setString(8, user.getUser_account_state());
+			pstmt.setString(9, user.getUser_lock_state());
+			pstmt.setString(10, user.getUser_marketing_state());
+			pstmt.setString(11, user.getUser_rank());
+			pstmt.setString(12, user.getUser_wd_date());
+			pstmt.setString(13, user.getUser_wd_reason());
+			pstmt.setString(14, user.getUser_wd_detail_reason());
+			pstmt.setString(15, id);
+			pstmt.setString(16, type);  // ✅ 추가
 			pstmt.executeUpdate();
 
 		} catch (Exception e) {
@@ -739,6 +770,8 @@ public class UserDAO {
 			pool.freeConnection(con, pstmt);
 		}
 	}
+
+
 
 	// 회원 수정(소셜 로그인)
 	public void updateSocialUser(UserDTO user, String id) {

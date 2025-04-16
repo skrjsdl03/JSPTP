@@ -36,7 +36,7 @@ public class Login extends HttpServlet {
                 response.sendRedirect("main2.jsp");
             }
 		} else if(result.equals("fail")) {		//로그인 실패
-			int fail = userDao.showFailLogin(id);
+			int fail = userDao.showFailLogin(id, "일반");
 			response.sendRedirect("login.jsp?error=wrong&fail=" + fail);
 		} else if(result.equals("none")) {		//아이디 존재 X
 			response.sendRedirect("login.jsp?error=noUser");

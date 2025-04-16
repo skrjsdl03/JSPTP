@@ -124,7 +124,7 @@ request.setAttribute("subMenu", "member_list");
 <script>
   function openCRM(id, type) {
     const url = "<%=request.getContextPath()%>/crm/userCRM.jsp?user_id=" + id + "&user_type=" + type;  // ✅ 절대 경로
-    window.open(url, "CRM상세", "width=1000,height=610,left=150,top=100,scrollbars=yes");
+    window.open(url, "CRM상세", "width=1000,height=585,left=150,top=100,scrollbars=yes,resizable=no");
   }
 </script>
 

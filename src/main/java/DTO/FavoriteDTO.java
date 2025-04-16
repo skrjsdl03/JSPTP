@@ -3,6 +3,7 @@ package DTO;
 public class FavoriteDTO {
 	private int f_id;
 	private String user_id;
+	private String user_type;
 	private int pd_id;
 	private String f_type;
 	private int f_quantity;
@@ -10,10 +11,11 @@ public class FavoriteDTO {
 	
 	public FavoriteDTO() {}
 
-	public FavoriteDTO(int f_id, String user_id, int pd_id, String f_type, int f_quantity, String created_at) {
+	public FavoriteDTO(int f_id, String user_id, String user_type, int pd_id, String f_type, int f_quantity, String created_at) {
 		super();
 		this.f_id = f_id;
 		this.user_id = user_id;
+		this.user_type = user_type;
 		this.pd_id = pd_id;
 		this.f_type = f_type;
 		this.f_quantity = f_quantity;
@@ -34,6 +36,14 @@ public class FavoriteDTO {
 
 	public void setUser_id(String user_id) {
 		this.user_id = user_id;
+	}
+
+	public String getUser_type() {
+		return user_type;
+	}
+
+	public void setUser_type(String user_type) {
+		this.user_type = user_type;
 	}
 
 	public int getPd_id() {

@@ -3,6 +3,7 @@ package DTO;
 public class ReviewReportDTO {
 	private int rr_id;
 	private String user_id;
+	private String user_type;
 	private int rr_target_id;
 	private String rr_target_type;
 	private String rr_reason_code;
@@ -11,11 +12,12 @@ public class ReviewReportDTO {
 	
 	public ReviewReportDTO() {}
 
-	public ReviewReportDTO(int rr_id, String user_id, int rr_target_id, String rr_target_type, String rr_reason_code,
+	public ReviewReportDTO(int rr_id, String user_id, String user_type, int rr_target_id, String rr_target_type, String rr_reason_code,
 			String rr_reason_text, String reported_at) {
 		super();
 		this.rr_id = rr_id;
 		this.user_id = user_id;
+		this.user_type = user_type;
 		this.rr_target_id = rr_target_id;
 		this.rr_target_type = rr_target_type;
 		this.rr_reason_code = rr_reason_code;
@@ -37,6 +39,14 @@ public class ReviewReportDTO {
 
 	public void setUser_id(String user_id) {
 		this.user_id = user_id;
+	}
+
+	public String getUser_type() {
+		return user_type;
+	}
+
+	public void setUser_type(String user_type) {
+		this.user_type = user_type;
 	}
 
 	public int getRr_target_id() {
