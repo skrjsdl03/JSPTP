@@ -21,12 +21,13 @@
 			<div class="user-info">
 				<div class="label">적립금</div>
 				<div class="value">25,000 ￦</div>
-				<div class="label">쿠폰</div>
+				<div class="label"><a href="coupon.jsp">쿠폰</a></div>
 				<div class="value">2 개</div>
 			</div>
 		</div>
 
 		<aside class="sidebar2">
+		<br>
 			<ul>
 				<li><a href="myPage.jsp">회원 정보 수정</a></li>
 				<li><a href="orderHistory2.jsp">주문 내역</a></li>

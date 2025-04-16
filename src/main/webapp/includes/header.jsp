@@ -38,13 +38,13 @@ if (queryString != null) {
 		if (id == null) {
 		%>
 		<div class="nav-right">
-			<a href="login.jsp?redirect=<%= java.net.URLEncoder.encode(fullUrl, "UTF-8") %>">LOGIN</a> <a href="#">CART</a>
+			<a href="login.jsp?redirect=<%= java.net.URLEncoder.encode(fullUrl, "UTF-8") %>">LOGIN</a> <a href="cart2.jsp">CART</a>
 		</div>
-		<%
+		<% 
 		} else {
 		%>
 		<div class="nav-right">
-			<a href="logout.jsp?redirect=<%= java.net.URLEncoder.encode(fullUrl, "UTF-8") %>">LOGOUT</a> <a href="#">CART</a>
+			<a href="logout.jsp?redirect=<%= java.net.URLEncoder.encode(fullUrl, "UTF-8") %>">LOGOUT</a> <a href="cart2.jsp">CART</a>
 		</div>
 		<%
 		}
