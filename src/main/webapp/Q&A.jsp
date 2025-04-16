@@ -36,7 +36,7 @@
 <meta charset="UTF-8">
 <title>에브리웨어 | everyWEAR</title>
 <link rel="icon" type="image/png" href="images/fav-icon.png">
-<link rel="stylesheet" type="text/css" href="css/Q&A.css?v=354">
+<link rel="stylesheet" type="text/css" href="css/Q&A2.css?v=354">
 </head>
 <body>
 
@@ -59,12 +59,13 @@
 		<section class="content">
 			<table class="notice-table" id="notice-table">
 				<tbody>
-					<tr style="border-bottom: 2px solid #BBBBBB;">
-						<td class="title">제목</td>
-						<td>답변 현황</td>
-						<td class="date">작성 일시</td>
-						<td class="type">작성자</td>
+					<tr class="qna-header">
+					  <td class="title">No. 제목</td>
+					  <td class="status">답변 현황</td>
+					  <td class="date">작성 일시</td>
+					  <td class="type">작성자</td>
 					</tr>
+
 				<%for(int i = start;i<end;i++){ 
 						InquiryDTO qna = qlist.get(i);
 						InquiryReplyDTO qnaReply = qDao.showOneQnaReply(qna.getI_id());
