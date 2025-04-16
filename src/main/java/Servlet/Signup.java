@@ -51,7 +51,7 @@ public class Signup extends HttpServlet {
 		if(request.getParameter("referrer") != null) {
 			if(userDao.idCheck(request.getParameter("referrer"))) {
 				point = 3000;
-				userDao.updatePoint(request.getParameter("referrer"));
+				userDao.updatePoint(request.getParameter("referrer"), type);
 			}
 		}
 		String zipcode = request.getParameter("zipcode");

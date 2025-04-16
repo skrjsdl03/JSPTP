@@ -3,6 +3,7 @@ package DTO;
 public class OrdersDTO {
 	private int o_id;
 	private String user_id;
+	private String user_type;
 	private int pd_id;
 	private String o_num;
 	private String o_isMember;
@@ -16,11 +17,12 @@ public class OrdersDTO {
 	
 	public OrdersDTO() {}
 
-	public OrdersDTO(int o_id, String user_id, int pd_id, String o_num, String o_isMember, String o_name,
+	public OrdersDTO(int o_id, String user_id, String user_type, int pd_id, String o_num, String o_isMember, String o_name,
 			String o_phone, int quantity, String created_at, int o_total_amount, int pay_id, int rf_id) {
 		super();
 		this.o_id = o_id;
 		this.user_id = user_id;
+		this.user_type = user_type;
 		this.pd_id = pd_id;
 		this.o_num = o_num;
 		this.o_isMember = o_isMember;
@@ -47,6 +49,14 @@ public class OrdersDTO {
 
 	public void setUser_id(String user_id) {
 		this.user_id = user_id;
+	}
+
+	public String getUser_type() {
+		return user_type;
+	}
+
+	public void setUser_type(String user_type) {
+		this.user_type = user_type;
 	}
 
 	public int getPd_id() {

@@ -3,6 +3,7 @@ package DTO;
 public class PaymentDTO {
 	private int pay_id;
 	private String user_id;
+	private String user_type;
 	private String pay_status;
 	private String paid_at;
 	private String pay_trans_id;
@@ -12,11 +13,12 @@ public class PaymentDTO {
 	
 	public PaymentDTO() {}
 
-	public PaymentDTO(int pay_id, String user_id, String pay_status, String paid_at, String pay_trans_id,
+	public PaymentDTO(int pay_id, String user_id, String user_type, String pay_status, String paid_at, String pay_trans_id,
 			String pay_appr_code, String pay_card_com, String pay_req_id) {
 		super();
 		this.pay_id = pay_id;
 		this.user_id = user_id;
+		this.user_type = user_type;
 		this.pay_status = pay_status;
 		this.paid_at = paid_at;
 		this.pay_trans_id = pay_trans_id;
@@ -39,6 +41,14 @@ public class PaymentDTO {
 
 	public void setUser_id(String user_id) {
 		this.user_id = user_id;
+	}
+
+	public String getUser_type() {
+		return user_type;
+	}
+
+	public void setUser_type(String user_type) {
+		this.user_type = user_type;
 	}
 
 	public String getPay_status() {

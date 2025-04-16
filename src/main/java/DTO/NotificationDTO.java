@@ -3,6 +3,7 @@ package DTO;
 public class NotificationDTO {
 	private int notifi_id;
 	private String user_id;
+	private String user_type;
 	private int o_id;
 	private String notifi_title;
 	private String notifi_content;
@@ -11,11 +12,12 @@ public class NotificationDTO {
 	
 	public NotificationDTO() {}
 
-	public NotificationDTO(int notifi_id, String user_id, int o_id, String notifi_title, String notifi_content,
+	public NotificationDTO(int notifi_id, String user_id, String user_type, int o_id, String notifi_title, String notifi_content,
 			String notified_at, String notifi_isRead) {
 		super();
 		this.notifi_id = notifi_id;
 		this.user_id = user_id;
+		this.user_type = user_type;
 		this.o_id = o_id;
 		this.notifi_title = notifi_title;
 		this.notifi_content = notifi_content;
@@ -37,6 +39,14 @@ public class NotificationDTO {
 
 	public void setUser_id(String user_id) {
 		this.user_id = user_id;
+	}
+
+	public String getUser_type() {
+		return user_type;
+	}
+
+	public void setUser_type(String user_type) {
+		this.user_type = user_type;
 	}
 
 	public int getO_id() {

@@ -69,7 +69,7 @@ public class KakaoLoginServlet extends HttpServlet {
 					session.setAttribute("id", email);
 					session.setAttribute("userType", "Kakao");
 					System.out.println("이미 가입한 카카오 계정");
-					userDao.insertLog(email, "로그인");
+					userDao.insertLog(email, "KaKao", "로그인");
 					 if (redirect != null && !redirect.equals("")) {
 			                response.sendRedirect(redirect);
 			            } else {

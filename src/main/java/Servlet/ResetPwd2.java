@@ -21,8 +21,8 @@ public class ResetPwd2 extends HttpServlet {
 		
 		UserDAO userDao = new UserDAO();
 		userDao.updatePwd(id, pwd);
-		userDao.updateAccountState(id, "정상");
-		userDao.updateLock("N", id);
+		userDao.updateAccountState(id, "일반", "정상");
+		userDao.updateLock("N", id, "일반");
 		
 		response.sendRedirect("login.jsp");
 	}
