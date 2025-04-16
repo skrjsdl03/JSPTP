@@ -157,7 +157,7 @@
 		
 		    <!-- 상품 1 -->
 		    <div class="recommend-item">
-		      <img src="images/main-cloth1.png" alt="추천 상품 1">
+		      <img src="images/main-cloth1.png" alt6="추천 상품 1">
 		      <p class="item-name">WL VARSITY JACKET</p>
 		      <p class="item-price">129,000 원</p>
 		    </div>
