@@ -181,12 +181,12 @@ p {
 }
 
 .btn-primary {
-    background-color: #3498db;
+    background-color: #0a2963;
     color: white;
 }
 
 .btn-primary:hover {
-    background-color: #2980b9;
+    background-color: #0a2963;
     transform: translateY(-1px);
 }
 
@@ -206,24 +206,6 @@ p {
 }
 
 /* 배지 스타일 */
-.badge {
-    display: inline-block;
-    padding: 4px 9px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-}
-
-.badge.important {
-    background-color: #e74c3c;
-    color: white;
-}
-
-.badge.normal {
-    background-color: #3498db;
-    color: white;
-}
 
 /* 관리자 상단 메뉴 영역 */
 .admin-nav {

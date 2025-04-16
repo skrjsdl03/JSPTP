@@ -11,6 +11,67 @@
 <title>관리자 공지사항 | everyWEAR</title>
 <link rel="icon" type="image/png" href="images/fav-icon.png">
 <link rel="stylesheet" type="text/css" href="css/admin_notice.css">
+<style>
+    .notice-table tbody tr {
+        border-bottom: 1px solid #e0e0e0;
+        transition: background-color 0.2s;
+    }
+    
+    .notice-table tbody tr:hover {
+        background-color: #f5f7fa;
+    }
+    
+    .notice-table {
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .notice-table th {
+        border-bottom: 2px solid #d1d1d1;
+    }
+    
+    /* 체크박스 스타일 */
+    .notice-check, #selectAll {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        accent-color: #4CAF50;
+    }
+    
+    /* 배지 스타일 개선 */
+    .badge {
+        display: inline-block;
+        min-width: 60px;
+        text-align: center;
+    }
+    
+    /* 버튼 간격 및 스타일 통일 */
+    .btn-sm {
+        padding: 6px 12px;
+        font-size: 13px;
+        border-radius: 4px;
+        transition: all 0.2s;
+    }
+    
+    .btn-sm.btn-edit {
+        background-color: #e8eef9;
+        color: #0a2963;
+        border: none;
+    }
+    
+    .btn-sm.btn-edit:hover {
+        background-color: #d1e0f6;
+    }
+    
+    .btn-sm.btn-delete {
+        background-color: #FFEBEE;
+        color: #F44336;
+        border: none;
+    }
+    
+    .btn-sm.btn-delete:hover {
+        background-color: #FFCDD2;
+    }
+</style>
 <script>
 // 페이지 로드 시 상태 메시지 표시
 window.onload = function() {
@@ -112,30 +173,66 @@ window.onload = function() {
         <div class="container">
             <h2>공지사항 관리</h2>
             
+            <!-- 상태 메시지 표시 영역 -->
+            <% if (request.getParameter("success") != null) { %>
+            <div class="alert alert-success" style="background-color: #d4edda; color: #155724; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #c3e6cb;">
+                <strong>성공!</strong> 
+                <% if ("insert".equals(request.getParameter("success"))) { %>
+                    공지사항이 등록되었습니다.
+                <% } else if ("update".equals(request.getParameter("success"))) { %>
+                    공지사항이 수정되었습니다.
+                <% } else if ("delete".equals(request.getParameter("success"))) { %>
+                    공지사항이 삭제되었습니다.
+                <% } else if ("status".equals(request.getParameter("success"))) { %>
+                    공지사항 상태가 변경되었습니다.
+                <% } %>
+            </div>
+            <% } else if (request.getParameter("error") != null) { %>
+            <div class="alert alert-danger" style="background-color: #f8d7da; color: #721c24; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #f5c6cb;">
+                <strong>오류!</strong> 
+                <% if ("insert".equals(request.getParameter("error"))) { %>
+                    공지사항 등록에 실패했습니다.
+                <% } else if ("update".equals(request.getParameter("error"))) { %>
+                    공지사항 수정에 실패했습니다.
+                <% } else if ("delete".equals(request.getParameter("error"))) { %>
+                    공지사항 삭제에 실패했습니다.
+                <% } else if ("status".equals(request.getParameter("error"))) { %>
+                    공지사항 상태 변경에 실패했습니다.
+                <% } else if ("system".equals(request.getParameter("error"))) { %>
+                    시스템 오류가 발생했습니다. 관리자에게 문의하세요.
+                <% } %>
+            </div>
+            <% } %>
+            
+            <!-- 총 게시물 수 표시 -->
+            <div style="margin-bottom: 15px; font-size: 16px; color: #333;">
+                총 <strong style="color: #0a2963; font-size: 18px;"><%= totalNotices %></strong>개의 공지사항이 있습니다.
+            </div>
+            
             <div class="notice-control">
-                <button id="addNoticeBtn" class="btn btn-primary">새 공지사항 작성</button>
+                <button id="addNoticeBtn" class="btn" style="background-color: #0a2963; color: white; height: 40px; border-radius: 5px; padding: 8px 20px; border: none;" onclick="location.href='admin_notice_edit.jsp'">새 공지사항 작성</button>
                 <div class="search-box">
-                    <form action="admin_notice.jsp" method="get">
+                    <form action="admin_notice.jsp" method="get" style="display: flex; align-items: center;">
                         <select id="searchType" name="searchType">
                             <option value="title" <%= "title".equals(searchType) ? "selected" : "" %>>제목</option>
                             <option value="content" <%= "content".equals(searchType) ? "selected" : "" %>>내용</option>
                         </select>
                         <input type="text" id="searchKeyword" name="keyword" placeholder="검색어 입력" value="<%= keyword != null ? keyword : "" %>">
-                        <button type="submit" id="searchBtn" class="btn">검색</button>
+                        <button type="submit" id="searchBtn" class="btn" style="background-color: #0a2963; color: white; height: 40px; border-radius: 5px; padding: 8px 20px; border: none;">검색</button>
                     </form>
                 </div>
             </div>
             
-            <table class="notice-table" id="notice-table">
+            <table class="notice-table" id="notice-table" style="border-spacing: 0; border-collapse: separate;">
                 <thead>
                     <tr>
-                        <th class="checkbox"><input type="checkbox" id="selectAll"></th>
-                        <th class="no">No</th>
-                        <th class="title">제목</th>
-                        <th class="date">등록일</th>
-                        <th class="views">조회수</th>
-                        <th class="status">상태</th>
-                        <th class="actions">관리</th>
+                        <th class="checkbox" style="padding: 15px 10px; text-align: center;"><input type="checkbox" id="selectAll" style="margin: 0 auto;"></th>
+                        <th class="no" style="padding: 15px 12px;">No</th>
+                        <th class="title" style="padding: 15px 20px;">제목</th>
+                        <th class="date" style="padding: 15px 12px;">등록일</th>
+                        <th class="views" style="padding: 15px 12px;">조회수</th>
+                        <th class="status" style="padding: 15px 12px;">상태</th>
+                        <th class="actions" style="padding: 15px 12px;">관리</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -156,15 +253,27 @@ window.onload = function() {
                         boolean isPinned = "Y".equals(notice.getNoti_isPinned());
                 %>
                     <tr>
-                        <td><input type="checkbox" class="notice-check" value="<%= notice.getNoti_id() %>"></td>
-                        <td><%= notice.getNoti_id() %></td>
-                        <td><a href="admin_notice_view.jsp?id=<%= notice.getNoti_id() %>"><%= notice.getNoti_title() %></a></td>
-                        <td><%= formattedDate %></td>
-                        <td><%= notice.getNoti_views() %></td>
-                        <td><span class="badge <%= isPinned ? "important" : "normal" %>"><%= isPinned ? "중요" : "일반" %></span></td>
-                        <td>
-                            <button class="btn btn-sm btn-edit" data-id="<%= notice.getNoti_id() %>">수정</button>
-                            <button class="btn btn-sm btn-delete" data-id="<%= notice.getNoti_id() %>">삭제</button>
+                        <td style="padding: 15px 10px; text-align: center;"><input type="checkbox" class="notice-check" value="<%= notice.getNoti_id() %>" style="margin: 0 auto;"></td>
+                        <td style="padding: 15px 12px;"><%= notice.getNoti_id() %></td>
+                        <td style="padding: 15px 20px;">
+                            <a href="admin_notice_view.jsp?id=<%= notice.getNoti_id() %>" class="<%= isPinned ? "important-notice" : "normal-notice" %>">
+                                <%= notice.getNoti_title() %>
+                            </a>
+                        </td>
+                        <td style="padding: 15px 12px;"><%= formattedDate %></td>
+                        <td style="padding: 15px 12px;"><%= notice.getNoti_views() %></td>
+                        <td style="padding: 15px 12px; text-align: center;">
+                            <% if (isPinned) { %>
+                            <span style="color: #F44336; font-size: 14px; font-weight: bold;">중요</span>
+                            <% } else { %>
+                            <span style="color: #0a2963; font-size: 14px; font-weight: bold;">일반</span>
+                            <% } %>
+                        </td>
+                        <td style="padding: 15px 12px;">
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn btn-sm btn-edit" data-id="<%= notice.getNoti_id() %>" style="margin-right: 5px;">수정</button>
+                                <button class="btn btn-sm btn-delete" data-id="<%= notice.getNoti_id() %>">삭제</button>
+                            </div>
                         </td>
                     </tr>
                 <% 
@@ -182,9 +291,11 @@ window.onload = function() {
             
             <div class="pagination" id="pagination">
                 <% if (currentPage > 1) { %>
-                    <a href="admin_notice.jsp?page=<%= currentPage - 1 %><%= searchType != null && keyword != null ? "&searchType=" + searchType + "&keyword=" + keyword : "" %>">Prev</a>
+                    <a href="admin_notice.jsp?page=1<%= searchType != null && keyword != null ? "&searchType=" + searchType + "&keyword=" + keyword : "" %>">처음</a>
+                    <a href="admin_notice.jsp?page=<%= currentPage - 1 %><%= searchType != null && keyword != null ? "&searchType=" + searchType + "&keyword=" + keyword : "" %>">이전</a>
                 <% } else { %>
-                    <span class="disabled">Prev</span>
+                    <span class="disabled">처음</span>
+                    <span class="disabled">이전</span>
                 <% } %>
                 
                 <% 
@@ -199,9 +310,11 @@ window.onload = function() {
                 <% } %>
                 
                 <% if (currentPage < totalPages) { %>
-                    <a href="admin_notice.jsp?page=<%= currentPage + 1 %><%= searchType != null && keyword != null ? "&searchType=" + searchType + "&keyword=" + keyword : "" %>">Next</a>
+                    <a href="admin_notice.jsp?page=<%= currentPage + 1 %><%= searchType != null && keyword != null ? "&searchType=" + searchType + "&keyword=" + keyword : "" %>">다음</a>
+                    <a href="admin_notice.jsp?page=<%= totalPages %><%= searchType != null && keyword != null ? "&searchType=" + searchType + "&keyword=" + keyword : "" %>">마지막</a>
                 <% } else { %>
-                    <span class="disabled">Next</span>
+                    <span class="disabled">다음</span>
+                    <span class="disabled">마지막</span>
                 <% } %>
             </div>
         </div>
@@ -283,7 +396,6 @@ window.onload = function() {
         // 모달 관련 요소
         const noticeModal = document.getElementById("noticeModal");
         const deleteModal = document.getElementById("deleteModal");
-        const addNoticeBtn = document.getElementById("addNoticeBtn");
         const modalCloseButtons = document.querySelectorAll(".close");
         const cancelBtn = document.getElementById("cancelBtn");
         const modalTitle = document.getElementById("modalTitle");
@@ -302,15 +414,6 @@ window.onload = function() {
         const deleteButtons = document.querySelectorAll(".btn-delete");
         const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
         const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
-        
-        // 모달 열기
-        addNoticeBtn.addEventListener("click", function() {
-            modalTitle.textContent = "공지사항 작성";
-            document.getElementById("action").value = "insert";
-            document.getElementById("noticeId").value = "";
-            noticeForm.reset();
-            noticeModal.style.display = "block";
-        });
         
         // 모달 닫기
         modalCloseButtons.forEach(function(btn) {
@@ -349,32 +452,8 @@ window.onload = function() {
         editButtons.forEach(function(btn) {
             btn.addEventListener("click", function() {
                 const noticeId = this.getAttribute("data-id");
-                modalTitle.textContent = "공지사항 수정";
-                document.getElementById("action").value = "update";
-                document.getElementById("noticeId").value = noticeId;
-                
-                // AJAX로 공지사항 정보 가져오기 (실제 구현 시)
-                // 여기에서는 간단히 구현
-                const row = this.closest("tr");
-                const title = row.querySelector("td:nth-child(3) a").textContent;
-                const isImportant = row.querySelector(".badge").classList.contains("important");
-                
-                document.getElementById("noticeTitle").value = title;
-                document.getElementById("noticeContent").value = "샘플 공지사항 내용입니다."; // 실제로는 AJAX로 가져와야 함
-                document.querySelector(`input[name="noticeStatus"][value="${isImportant ? 'Y' : 'N'}"]`).checked = true;
-                
-                // AJAX로 공지사항 내용 가져오기
-                fetch("NoticeServlet?action=getContent&id=" + noticeId)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("noticeContent").value = data || "내용을 불러올 수 없습니다.";
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    document.getElementById("noticeContent").value = "내용을 불러올 수 없습니다.";
-                });
-                
-                noticeModal.style.display = "block";
+                // 수정 페이지로 이동
+                location.href = "admin_notice_edit.jsp?id=" + noticeId;
             });
         });
         
