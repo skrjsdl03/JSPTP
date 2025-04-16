@@ -13,17 +13,18 @@
 <%
 		String userId = (String)session.getAttribute("id");
 		String userType = (String)session.getAttribute("userType");
+		
+		// 현재 페이지 경로를 얻기 위한 코드
+		String fullUrl2 = request.getRequestURI();
+		String queryString2 = request.getQueryString();
+		if (queryString2 != null) {
+			fullUrl2 += "?" + queryString2;
+		}
 		if(userId == null || userId == ""){
-			// 현재 페이지 경로를 얻기 위한 코드
-			String fullUrl = request.getRequestURI();
-			String queryString = request.getQueryString();
-			if (queryString != null) {
-				fullUrl += "?" + queryString;
-			}
-
-			response.sendRedirect("login.jsp?redirect=" + java.net.URLEncoder.encode(fullUrl, "UTF-8"));
+			response.sendRedirect("login.jsp?redirect=" + java.net.URLEncoder.encode(fullUrl2, "UTF-8"));
 			return;
 		}
+
 		
 		UserDTO userDto = userDao.getOneUser(userId, userType);
 		int couponCnt = userDao.showOneUserCoupon(userId, userType);
@@ -101,11 +102,11 @@
 										}
 									}
 									Vector<ReviewImgDTO> rilist = reDao.showUserReviewImg(reviewDto.getR_id());
-									if(rilist != null){
+									if(!rilist.isEmpty()){
 										ReviewImgDTO reImgDto = rilist.get(0);
 						%>
-							<tr>
-								<td class="pdInfo">
+							<tr class="QnABox">
+								<td class="pdInfo" onclick="javascropt:reviewDetail('<%=reviewDto.getR_id()%>')">
 									<div class="product-box">
 										<img src="review_images/<%=reImgDto.getRi_url()%>" alt="ARCH LOGO VARSITY JACKET" class="product-img">
 										<div class="product-info">
@@ -125,8 +126,8 @@
 							<%
 							}else{ 
 							%>
-							<tr>
-								<td class="pdInfo">
+							<tr class="QnABox">
+								<td class="pdInfo" onclick="javascropt:reviewDetail('<%=reviewDto.getR_id()%>')">
 									<div class="product-box">
 										<div class="product-info">
 											<strong>ARCH LOGO VARSITY JACKET</strong>
@@ -135,7 +136,7 @@
 										</div>
 									</div>
 								</td>
-								<td class="date"><%=reviewDto.getCreated_at()%><br><%=rating%>
+								<td class="date" ><%=reviewDto.getCreated_at()%><br><%=rating%>
 									<div class="review-actions">
 										<a href="#" class="edit">수정</a> 
 										<a href="#" class="delete disabled" onclick="openDeleteModal2(event, '<%=reviewDto.getR_id()%>')">삭제</a>
@@ -310,7 +311,11 @@
 	</div>
 	
 	
-	
+	<form action="reviewDetail.jsp" method="post" id="goReviewDetail">
+		<input type="hidden" id="hidden_rid" name="r_id">
+		<input type="hidden" name="redirect" value="<%=fullUrl2%>">
+		<%-- <input type="hidden" name="redirect" value="<%=java.net.URLEncoder.encode(fullUrl2, "UTF-8")%>"> --%>
+	</form>
 	
 	<form action="qnaDetail.jsp" method="post" id="goDetail">
 		<input type="hidden" id="hidden_id" name="i_id">
@@ -353,6 +358,11 @@ function goDetail(id) {
 function goDetailWithReply(id){
    document.getElementById("hidden_iid").value = id;
    document.getElementById("goDetailWithReply").submit();
+}
+
+function reviewDetail(r_id){
+	document.getElementById("hidden_rid").value = r_id;
+	document.getElementById("goReviewDetail").submit();
 }
 
 /* 모달 */
@@ -415,6 +425,7 @@ function goCommonUpdate(event, i_id){
 	document.getElementById("hidden_i_id").value = i_id;
 	document.getElementById("qnaUpdate").submit();
 }
+
 
 
 	</script>

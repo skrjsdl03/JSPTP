@@ -1039,8 +1039,8 @@ public class ProductDAO {
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				pDto = new ProductDTO(rs.getInt(1), rs.getString(2), 
-						rs.getString(3), rs.getString(4), rs.getInt(5), rs.getInt(6), 
-						rs.getString(7), rs.getString(8), SDF_DATE.format(rs.getDate(9)));
+						rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getString(6), 
+						rs.getString(7), SDF_DATE.format(rs.getDate(8)));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1086,13 +1086,14 @@ public class ProductDAO {
     }
     
     //한 리뷰에 대한 상품 이미지 출력
-    public String getProductByReviewImg(int r_id) {
+    public Vector<String> getProductByReviewImg(int r_id) {
     	Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
 		int pd_id = 0;
-		String pd_size = "";
+		int p_id = 0;
+		Vector<String> pilist = new Vector<String>();
 		try {
 			con = pool.getConnection();
 			sql = "select pd_id from review where r_id = ?";
@@ -1109,7 +1110,17 @@ public class ProductDAO {
 			pstmt.setInt(1, pd_id);
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
-				pd_size = rs.getString(1);
+				p_id = rs.getInt(1);
+			}
+			pstmt.close();
+			rs.close();
+			
+			sql = "select pi_url from product_image where p_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, p_id);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				 pilist.add(rs.getString(1));
 			}
 			
 		} catch (Exception e) {
@@ -1117,6 +1128,8 @@ public class ProductDAO {
 		} finally {
 			pool.freeConnection(con, pstmt, rs);
 		}
-		return pd_size;
+		return pilist;
     }
+    
+
 }

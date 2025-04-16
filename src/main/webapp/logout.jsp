@@ -7,7 +7,8 @@
 		}
 		
 		String id = (String)session.getAttribute("id");
-		user.insertLog(id, "로그아웃");
+		String type = (String)session.getAttribute("userType");
+		user.insertLog(id, type, "로그아웃");
 		session.invalidate();
 %>
 <script>

@@ -2,7 +2,6 @@ package DTO;
 
 public class ProductDTO {
 	private int p_id;
-	private String p_code;
 	private String p_category;
 	private String p_name;
 	private int p_price;
@@ -13,11 +12,10 @@ public class ProductDTO {
 	
 	public ProductDTO() {}
 
-	public ProductDTO(int p_id, String p_code, String p_category, String p_name, int p_price, int p_disc,
+	public ProductDTO(int p_id, String p_category, String p_name, int p_price, int p_disc,
 			String p_text, String p_color, String created_at) {
 		super();
 		this.p_id = p_id;
-		this.p_code = p_code;
 		this.p_category = p_category;
 		this.p_name = p_name;
 		this.p_price = p_price;
@@ -33,14 +31,6 @@ public class ProductDTO {
 
 	public void setP_id(int p_id) {
 		this.p_id = p_id;
-	}
-
-	public String getP_code() {
-		return p_code;
-	}
-
-	public void setP_code(String p_code) {
-		this.p_code = p_code;
 	}
 
 	public String getP_category() {

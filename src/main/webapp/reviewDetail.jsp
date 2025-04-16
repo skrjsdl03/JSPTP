@@ -10,6 +10,7 @@
 <%
 		String userId = (String)session.getAttribute("id");
 		String userType = (String)session.getAttribute("userType");
+		String redirect = request.getParameter("redirect");
 		if(userId == null || userId == ""){
 			// 현재 페이지 경로를 얻기 위한 코드
 			String fullUrl = request.getRequestURI();
@@ -21,7 +22,7 @@
 			response.sendRedirect("login.jsp?redirect=" + java.net.URLEncoder.encode(fullUrl, "UTF-8"));
 			return;
 		}
-		
+
 		int r_id = Integer.parseInt(request.getParameter("r_id"));
 		if(r_id == 0){
 		}
@@ -30,6 +31,7 @@
 		
 		ProductDTO pDto = pDao.getProductByReview(r_id);
 		String size = pDao.getProductByReviewSize(r_id);
+		Vector<String> pilist = pDao.getProductByReviewImg(r_id);
 		
 		String rating = "";
 		for(int j = 0; j<rDto.getR_rating(); j++){
@@ -76,8 +78,7 @@
 					<tr>
 						<td class="pdInfo">
 							<div class="product-box">
-								<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
-									class="product-img">
+								<img src="<%=pilist.get(0)%>" alt="<%=pDto.getP_name()%>" class="product-img">
 								<div class="product-info">
 									<strong><%=pDto.getP_name()%></strong><br> <%=pDto.getP_color()%><br>
 								</div>
@@ -99,7 +100,7 @@
 					</div>
 					<!-- <div class="rating-text">별점을 입력해주세요.</div> -->
 
-<script>
+<!-- <script>
   const stars = document.querySelectorAll('.star');
   let currentRating = 0;
 
@@ -125,10 +126,10 @@
       star.textContent = value <= tempRating ? '★' : '☆';
     });
   }
-</script>
+</script> -->
 
 				<label for="content">내용 *</label>
-				<textarea name="content" id="content" rows="6" placeholder="내용을 입력해주세요." required><%=rDto.getR_content()%></textarea>
+				<textarea name="content" id="content" rows="6" placeholder="내용을 입력해주세요." readonly="readonly"><%=rDto.getR_content()%></textarea>
 				
 				<label>사진 첨부</label>
 				
@@ -144,7 +145,9 @@
 				</div>
 				
 				<div class="write-btn-wrapper2">
-					<button class="write-btn2">작성하기</button>
+					<button type="button" class="write-btn2">수정</button>
+					<button type="button" class="write-btn2" onclick="openDeleteModal('<%=rDto.getR_id()%>')">삭제</button>
+					<button type="button" class="write-btn2" onclick="window.history.back()">목록</button>
 				</div>
 		
 				</form>
@@ -156,5 +159,47 @@
 
 		</section>
 	</div>
+	
+	<input type="hidden" id="hidden_rid">
+	
+		<!-- 삭제 모달 -->
+	<div id="deleteModal" class="modal" style="display: none;">
+	  <div class="modal-content">
+	    <p>정말 삭제하시겠습니까?</p>
+	    <div class="modal-buttons">
+	      <button class="modalBtn1" id="modalBtn1" onclick="closeModal()">취소</button>
+	      <button id="deleteQna" class="modalBtn2" onclick="deleteQna()">삭제</button>
+	      <!-- <a id="confirmDelete" href="#">삭제</a> -->
+	    </div>
+	  </div>
+	</div>
+	
+	<script>
+	/* 모달 */
+	function openDeleteModal(r_id) {
+	  document.getElementById("deleteModal").style.display = "flex";
+	  document.getElementById("hidden_rid").value = r_id;
+	}
+
+	function closeModal() {
+	  document.getElementById("deleteModal").style.display = "none";
+	}
+
+	function deleteQna(){
+		const r_id = document.getElementById("hidden_rid");
+		 const redirect = "<%= (redirect != null && !redirect.equals("")) ? redirect : "main2.jsp" %>";
+		
+		 fetch("deleteReview.jsp?r_id=" + encodeURIComponent(r_id.value))
+		    .then(res => res.json())
+		    .then(data => {
+		      if (data.result === "success") {
+		        alert("삭제되었습니다.");
+		        location.href = redirect;
+		      } else {
+		        alert("삭제에 실패하였습니다.");
+		      }
+		    });
+	}
+	</script>
 
 </body>
