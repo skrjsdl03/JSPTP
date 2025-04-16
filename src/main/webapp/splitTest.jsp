@@ -141,6 +141,12 @@
 						사유가 아니라는 것을 알려드립니다.<br> * The slip agent on dark clothes is
 						not defective.
 					</div>
+					<div class="inner-panel right-panel" style="display: none;" id="abc">
+						<!-- 텍스트 설명, 옵션, 버튼 등 -->
+						<img src="images/main-cloth1.png"> <img
+							src="images/main-cloth1.png"> <img
+							src="images/main-cloth1.png">
+					</div>
 				</div>
 			</div>
 			<div class="inner-panel right-panel">
@@ -177,8 +183,10 @@
          	// ✅ 너비 기준으로 column-layout 클래스 추가/제거
           if (newWidth < 600) {
           	detailPanel.classList.add('column-layout');
+          	document.getElementById("abc").style.display = "block";
           } else {
             detailPanel.classList.remove('column-layout');
+            document.getElementById("abc").style.display = "none";
           }
      		}
     	}

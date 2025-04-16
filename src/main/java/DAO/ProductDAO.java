@@ -4,11 +4,14 @@ import DTO.ProductDTO;
 import DTO.ProductDetailDTO;
 import DTO.ProductImgDTO;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ProductDAO {
     private DBConnectionMgr pool;
 
+	private final SimpleDateFormat SDF_DATE = new SimpleDateFormat("yyyy-MM-dd");
+    
     public ProductDAO() {
         pool = DBConnectionMgr.getInstance();
     }
@@ -999,5 +1002,121 @@ public class ProductDAO {
         }
         
         return imageList;
+    }
+    
+    //한 리뷰에 대한 상품 출력
+    public ProductDTO getProductByReview(int r_id) {
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		int pd_id = 0;
+		int p_id = 0;
+		ProductDTO pDto = null;
+		try {
+			con = pool.getConnection();
+			sql = "select pd_id from review where r_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, r_id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				pd_id = rs.getInt(1);
+			pstmt.close();
+			rs.close();
+			
+			sql = "select p_id from product_detail where pd_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, pd_id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) 
+				p_id = rs.getInt(1);
+			pstmt.close();
+			rs.close();
+			
+			sql = "select * from product where p_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, p_id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				pDto = new ProductDTO(rs.getInt(1), rs.getString(2), 
+						rs.getString(3), rs.getString(4), rs.getInt(5), rs.getInt(6), 
+						rs.getString(7), rs.getString(8), SDF_DATE.format(rs.getDate(9)));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return pDto;
+    }
+    
+    //한 리뷰에 대한 상품 출력
+    public String getProductByReviewSize(int r_id) {
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		int pd_id = 0;
+		String pd_size = "";
+		try {
+			con = pool.getConnection();
+			sql = "select pd_id from review where r_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, r_id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				pd_id = rs.getInt(1);
+			pstmt.close();
+			rs.close();
+			
+			sql = "select pd_size from product_detail where pd_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, pd_id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				pd_size = rs.getString(1);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return pd_size;
+    }
+    
+    //한 리뷰에 대한 상품 이미지 출력
+    public String getProductByReviewImg(int r_id) {
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		int pd_id = 0;
+		String pd_size = "";
+		try {
+			con = pool.getConnection();
+			sql = "select pd_id from review where r_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, r_id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				pd_id = rs.getInt(1);
+			pstmt.close();
+			rs.close();
+			
+			sql = "select p_id from product_detail where pd_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, pd_id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				pd_size = rs.getString(1);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return pd_size;
     }
 }

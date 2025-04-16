@@ -31,8 +31,7 @@
 					<tr>
 						<td class="pdInfo">
 							<div class="product-box">
-								<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET"
-									class="product-img">
+								<img src="images/review1.jpg" alt="ARCH LOGO VARSITY JACKET" class="product-img">
 								<div class="product-info">
 									<strong>ARCH LOGO VARSITY JACKET</strong><br> NAVY<br>
 									마음에 들어요

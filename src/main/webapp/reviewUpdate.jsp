@@ -1,4 +1,28 @@
+<%@page import="DTO.ReviewImgDTO"%>
+<%@page import="java.util.List"%>
+<%@page import="DTO.ReviewDTO"%>
+<%@page import="java.util.Vector"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<jsp:useBean id="reDao" class="DAO.ReviewDAO"/>
+<%
+		String userId = (String)session.getAttribute("id");
+		String userType = (String)session.getAttribute("userType");
+		if(userId == null || userId == ""){
+			// 현재 페이지 경로를 얻기 위한 코드
+			String fullUrl = request.getRequestURI();
+			String queryString = request.getQueryString();
+			if (queryString != null) {
+				fullUrl += "?" + queryString;
+			}
+		
+			response.sendRedirect("login.jsp?redirect=" + java.net.URLEncoder.encode(fullUrl, "UTF-8"));
+			return;
+		}
+		
+		int r_id = Integer.parseInt(request.getParameter("r_id"));
+		ReviewDTO rDto = reDao.getReviewById(r_id);
+		List<ReviewImgDTO> rilist = reDao.getReviewImages(r_id);
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -32,13 +56,14 @@
 					enctype="multipart/form-data">
 					
 					<div class="star-rating" id="starRating">
-  					<span class="star" data-value="1">☆</span>
-  					<span class="star" data-value="2">☆</span>
-  					<span class="star" data-value="3">☆</span>
-  					<span class="star" data-value="4">☆</span>
-  					<span class="star" data-value="5">☆</span>
+					<%for(int i = 1; i<=rDto.getR_rating(); i++){ %>
+						<span class="star" data-value="<%=i%>">★</span>
+					<%} %>
+					<%for(int i = rDto.getR_rating(); i<5;i++){ %>
+						<span class="star" data-value="<%=i+1%>">☆</span>
+					<%} %>
 					</div>
-					<div class="rating-text">별점을 입력해주세요.</div>
+					<!-- <div class="rating-text">별점을 입력해주세요.</div> -->
 
 					<script>
   const stars = document.querySelectorAll('.star');
@@ -68,24 +93,33 @@
   }
 </script>
 
-					<label for="content">내용 *</label>
-					<textarea name="content" id="content" rows="6"
-						placeholder="내용을 입력해주세요." required></textarea>
-						
-						<label>사진 첨부</label>
+<label for="content">내용 *</label>
+<textarea name="content" id="content" rows="6" placeholder="내용을 입력해주세요." required><%=rDto.getR_content()%></textarea>
+
+<label>사진 첨부</label>
 
 <!-- 클릭용 박스 -->
-<label for="file-upload" class="photo-box" id="photo-box">＋</label>
-<input type="file" id="file-upload" name="files" accept="image/*" multiple style="display: none;">
+<div class="preview-wrapper" id="preview-wrapper" 
+     style="display: grid; grid-template-columns: repeat(4, 100px); gap: 10px; margin-top: 10px;">
+<% for(ReviewImgDTO imgDto : rilist) { %>
+    <div style="position: relative; width: 100px; height: 100px;">
+        <img src="review_images/<%= imgDto.getRi_url()%>" alt="리뷰 이미지" 
+             style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+             <button style="position: absolute; top: -5px; right: -5px; background: red; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer;">✕</button>
+    </div>
+<% } %>
+</div>
+<!-- <label for="file-upload" class="photo-box" id="photo-box">＋</label>
+<input type="file" id="file-upload" name="files" accept="image/*" multiple style="display: none;"> -->
 
 <!-- 파일명 표시 -->
 <!-- <div id="file-names" style="font-size: 14px; margin-top: 8px; color: #444;"></div> -->
 
 <!-- 미리보기 + 삭제버튼 -->
-<!-- <div class="preview-wrapper" id="preview-wrapper" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;"></div> -->
-<div class="preview-wrapper" id="preview-wrapper" 
-     style="display: grid; grid-template-columns: repeat(5, 100px); gap: 10px; margin-top: 10px;">
+<!-- <div class="preview-wrapper" id="preview-wrapper" 
+     style="display: grid; grid-template-columns: repeat(4, 100px); gap: 10px; margin-top: 10px;">
 </div>
+ -->
 
 
 <script>
@@ -93,21 +127,9 @@
 	const previewWrapper = document.getElementById('preview-wrapper');
 	const photoBox = document.getElementById('photo-box');
 /* 	const fileNames = document.getElementById('file-names'); */
- 	const MAXFILES = 5;
-
 
 	fileInput.addEventListener('change', function () {
 		const files = Array.from(this.files);
-		
-		// 개수 제한
-		if (files.length > MAX_FILES) {
-			alert("최대 " + MAXFILES + "장까지만 업로드할 수 있습니다..");
-			// input 초기화
-			fileInput.value = '';
-			return;
-		}
-		
-		
 		previewWrapper.innerHTML = '';
 /* 		fileNames.innerHTML = ''; */
 
