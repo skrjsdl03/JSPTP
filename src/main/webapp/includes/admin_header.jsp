@@ -35,7 +35,7 @@
 				</div>
 				<div class="menu-column">
 					<a href="admin_product_list.jsp" <%= "product_list".equals(subMenu) ? "class=\"active\"" : "" %>>상품 관리</a>
-					<a href="#" <%= "product_add".equals(subMenu) ? "class=\"active\"" : "" %>>상품 등록</a>
+					<a href="admin_product_edit.jsp" <%= "product_add".equals(subMenu) ? "class=\"active\"" : "" %>>상품 등록</a>
 				</div>
 				<div class="menu-column">
 					<a href="admin_member.jsp" <%= "member_list".equals(subMenu) ? "class=\"active\"" : "" %>>회원 목록 조회</a>
