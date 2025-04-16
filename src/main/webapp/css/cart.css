@@ -1,3 +1,4 @@
+/*cart.css*/
 body {
 	font-family: 'Malgun Gothic', sans-serif;
 	padding-top: 120px;
@@ -227,19 +228,32 @@ input[type="checkbox"]:checked::after {
 }
 
 .qty-control button {
-  width: 30px;
-  height: 30px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  cursor: pointer;
-  font-weight: bold;
-  border-radius: 4px;
+  background: none;
+  border: none;
   font-size: 16px;
-  transition: background-color 0.2s;
+  font-weight: bold;
+  color: #000;
+  cursor: pointer;
+  padding: 0 6px;
+  transition: color 0.2s;
 }
 
 .qty-control button:hover {
-  background-color: #f2f2f2;
+  color: #015FC1; /* hover 시 색상 변경 */
+}
+
+.qty-control {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.qty-value {
+  font-size: 14px;
+  font-weight: bold;
+  min-width: 20px;
+  text-align: center;
 }
 
 .qty-control input {

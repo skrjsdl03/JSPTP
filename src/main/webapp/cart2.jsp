@@ -1,3 +1,5 @@
+<!-- cart2.jsp -->
+
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <!DOCTYPE html>
 <html lang="ko">
@@ -59,7 +61,7 @@
 						<p class="item-name">Onitsuka Tiger Tokuten Gray</p>
 						<p class="item-option">220</p>
 						<div class="qty-control">
-							<button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+							<button class="qty-btn" onclick="changeQty(this, -1)">–</button>
 							<span class="qty-value">1</span>
 							<button class="qty-btn" onclick="changeQty(this, 1)">+</button>
 						</div>
@@ -82,7 +84,7 @@
 						<p class="item-name">Montbell Poketable Light Pack 18 Black</p>
 						<p class="item-option">one size</p>
 						<div class="qty-control">
-							<button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+							<button class="qty-btn" onclick="changeQty(this, -1)">–</button>
 							<span class="qty-value">1</span>
 							<button class="qty-btn" onclick="changeQty(this, 1)">+</button>
 						</div>
@@ -125,5 +127,39 @@
       document.getElementById("select-all").checked = all === checked;
     });
   });
+  
+  document.querySelector(".delete-box").addEventListener("click", function () {
+	  const checkedBoxes = document.querySelectorAll(".item-checkbox:checked");
+
+	  if (checkedBoxes.length === 0) {
+	    alert("삭제할 상품을 선택해주세요.");
+	    return;
+	  }
+
+	  const confirmed = confirm("선택한 상품을 삭제하시겠습니까?");
+	  if (!confirmed) return;
+
+	  checkedBoxes.forEach(cb => {
+	    const row = cb.closest(".order-row");
+	    if (row) row.remove();
+	  });
+
+	  // 전체선택 체크박스 상태 다시 확인
+	  const all = document.querySelectorAll(".item-checkbox").length;
+	  const checked = document.querySelectorAll(".item-checkbox:checked").length;
+	  document.getElementById("select-all").checked = all > 0 && all === checked;
+	});
+  
+  function changeQty(button, delta) {
+	  const qtyValue = button.parentElement.querySelector(".qty-value");
+	  let currentQty = parseInt(qtyValue.textContent);
+
+	  // delta가 -1이고 현재 수량이 1이면 더 이상 감소 금지
+	  if (delta === -1 && currentQty === 1) return;
+
+	  currentQty += delta;
+	  qtyValue.textContent = currentQty;
+	}
+
 </script>
 </html>
