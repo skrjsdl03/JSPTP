@@ -11,13 +11,13 @@ body {
 	gap: 40px; /* 항목 간 간격 */
 	list-style: none;
 	padding: 0;
-	margin: 0 0 50px 0;
+	margin: 0 0 30px 0;
 }
 
 .sub-nav ul li a {
 	text-decoration: none;
 	color: black;
-	font-size: 14px;
+	font-size: 15px;
 	font-family: 'Malgun Gothic', sans-serif;
 	font-weight: bold;
 }
@@ -28,6 +28,46 @@ body {
 
 .sub-nav ul li a.active {
 	color: #015FC1; /* 호버와 동일한 색상 */
+}
+
+.sub-nav2 ul {
+	display: flex;
+	justify-content: center;
+	gap: 40px; /* 항목 간 간격 */
+	list-style: none;
+	padding: 0;
+	margin: 0 0 50px 0;
+}
+
+.sub-nav2 ul li a {
+	text-decoration: none;
+	color: black;
+	font-size: 12px;
+	font-family: 'Malgun Gothic', sans-serif;
+	font-weight: bold;
+}
+
+.sub-nav2 ul li a:hover {
+	color: #015FC1;
+}
+
+.sub-nav2 ul li a.active {
+	color: #015FC1; /* 호버와 동일한 색상 */
+}
+
+.items ul {
+	display: flex;
+	justify-content: left;
+	list-style: none;
+	padding: 0;
+	margin: 0 20px;
+}
+
+.items ul li a {
+	color: black;
+	font-size: 14px;
+	font-family: 'Malgun Gothic', sans-serif;
+	font-weight: bold;
 }
 
 * {
@@ -49,6 +89,7 @@ body {
 	transition: all 0.3s ease;
 	overflow-y: auto; /* ✅ 세로 스크롤 활성화 */
 	height: 100vh;
+	gap: 5px 0;
 }
 
 .container.detail-open .product-list {
@@ -148,6 +189,16 @@ body {
 
 .right-panel {
 	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.right-panel .product-image {
+	max-width: 100%;
+	height: auto;
+	display: block;
+	margin: 0 auto; /* 백업용 중앙 정렬 */
 }
 
 .left-panel, .right-panel {
@@ -168,6 +219,16 @@ body {
 	.right-panel {
 		border-top: 1px solid #eee;
 		border-left: none;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+	.right-panel .product-image {
+		width: 90%; /* ✅ 패널 너비의 90%로 줄임 */
+		max-width: 400px; /* ✅ 최대 크기 제한 */
+		height: auto;
+		margin: 20px 0; /* 여백도 약간 추가 */
+		object-fit: contain;
 	}
 }
 
@@ -186,6 +247,17 @@ body {
 .detail-panel.column-layout .right-panel {
 	border-top: 1px solid #eee;
 	border-left: none;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.detail-panel.column-layout .right-panel .product-image {
+	width: 90%; /* ✅ 패널 너비의 90%로 줄임 */
+	max-width: 400px; /* ✅ 최대 크기 제한 */
+	height: auto;
+	margin: 20px 0; /* 여백도 약간 추가 */
+	object-fit: contain;
 }
 
 .fixed-buttons {
@@ -346,5 +418,24 @@ body {
 }
 
 .container.fullscreen-mode .close-btn {
-  display: none;
+	display: none;
+}
+
+.product-list::-webkit-scrollbar, .detail-panel::-webkit-scrollbar,
+	.left-panel::-webkit-scrollbar, .right-panel::-webkit-scrollbar {
+	display: none;
+}
+
+.sort-options {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	margin: 0 0 20px 0;
+	font-size: 14px;
+}
+
+.sort-options select {
+	margin-left: 8px;
+	padding: 4px 8px;
+	font-size: 14px;
 }
