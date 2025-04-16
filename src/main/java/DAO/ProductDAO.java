@@ -1131,5 +1131,96 @@ public class ProductDAO {
 		return pilist;
     }
     
+    //한 장바구니에 대한 상품 정보(사이즈)
+    public String getOnePdSizeForCart(int pd_id) {
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		String size = "";
+		try {
+			con = pool.getConnection();
+			sql = "select pd_size from product_detail where pd_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, pd_id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				size = rs.getString(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return size;
+    }
+    
+    //한 장바구니에 대한 상품 정보
+    public ProductDTO getOnePdForCart(int pd_id) {
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		int p_id = 0;
+		ProductDTO pDto = null;
+		try {
+			con = pool.getConnection();
+			sql = "select p_id from product_detail where pd_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, pd_id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				p_id = rs.getInt(1);
+			pstmt.close();
+			rs.close();
+			
+			sql = "select * from product where p_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, p_id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				pDto = new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8)));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return pDto;
+    }
+    
+    //한 장바구니에 대한 상품 정보(이미지)
+    public Vector<String> getOnePdImgForCart(int pd_id){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		int p_id = 0;
+		Vector<String> urllist = new Vector<String>();
+		try {
+			con = pool.getConnection();
+			sql = "select p_id from product_detail where pd_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, pd_id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				p_id = rs.getInt(1);
+			pstmt.close();
+			rs.close();
+			
+			sql = "select pi_url from product_image where p_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, p_id);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				urllist.add(rs.getString(1));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return urllist;
+    }
 
 }

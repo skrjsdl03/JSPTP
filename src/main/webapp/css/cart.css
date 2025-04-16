@@ -146,8 +146,8 @@ input[type="checkbox"]:checked {
 input[type="checkbox"]:checked::after {
   content: '';
   position: absolute;
-  top: 2px;
-  left: 5px;
+  top: 1px;
+  left: 4px;
   width: 4px;
   height: 8px;
   border: solid #fff;
@@ -190,7 +190,7 @@ input[type="checkbox"]:checked::after {
 }
 
 .option-button {
-  background-color: #f1f1f1;
+  background-color: #FFF;
   color: #000;
   text-decoration: none;
   border: none;
@@ -205,7 +205,7 @@ input[type="checkbox"]:checked::after {
 }
 
 .option-button:hover {
-  background-color: #e3e3e3;
+  background-color: #f1f1f1;
 }
 
 /* 주문 정보 */
@@ -229,7 +229,8 @@ input[type="checkbox"]:checked::after {
 .qty-control button {
   width: 30px;
   height: 30px;
-  border: 1px solid #ccc;
+/*   border: 1px solid #ccc; */
+  border: none;
   background-color: #fff;
   cursor: pointer;
   font-weight: bold;
