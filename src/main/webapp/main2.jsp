@@ -17,8 +17,8 @@
 	<!-- 하위 네비 -->
 	<nav class="sub-nav">
 		<ul>
-			<li><a href="splitTest.jsp" class="active">ALL</a></li>
-			<li><a href="#">OUTER</a></li>
+			<li><a href="splitTest2.jsp" class="active">ALL</a></li>
+			<li><a href="splitTest3(outerEx).jsp">OUTER</a></li>
 			<li><a href="#">TOP</a></li>
 			<li><a href="#">BOTTOM</a></li>
 			<li><a href="#">ACC</a></li>
