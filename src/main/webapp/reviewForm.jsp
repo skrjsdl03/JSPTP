@@ -1,240 +1,200 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>에브리웨어 | everyWEAR</title>
-<link rel="icon" type="image/png" href="images/fav-icon.png">
-<link rel="stylesheet" type="text/css" href="css/Q&A.css?v=578">
+  <meta charset="UTF-8">
+  <title>에브리웨어 | everyWEAR</title>
+  <link rel="icon" type="image/png" href="images/fav-icon.png">
+  <link rel="stylesheet" type="text/css" href="css/reviewDetail.css?v=578">
 </head>
 <body>
 
-	<%@ include file="includes/header.jsp"%>
+<%@ include file="includes/header.jsp" %>
 
-	<section2 class="content2">
-	<h3>REVIEW</h3>
-	</section2>
+<section class="content2">
+  <h3>REVIEW</h3>
+</section>
 
-	<div class="container">
-		<aside class="sidebar2">
-			<ul>
-				<li><a href="board.jsp">BOARD</a></li>
-				<li><a href="FAQ.jsp">FAQ</a></li>
-				<li><a href="Q&A.jsp">Q&A</a></li>
-				<li><a href="review.jsp">REVIEW</a></li>
-			</ul>
-		</aside>
+<div class="container">
+  <aside class="sidebar2">
+    <ul>
+      <li><a href="board.jsp">BOARD</a></li>
+      <li><a href="FAQ.jsp">FAQ</a></li>
+      <li><a href="Q&A.jsp">Q&A</a></li>
+      <li><a href="review.jsp">REVIEW</a></li>
+    </ul>
+  </aside>
 
-		<section class="content">
+  <section class="content">
+    <div class="form-container">
+    <table class="notice-table">
+  <tr>
+    <td class="pdInfo">
+      <div class="product-box">
+        <img src="images/review-cloth1.png" alt="NM COTTON SHIRT" class="product-img">
+        <div class="product-info">
+          <strong>AETHER NYLON JACKET</strong><br>
+          COLOR: SKY BLUE
+        </div>
+      </div>
+    </td>
+    <td class="date">
+      2025-04-17
+    </td>
+  </tr>
+</table>
+    
+      <form action="submitReview.jsp" method="post" enctype="multipart/form-data">
 
-			<div class="form-container">
-				<form action="submitQna.jsp" method="post"
-					enctype="multipart/form-data">
-					
-					<div class="star-rating" id="starRating">
-  					<span class="star" data-value="1">☆</span>
-  					<span class="star" data-value="2">☆</span>
-  					<span class="star" data-value="3">☆</span>
-  					<span class="star" data-value="4">☆</span>
-  					<span class="star" data-value="5">☆</span>
-					</div>
-					<div class="rating-text">별점을 입력해주세요.</div>
+        <div class="star-rating" id="starRating">
+          <% for(int i = 1; i <= 5; i++) { %>
+            <span class="star" data-value="<%=i%>">☆</span>
+          <% } %>
+        </div>
 
-					<script>
-  const stars = document.querySelectorAll('.star');
+        <label for="content">내용 *</label>
+        <textarea name="content" id="content" rows="6"></textarea>
+
+        <label>사진 첨부</label>
+        <div class="preview-wrapper" id="preview-wrapper"
+             style="display: grid; grid-template-columns: repeat(5, 100px); gap: 10px; margin-top: 10px; align-items: start;">
+          <div class="preview-image-box">
+            <label class="upload-box">
+              <span>＋</span>
+              <input type="file" name="reviewImage" id="fileInput" accept="image/*" multiple hidden>
+            </label>
+          </div>
+        </div>
+
+        <div id="image-count" class="image-count">0 / 5 장 업로드됨</div>
+
+        <div class="write-btn-wrapper2">
+          <button type="submit" class="write-btn2">등록</button>
+          <button type="button" class="write-btn2" onclick="window.history.back()">취소</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="footer-bottom">
+      <p>2025&copy;everyWEAR</p>
+    </div>
+  </section>
+</div>
+
+<script>
+  // 별점 처리
   let currentRating = 0;
-
+  const stars = document.querySelectorAll(".star");
   stars.forEach((star) => {
-    star.addEventListener('click', () => {
-      currentRating = parseInt(star.getAttribute('data-value'));
-      updateStars();
+    star.style.cursor = "pointer";
+
+    star.addEventListener("click", () => {
+      const selected = parseInt(star.getAttribute("data-value"));
+      currentRating = selected;
+      updateStars(currentRating);
     });
 
-    star.addEventListener('mouseover', () => {
-      const hoverValue = parseInt(star.getAttribute('data-value'));
+    star.addEventListener("mouseover", () => {
+      const hoverValue = parseInt(star.getAttribute("data-value"));
       updateStars(hoverValue);
     });
 
-    star.addEventListener('mouseleave', () => {
-      updateStars();
+    star.addEventListener("mouseleave", () => {
+      updateStars(currentRating);
     });
   });
 
-  function updateStars(tempRating = currentRating) {
+  function updateStars(tempRating) {
     stars.forEach((star) => {
-      const value = parseInt(star.getAttribute('data-value'));
-      star.textContent = value <= tempRating ? '★' : '☆';
+      const value = parseInt(star.getAttribute("data-value"));
+      star.textContent = value <= tempRating ? "★" : "☆";
     });
   }
 </script>
 
-					<label for="content">내용 *</label>
-					<textarea name="content" id="content" rows="6"
-						placeholder="내용을 입력해주세요." required></textarea>
-						
-						<label>사진 첨부</label>
-
-<!-- 클릭용 박스 -->
-<label for="file-upload" class="photo-box" id="photo-box">＋</label>
-<input type="file" id="file-upload" name="files" accept="image/*" multiple style="display: none;">
-
-<!-- 파일명 표시 -->
-<!-- <div id="file-names" style="font-size: 14px; margin-top: 8px; color: #444;"></div> -->
-
-<!-- 미리보기 + 삭제버튼 -->
-<!-- <div class="preview-wrapper" id="preview-wrapper" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;"></div> -->
-<div class="preview-wrapper" id="preview-wrapper" 
-     style="display: grid; grid-template-columns: repeat(5, 100px); gap: 10px; margin-top: 10px;">
-</div>
-
-
 <script>
-	const fileInput = document.getElementById('file-upload');
-	const previewWrapper = document.getElementById('preview-wrapper');
-	const photoBox = document.getElementById('photo-box');
-/* 	const fileNames = document.getElementById('file-names'); */
- 	const MAXFILES = 5;
+  document.addEventListener("DOMContentLoaded", () => {
+    const fileInput = document.getElementById("fileInput");
+    const previewWrapper = document.getElementById("preview-wrapper");
+    const countDisplay = document.getElementById("image-count");
+    const uploadBox = previewWrapper.querySelector(".upload-box")?.parentElement;
 
+    function updateUploadBoxVisibility() {
+      const allBoxes = [...previewWrapper.querySelectorAll(".preview-image-box")];
+      const count = allBoxes.filter(box => box.querySelector("img")).length;
 
-	fileInput.addEventListener('change', function () {
-		const files = Array.from(this.files);
-		
-		// 개수 제한
-		if (files.length > MAX_FILES) {
-			alert("최대 " + MAXFILES + "장까지만 업로드할 수 있습니다..");
-			// input 초기화
-			fileInput.value = '';
-			return;
-		}
-		
-		
-		previewWrapper.innerHTML = '';
-/* 		fileNames.innerHTML = ''; */
+      if (countDisplay) countDisplay.textContent = count + " / 5 장 업로드됨";
+      if (uploadBox) uploadBox.style.display = (count >= 5) ? "none" : "flex";
+    }
 
-		if (files.length > 0) {
-			photoBox.style.display = 'none';
+    fileInput.addEventListener("change", (e) => {
+      const allBoxes = [...previewWrapper.querySelectorAll(".preview-image-box")];
+      const currentCount = allBoxes.filter(box => box.querySelector("img")).length;
+      const availableCount = 5 - currentCount;
+      const files = Array.from(e.target.files).slice(0, availableCount);
 
-			files.forEach((file, index) => {
-/* 				// 파일 이름 출력
-				const fileNameElem = document.createElement('p');
-				fileNameElem.innerText = file.name;
-				fileNames.appendChild(fileNameElem); */
+      files.forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const imgBox = document.createElement("div");
+          imgBox.className = "preview-image-box client-added";
+          imgBox.style.cssText = "position: relative; width: 100px; height: 100px;";
 
-				// 이미지 미리보기
-				const reader = new FileReader();
-				reader.onload = function (e) {
-					const previewBox = document.createElement('div');
-					previewBox.style.position = 'relative';
-					previewBox.style.width = '100px';
-					previewBox.style.height = '100px';
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          img.alt = "업로드 이미지";
+          img.style.cssText = "width: 100%; height: 100%; object-fit: cover; border-radius: 6px;";
 
-					const img = document.createElement('img');
-					img.src = e.target.result;
-					img.style.width = '100%';
-					img.style.height = '100%';
-					img.style.objectFit = 'cover';
-					img.style.borderRadius = '6px';
+          const delBtn = document.createElement("button");
+          delBtn.className = "delete-btn";
+          delBtn.textContent = "×";
+          delBtn.onclick = () => {
+            imgBox.remove();
+            updateUploadBoxVisibility();
+          };
 
-					const deleteBtn = document.createElement('button');
-					deleteBtn.innerText = '✕';
-					deleteBtn.style.position = 'absolute';
-					deleteBtn.style.top = '-5px';
-					deleteBtn.style.right = '-5px';
-					deleteBtn.style.background = 'red';
-					deleteBtn.style.color = '#fff';
-					deleteBtn.style.border = 'none';
-					deleteBtn.style.borderRadius = '50%';
-					deleteBtn.style.width = '20px';
-					deleteBtn.style.height = '20px';
-					deleteBtn.style.cursor = 'pointer';
-					deleteBtn.setAttribute('data-index', index);
+          imgBox.appendChild(img);
+          imgBox.appendChild(delBtn);
 
-					deleteBtn.addEventListener('click', () => {
-						files.splice(index, 1);
-						// 재할당해서 다시 트리거
-						const dataTransfer = new DataTransfer();
-						files.forEach(f => dataTransfer.items.add(f));
-						fileInput.files = dataTransfer.files;
-						fileInput.dispatchEvent(new Event('change'));
-					});
+          if (uploadBox) {
+            previewWrapper.insertBefore(imgBox, uploadBox);
+          } else {
+            previewWrapper.appendChild(imgBox);
+          }
 
-					previewBox.appendChild(img);
-					previewBox.appendChild(deleteBtn);
-					previewWrapper.appendChild(previewBox);
-				};
-				reader.readAsDataURL(file);
-			});
-		} else {
-			photoBox.style.display = 'flex';
-		}
-	});
+          updateUploadBoxVisibility();
+        };
+        reader.readAsDataURL(file);
+      });
+
+      e.target.value = '';
+    });
+
+    updateUploadBoxVisibility();
+
+    // textarea placeholder 동작처럼 구현
+    const textarea = document.getElementById("content");
+
+    if (textarea.value.trim() === "") {
+      textarea.value = "내용을 입력해주세요.";
+      textarea.style.color = "#999";
+    }
+
+    textarea.addEventListener("focus", function () {
+      if (this.value === "내용을 입력해주세요.") {
+        this.value = "";
+        this.style.color = "#000";
+      }
+    });
+
+    textarea.addEventListener("blur", function () {
+      if (this.value.trim() === "") {
+        this.value = "내용을 입력해주세요.";
+        this.style.color = "#999";
+      }
+    });
+  });
 </script>
-						
-						
-<!-- 					<label>사진 첨부</label>
-
-					클릭용 박스
-					<label for="file-upload" class="photo-box" id="photo-box">＋</label>
-					<input type="file" id="file-upload" name="file" accept="image/*" style="display: none;">
-
-					파일명 표시
-					<p id="file-name" style="font-size: 14px; margin-top: 8px; color: #444;"></p>
-
-					미리보기 + 삭제버튼
-					<div class="preview-wrapper" id="preview-wrapper" style="display: none;">
-						<img id="preview-image" />
-						<button type="button" class="delete-btn" id="delete-btn">✕</button>
-					</div>
-
-					<script>
-						const fileInput = document
-								.getElementById('file-upload');
-						const previewImage = document
-								.getElementById('preview-image');
-						const previewWrapper = document
-								.getElementById('preview-wrapper');
-						const photoBox = document.getElementById('photo-box');
-						const deleteBtn = document.getElementById('delete-btn');
-						const fileNameText = document
-								.getElementById('file-name');
-
-						fileInput.addEventListener('change', function() {
-							const file = this.files[0];
-							if (file) {
-								// 파일명 표시
-								fileNameText.innerText = file.name;
-
-								// 미리보기 표시
-								const reader = new FileReader();
-								reader.onload = function(e) {
-									previewImage.src = e.target.result;
-									previewWrapper.style.display = 'block';
-									photoBox.style.display = 'none';
-								};
-								reader.readAsDataURL(file);
-							}
-						});
-
-						deleteBtn.addEventListener('click', function() {
-							fileInput.value = '';
-							fileNameText.innerText = '';
-							previewWrapper.style.display = 'none';
-							photoBox.style.display = 'flex';
-						});
-					</script> -->
-					
-				</form>
-			</div>
-
-			<div class="write-btn-wrapper">
-				<button class="write-btn">작성하기</button>
-			</div>
-
-			<div class="footer-bottom">
-				<p>2025&copy;everyWEAR</p>
-			</div>
-
-		</section>
-	</div>
 
 </body>
+</html>
