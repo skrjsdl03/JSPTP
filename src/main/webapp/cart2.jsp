@@ -90,6 +90,7 @@ Vector<FavoriteDTO> flist = fDao.getUserCart(userId, userType);
 							String size = pDao.getOnePdSizeForCart(fDto.getPd_id());
 							pDto = pDao.getOnePdForCart(fDto.getPd_id());
 							Vector<String> urllist = pDao.getOnePdImgForCart(fDto.getPd_id());
+							
 			%>
 				<!-- 상품 -->
 				<div class="order-row">
@@ -277,17 +278,17 @@ window.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <script>
-	function pay(){
-		  // 체크된 체크박스 전부 가져오기
-		  const checkedItems = document.querySelectorAll('.item-checkbox:checked');
-
-		  if (checkedItems.length === 0) {
-		    alert("상품을 선택해주세요.");
-		    return;
-		  }
-		  
-		  document.getElementById("payForm").submit();
-	}
+// 페이지 로드 후 특정 상품을 품절 처리
+window.addEventListener("DOMContentLoaded", () => {
+  const orderRows = document.querySelectorAll(".order-row");
+  
+  // 예: 3번째 상품을 회색 처리하고 싶다면 (index는 0부터 시작)
+  const soldOutIndex = 2;
+  if (orderRows[soldOutIndex]) {
+    orderRows[soldOutIndex].classList.add("soldout");
+  }
+});
 </script>
+
 </body>
 </html>

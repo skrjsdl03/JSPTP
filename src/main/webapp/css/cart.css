@@ -125,6 +125,38 @@ h3 {
 	gap: 0;
 }
 
+.order-row.soldout {
+  background-color: #eee;
+  opacity: 1; /* 전체 흐림 제거 */
+  position: relative;
+}
+
+/* 기존 품절 텍스트 스타일 + 가격까지 */
+.order-row.soldout .item-name,
+.order-row.soldout .item-option,
+.order-row.soldout .qty-value,
+.order-row.soldout .order-meta strong {
+  color: #999;
+  text-decoration: line-through;
+}
+
+.order-row.soldout img {
+  filter: grayscale(100%);
+  opacity: 0.6;
+}
+
+/* 수량 조절 버튼 비활성화 */
+.order-row.soldout .qty-btn {
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* 옵션 변경 버튼 비활성화 */
+.order-row.soldout .option-button {
+  pointer-events: none;
+  opacity: 0.3;
+}
+
 /* 기본 체크박스 숨김 + 커스텀 디자인 */
 input[type="checkbox"] {
   appearance: none; /* 브라우저 기본 스타일 제거 */
@@ -165,7 +197,9 @@ input[type="checkbox"]:checked::after {
 	border-radius: 8px;
 	background-color: #fff;
 	transition: background-color 0.3s ease;
-	border-bottom: 1px solid #ccc;}
+	border-bottom: 1px solid #ccc;
+	margin-bottom: 20px;
+}
 
 /* 이미지 스타일 */
 .order-row img {
@@ -390,7 +424,6 @@ input[readonly] {
 .delete-text {
   font-size: 13px;
   color: #333;
-  cursor: pointer;
 }
 
 .delete-icon {
