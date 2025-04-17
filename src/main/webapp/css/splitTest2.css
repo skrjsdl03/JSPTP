@@ -11,13 +11,13 @@ body {
 	gap: 40px; /* 항목 간 간격 */
 	list-style: none;
 	padding: 0;
-	margin: 0 0 30px 0;
+	margin: 0;
 }
 
 .sub-nav ul li a {
 	text-decoration: none;
 	color: black;
-	font-size: 15px;
+	font-size: 14px;
 	font-family: 'Malgun Gothic', sans-serif;
 	font-weight: bold;
 }
@@ -36,7 +36,7 @@ body {
 	gap: 40px; /* 항목 간 간격 */
 	list-style: none;
 	padding: 0;
-	margin: 0 0 50px 0;
+	margin: 30px 0 0 0;
 }
 
 .sub-nav2 ul li a {
@@ -55,7 +55,12 @@ body {
 	color: #015FC1; /* 호버와 동일한 색상 */
 }
 
-.items ul {
+#subCategoryList a.active {
+	color: #015FC1;
+	font-weight: bold;
+}
+
+/* .items ul {
 	display: flex;
 	justify-content: left;
 	list-style: none;
@@ -68,8 +73,7 @@ body {
 	font-size: 14px;
 	font-family: 'Malgun Gothic', sans-serif;
 	font-weight: bold;
-}
-
+} */
 * {
 	box-sizing: border-box;
 }
@@ -82,7 +86,7 @@ body {
 
 .product-list {
 	flex-grow: 1;
-	padding: 20px 20px 0px 20px;
+	padding: 25px 20px 0px 20px;
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 	min-width: 800px;
@@ -430,8 +434,13 @@ body {
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
-	margin: 0 0 20px 0;
+	margin: 0 0 5px 0;
 	font-size: 14px;
+}
+
+.label-bold {
+	font-weight: bold;
+	font-size: 15px;
 }
 
 .sort-options select {

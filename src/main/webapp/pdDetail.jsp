@@ -1,4 +1,51 @@
+<%@page import="java.util.Arrays"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%
+// 1. 상품 ID 받기
+/* String id = request.getParameter("id");
+if (id == null)
+	id = "101"; */
+
+// 2. 가짜 상품 데이터 생성
+class Product {
+	String id, name, size, color;
+	int price;
+	String thumbnail; // 대표 이미지
+	List<String> detailImages; // 상세 이미지들
+
+	Product(String id, String name, int price, String size, String color, String thumbnail, List<String> detailImages) {
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.size = size;
+		this.color = color;
+		this.thumbnail = thumbnail;
+		this.detailImages = detailImages;
+	}
+}
+
+List<Product> allProducts = new ArrayList<>();
+allProducts.add(new Product("101", "오버핏 자켓", 89000, "M / L", "Black", "images/main-cloth1.png",
+		Arrays.asList("images/main-cloth2.png", "images/main-cloth3.png")));
+allProducts.add(new Product("102", "데님 팬츠", 69000, "S / M / L", "Blue", "images/main-cloth1.png",
+		Arrays.asList("images/main-cloth2.png", "images/main-cloth3.png")));
+
+// 3. 상품 찾기
+/* Product selected = null;
+for (Product p : allProducts) {
+	if (p.id.equals(id)) {
+		selected = p;
+		break;
+	}
+} */
+
+/* if (selected == null) {
+	out.println("<h2>해당 상품을 찾을 수 없습니다.</h2>");
+	return;
+} */
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -19,24 +66,15 @@
 
 	<%@ include file="includes/header.jsp"%>
 
-	<!-- 하위 네비 -->
+	<!-- 대분류 카테고리 -->
 	<nav class="sub-nav">
 		<ul>
-			<li><a href="splitTest2.jsp" class="active">ALL</a></li>
-			<li><a href="#">OUTER</a></li>
-			<li><a href="#">TOP</a></li>
-			<li><a href="#">BOTTOM</a></li>
-			<li><a href="#">ACC</a></li>
-		</ul>
-	</nav>
-	<nav class="sub-nav2">
-		<ul>
-			<li><a href="pdListAll.jsp" class="active">HEAVY OUTER</a></li>
-			<li><a href="#">HOODED ZIP-UP</a></li>
-			<li><a href="#">JACKET</a></li>
-			<li><a href="#">JUMPER</a></li>
-			<li><a href="#">VEST</a></li>
-			<li><a href="#">WIND BREAKER</a></li>
+			<li><a href="splitTest2.jsp?cat=all">ALL</a></li>
+			<li><a href="splitTest2.jsp?cat=outer">OUTER</a></li>
+			<li><a href="splitTest2.jsp?cat=top">TOP</a></li>
+			<li><a href="splitTest2.jsp?cat=bottom">BOTTOM</a></li>
+			<li><a href="splitTest2.jsp?cat=acc">ACC</a></li>
+			<li><a href="splitTest2.jsp?cat=etc">ETC</a></li>
 		</ul>
 	</nav>
 
@@ -79,8 +117,9 @@
 					<div class="total-price">TOTAL: KRW 0 (0개)</div>
 
 					<div class="buy-buttons">
-						<button class="btn outline">ADD TO BAG</button>
+						<button class="btn outline">ADD TO CART</button>
 						<button class="btn filled">BUY NOW</button>
+						<button class="btn wishlist-btn" id="wishlistBtn">🤍</button>
 					</div>
 
 					<div class="section2">
@@ -263,41 +302,109 @@
 				<button class="write-review-btn">상품 리뷰 작성하기</button>
 			</div>
 			<div class="rating-bars">
-				<p>
-					아주 좋아요 <span class="bar"><span class="fill"
-						style="width: 100%;"></span></span> 10
-				</p>
-				<p>
-					맘에 들어요 <span class="bar"><span class="fill"
-						style="width: 0%;"></span></span> 0
-				</p>
-				<p>
-					보통이에요 <span class="bar"><span class="fill"
-						style="width: 0%;"></span></span> 0
-				</p>
-				<p>
-					그냥 그래요 <span class="bar"><span class="fill"
-						style="width: 0%;"></span></span> 0
-				</p>
-				<p>
-					별로예요 <span class="bar"><span class="fill" style="width: 0%;"></span></span>
-					0
-				</p>
+				<div class="rating-row">
+					<div class="rating-label">아주 좋아요</div>
+					<div class="bar">
+						<div class="fill" style="width: 100%;"></div>
+					</div>
+					<div class="rating-count">10</div>
+				</div>
+				<div class="rating-row">
+					<div class="rating-label">맘에 들어요</div>
+					<div class="bar">
+						<div class="fill" style="width: 0%;"></div>
+					</div>
+					<div class="rating-count">0</div>
+				</div>
+				<div class="rating-row">
+					<div class="rating-label">보통이에요</div>
+					<div class="bar">
+						<div class="fill" style="width: 0%;"></div>
+					</div>
+					<div class="rating-count">0</div>
+				</div>
+				<div class="rating-row">
+					<div class="rating-label">그냥 그래요</div>
+					<div class="bar">
+						<div class="fill" style="width: 0%;"></div>
+					</div>
+					<div class="rating-count">0</div>
+				</div>
+				<div class="rating-row">
+					<div class="rating-label">별로예요</div>
+					<div class="bar">
+						<div class="fill" style="width: 0%;"></div>
+					</div>
+					<div class="rating-count">0</div>
+				</div>
+				<!-- 나머지도 동일하게 반복 -->
 			</div>
+
 		</div>
 
 		<!-- 필터 및 정렬 -->
 		<div class="review-filters">
-			<div class="sort">추천순 | 최신순</div>
-			<div class="filter-box">
-				<button>별점</button>
-				<button>키</button>
-				<button>몸무게</button>
-				<button>평소 사이즈</button>
+			<div class="sort">
+				<span class="sort-option inactive">추천순</span> |
+				<span class="sort-option active">최신순</span>
 			</div>
 			<div class="photo-toggle">📷 포토/영상 리뷰만 보기</div>
 			<input type="text" placeholder="리뷰 키워드 검색" />
 		</div>
+		
+		<div class="review-filters2">
+			<div class="filter-box">
+				<button class="filter-btn" data-target="star-filter">별점 ▽</button>
+				<button class="filter-btn" data-target="height-filter">키 ▽</button>
+				<button class="filter-btn" data-target="weight-filter">몸무게 ▽</button>
+				<button class="filter-btn" data-target="size-filter">사이즈 ▽</button>
+			</div>
+
+			<!-- 별점 필터 드롭다운 -->
+			<div class="filter-dropdown" id="star-filter">
+				<div class="dropdown-header">
+					<span>별점</span>
+					<button class="reset-btn">초기화 🔄</button>
+				</div>
+				<ul class="star-options">
+					<li><span>★★★★★</span> 아주 좋아요 <input type="checkbox"></li>
+					<li><span>★★★★☆</span> 맘에 들어요 <input type="checkbox"></li>
+					<li><span>★★★☆☆</span> 보통이에요 <input type="checkbox"></li>
+					<li><span>★★☆☆☆</span> 그냥 그래요 <input type="checkbox"></li>
+					<li><span>★☆☆☆☆</span> 별로예요 <input type="checkbox"></li>
+				</ul>
+				<button class="complete-btn">완료</button>
+			</div>
+		</div>
+		
+		<!-- 키 필터 드롭다운 -->
+<div class="filter-dropdown" id="height-filter">
+  <div class="dropdown-header">
+    <span>키</span>
+    <button class="reset-btn" onclick="resetHeightFilter()">초기화 🔄</button>
+  </div>
+  
+  <div class="height-options">
+    <button class="height-btn">149 cm 이하</button>
+    <button class="height-btn">150 ~ 152 cm</button>
+    <button class="height-btn">153 ~ 155 cm</button>
+    <button class="height-btn">156 ~ 158 cm</button>
+    <button class="height-btn">159 ~ 161 cm</button>
+    <button class="height-btn">162 ~ 164 cm</button>
+    <button class="height-btn">165 ~ 167 cm</button>
+    <button class="height-btn">168 ~ 170 cm</button>
+    <button class="height-btn">171 ~ 173 cm</button>
+    <button class="height-btn">174 ~ 176 cm</button>
+    <button class="height-btn">177 ~ 179 cm</button>
+    <button class="height-btn">180 ~ 182 cm</button>
+    <button class="height-btn">183 ~ 185 cm</button>
+    <button class="height-btn">186 ~ 188 cm</button>
+    <button class="height-btn">189 ~ 191 cm</button>
+    <button class="height-btn">192 cm 이상</button>
+  </div>
+
+  <button class="complete-btn">완료</button>
+</div>
 
 		<!-- 리뷰 리스트 -->
 		<div class="review-list">
@@ -312,6 +419,47 @@
 			</div>
 		</div>
 	</section>
+
+	<!-- Q&A 영역 -->
+	<section class="qna-section">
+		<h2>Q&amp;A</h2>
+		<hr class="qna-divider">
+
+		<div class="qna-list">
+			<div class="qna-item">
+				<span class="qna-lock">🔒</span> <span class="qna-title">배송관련
+					문의입니다.</span>
+				<div class="qna-meta">
+					<span class="qna-status">답변 예정</span> <span class="qna-date">2025-03-30</span>
+					<span class="qna-category">배송 문의</span>
+				</div>
+			</div>
+
+			<div class="qna-item">
+				<span class="qna-lock">🔒</span> <span class="qna-title">제품
+					상세 문의입니다.</span>
+				<div class="qna-meta">
+					<span class="qna-status">답변 완료</span> <span class="qna-date">2025-03-30</span>
+					<span class="qna-category">제품 상세 문의</span>
+				</div>
+			</div>
+
+			<div class="qna-item">
+				<span class="qna-lock">🔒</span> <span class="qna-title">배송관련
+					문의입니다.</span>
+				<div class="qna-meta">
+					<span class="qna-status">답변 완료</span> <span class="qna-date">2025-03-30</span>
+					<span class="qna-category">배송 문의</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="qna-btn-wrapper">
+			<button class="qna-write-btn"
+			onclick="location.href='qnaForm.jsp'">작성하기</button>
+		</div>
+	</section>
+
 
 	<script>
   	document.querySelectorAll(".guide-toggle").forEach(button => {
@@ -336,6 +484,51 @@
   	});
 	</script>
 
+	<script>
+ 		document.addEventListener("DOMContentLoaded", () => {
+    	const wishlistBtn = document.getElementById("wishlistBtn");
+
+    	wishlistBtn.addEventListener("click", () => {
+      	wishlistBtn.classList.toggle("active");
+      	wishlistBtn.textContent = wishlistBtn.classList.contains("active") ? "❤️" : "🤍";
+    	});
+  	});
+	</script>
+
+	<script>
+	document.addEventListener("DOMContentLoaded", () => {
+	  // 필터 버튼 클릭 시 드롭다운 열기
+	  document.querySelectorAll(".filter-btn").forEach(btn => {
+	    btn.addEventListener("click", () => {
+	      const targetId = btn.dataset.target;
+	      const dropdown = document.getElementById(targetId);
+	
+	      // 다른 드롭다운 닫기
+	      document.querySelectorAll(".filter-dropdown").forEach(el => {
+	        if (el !== dropdown) el.style.display = "none";
+	      });
+	
+	      // 현재 드롭다운 토글
+	      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+	    });
+	  });
+	
+	  // ✅ 완료 버튼 클릭 시 드롭다운 닫기
+	  document.querySelectorAll(".complete-btn").forEach(btn => {
+	    btn.addEventListener("click", () => {
+	      const dropdown = btn.closest(".filter-dropdown");
+	      dropdown.style.display = "none";
+	    });
+	  });
+	
+	  // ✅ 바깥 클릭 시 드롭다운 닫기 (선택)
+	  document.addEventListener("click", (e) => {
+	    if (!e.target.closest(".filter-box") && !e.target.closest(".filter-dropdown")) {
+	      document.querySelectorAll(".filter-dropdown").forEach(el => el.style.display = "none");
+	    }
+	  });
+	});
+	</script>
 
 </body>
 </html>

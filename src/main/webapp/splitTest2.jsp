@@ -1,7 +1,59 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page contentType="text/html;charset=UTF-8" language="java"%>
 <%
-	String category = request.getParameter("cat");
-	if (category == null) category = "default";
+// 카테고리 파라미터 처리
+String category = request.getParameter("cat");
+if (category == null) {
+	category = "all";
+}
+
+String subCategory = request.getParameter("subCat");
+if (subCategory == null) {
+	subCategory = "all";
+}
+
+// 임시 상품 데이터
+class Product {
+	String id;
+	String name;
+	int price;
+	String image;
+	String category;
+
+	Product(String id, String name, int price, String image, String category) {
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.image = image;
+		this.category = category;
+	}
+}
+
+List<Product> allProducts = new ArrayList<>();
+allProducts.add(new Product("101", "후리스 자켓", 59000, "images/main-cloth1.png", "outer"));
+allProducts.add(new Product("102", "셔츠 블라우스", 49000, "images/main-cloth2.png", "top"));
+allProducts.add(new Product("103", "데님 팬츠", 69000, "images/main-cloth3.png", "bottom"));
+allProducts.add(new Product("104", "롱코트", 129000, "images/main-cloth4.png", "acc"));
+allProducts.add(new Product("105", "기본 티셔츠", 19000, "images/main-cloth5.png", "outer"));
+allProducts.add(new Product("106", "후리스 자켓", 59000, "images/main-cloth1.png", "outer"));
+allProducts.add(new Product("107", "셔츠 블라우스", 49000, "images/main-cloth2.png", "top"));
+allProducts.add(new Product("108", "데님 팬츠", 69000, "images/main-cloth3.png", "bottom"));
+allProducts.add(new Product("109", "롱코트", 129000, "images/main-cloth4.png", "acc"));
+allProducts.add(new Product("110", "기본 티셔츠", 19000, "images/main-cloth5.png", "outer"));
+allProducts.add(new Product("111", "후리스 자켓", 59000, "images/main-cloth1.png", "outer"));
+allProducts.add(new Product("112", "셔츠 블라우스", 49000, "images/main-cloth2.png", "top"));
+allProducts.add(new Product("113", "데님 팬츠", 69000, "images/main-cloth3.png", "bottom"));
+allProducts.add(new Product("114", "롱코트", 129000, "images/main-cloth4.png", "acc"));
+allProducts.add(new Product("115", "기본 티셔츠", 19000, "images/main-cloth5.png", "outer"));
+
+// 필터링
+List<Product> filteredProducts = new ArrayList<>();
+for (Product p : allProducts) {
+	if (category.equals("all") || p.category.equals(category)) {
+		filteredProducts.add(p);
+	}
+}
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -18,115 +70,323 @@
 	<!-- 대분류 카테고리 -->
 	<nav class="sub-nav">
 		<ul>
-			<li><a href="splitTest2.jsp?cat=all" class="active">ALL</a></li>
-			<li><a href="splitTest2.jsp?cat=outer">OUTER</a></li>
-			<li><a href="splitTest2.jsp?cat=top">TOP</a></li>
-			<li><a href="splitTest2.jsp?cat=bottom">BOTTOM</a></li>
-			<li><a href="splitTest2.jsp?cat=acc">ACC</a></li>
+			<li><a href="splitTest2.jsp?cat=all"
+				class="<%=category.equals("all") ? "active" : ""%>">ALL</a></li>
+			<li><a href="splitTest2.jsp?cat=outer"
+				class="<%=category.equals("outer") ? "active" : ""%>">OUTER</a></li>
+			<li><a href="splitTest2.jsp?cat=top"
+				class="<%=category.equals("top") ? "active" : ""%>">TOP</a></li>
+			<li><a href="splitTest2.jsp?cat=bottom"
+				class="<%=category.equals("bottom") ? "active" : ""%>">BOTTOM</a></li>
+			<li><a href="splitTest2.jsp?cat=acc"
+				class="<%=category.equals("acc") ? "active" : ""%>">ACC</a></li>
+			<li><a href="splitTest2.jsp?cat=etc"
+				class="<%=category.equals("etc") ? "active" : ""%>">ETC</a></li>
 		</ul>
 	</nav>
 
 	<!-- 중분류 카테고리 -->
-	<nav class="sub-nav2">
-		<ul>
-			<li><a href="#" class="active">HEAVY OUTER</a></li>
-			<li><a href="#">HOODED ZIP-UP</a></li>
-			<li><a href="#">JACKET</a></li>
-			<li><a href="#">JUMPER</a></li>
-			<li><a href="#">VEST</a></li>
-			<li><a href="#">WIND BREAKER</a></li>
-		</ul>
+	<nav class="sub-nav2" id="subCategoryNav"
+		style="<%=category.equals("all") ? "display:none;" : "display:block;"%>">
+		<ul id="subCategoryList"></ul>
 	</nav>
 
-	<div class="main-content">
-		<%
-		switch (category) {
-		case "outer" :
-		%><jsp:include page="outer.jsp" />
-		<%
-		break;
-		case "top" :
-		%><jsp:include page="outer.jsp" />
-		<%
-		break;
-		case "bottom" :
-		%><jsp:include page="outer.jsp" />
-		<%
-		break;
-		case "acc" :
-		%><jsp:include page="outer.jsp" />
-		<%
-		break;
-		default :
-		%>
-		<%
-		}
-		%>
-	</div>
-	
-	<nav class="items">
+	<!-- <nav class="items">
 		<ul>
 			<li><a>ITEMS()</a></li>
 		</ul>
-	</nav>
+	</nav> -->
 
 	<!-- 정렬 옵션 -->
 	<div class="sort-options">
-		<label for="sort-select">정렬 :</label> <select id="sort-select">
-			<option value="popular">인기순</option>
-			<option value="new">신상품순</option>
-			<option value="low">낮은 가격순</option>
-			<option value="high">높은 가격순</option>
+		<label for="sort-select" class="label-bold">ITEMS() </label>
+		<select id="sort-select">
+			<option value="" disabled selected hidden>SORT BY</option>
+			<option value="new">NEW</option>
+			<option value="popular">POPULAR</option>
+			<option value="low">LOW PRICE</option>
+			<option value="high">HIGH PRICE</option>
 		</select>
 	</div>
 
 	<div class="container">
 		<div class="product-list" id="productList">
+			<%
+			if (category != null && category.equals("all")) {
+			%>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth1.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth1.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth1.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth1.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth1.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth1.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth1.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth1.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<%
+			}
+			%>
+			<%
+			if (category != null && category.equals("outer")) {
+			%>
 			<div class="product" onclick="openDetail()">
 				<img src="images/main-cloth2.png">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
 			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth1.png">
+				<img src="images/main-cloth2.png">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
 			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth1.png">
+				<img src="images/main-cloth2.png">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
 			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth1.png">
+				<img src="images/main-cloth2.png">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
 			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth1.png">
+				<img src="images/main-cloth2.png">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
 			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth1.png">
+				<img src="images/main-cloth2.png">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
 			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth1.png">
+				<img src="images/main-cloth2.png">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
 			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth1.png">
+				<img src="images/main-cloth2.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<%
+			}
+			%>
+			<%
+			if (category != null && category.equals("top")) {
+			%>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth3.png">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
 			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth1.png">
+				<img src="images/main-cloth3.png">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth3.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth3.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth3.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth3.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth3.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth3.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<%
+			}
+			%>
+			<%
+			if (category != null && category.equals("bottom")) {
+			%>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth4.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth4.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth4.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth4.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth4.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth4.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth4.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth4.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<%
+			}
+			%>
+			<%
+			if (category != null && category.equals("acc")) {
+			%>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth5.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth5.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth5.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth5.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth5.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth5.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth5.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/main-cloth5.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<%
+			}
+			%>
+			<%
+			if (category != null && category.equals("etc")) {
+			%>
+			<div class="product" onclick="openDetail()">
+				<img src="images/ex1.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/ex1.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/ex1.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/ex1.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/ex1.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/ex1.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/ex1.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<div class="product" onclick="openDetail()">
+				<img src="images/ex1.png">
+				<p class="product-name">I ♥ JDJ</p>
+				<p class="product-price">KRW 88,000</p>
+			</div>
+			<%
+			}
+			%>
 		</div>
 
 		<div class="resizer" id="resizer"></div>
@@ -295,6 +555,89 @@
   		window.location.href = 'pdDetail.jsp';
   	}
 
+	</script>
+
+	<script>
+  	document.querySelectorAll('.sub-nav ul li a').forEach(item => {
+    	item.addEventListener('click', function (e) {
+/*     		e.preventDefault(); */
+    		
+      	const selectedText = this.textContent.trim().toLowerCase();
+      	const subNav = document.getElementById('subCategoryNav');
+
+      	if (selectedText === 'all') {
+        	subNav.style.display = 'none';
+      	} else {
+        	subNav.style.display = 'block';
+      	}
+
+      	// 액티브 클래스 토글
+      	document.querySelectorAll('.sub-nav ul li a').forEach(a => a.classList.remove('active'));
+      	this.classList.add('active');
+    	});
+  	});
+	</script>
+
+	<script>
+  	const subCategories = {
+	    outer: ["HEAVY OUTER", "HOODED ZIP-UP", "JACKET", "JUMPER", "VEST", "WIND BREAKER"],
+	    top: ["HOODIE", "KNIT/CARDIGAN", "LONG SLEEVE", "SHIRT", "SLEEVESS", "SWEAT SHIRT", "T-SHIRT"],
+	    bottom: ["DENIM", "PANTS", "SHORTS", "TRAINING PANTS"],
+	    acc: ["BAG", "ETC", "HEADGEAR", "KEYRING", "MUFFLER"],
+	    etc: ["BELT/NECKLACE", "GLOVES/SOCKS", "OTHERS"]
+	  };
+
+	  // 파라미터 읽는 함수
+	  function getParameterByName(name) {
+	    const url = window.location.href;
+	    name = name.replace(/[\\[\\]]/g, '\\$&');
+	    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+	      results = regex.exec(url);
+	    if (!results) return null;
+	    if (!results[2]) return '';
+	    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  	}
+
+	  function renderSubCategories(category) {
+	    const subNav = document.getElementById('subCategoryNav');
+	    const subList = document.getElementById('subCategoryList');
+	
+	    if (!category || category === 'all') {
+	      subNav.style.display = 'none';
+	      subList.innerHTML = '';
+	      return;
+	    }
+
+	    const subs = subCategories[category];
+	    if (subs && subs.length > 0) {
+	      subList.innerHTML = '';
+	      subs.forEach(sub => {
+	        const li = document.createElement('li');
+	        const a = document.createElement('a');
+	        a.href = "#";
+	        a.textContent = sub;
+	
+	        a.addEventListener('click', function (e) {
+	          e.preventDefault();
+	          document.querySelectorAll('#subCategoryList a').forEach(a => a.classList.remove('active'));
+	          this.classList.add('active');
+	        });
+	
+	        li.appendChild(a);
+	        subList.appendChild(li);
+	      });
+	      subNav.style.display = 'block';
+	    } else {
+	      subList.innerHTML = '';
+	      subNav.style.display = 'none';
+	    }
+	  }
+	
+	  // 페이지 로드되자마자 실행
+	  document.addEventListener("DOMContentLoaded", function () {
+	    const currentCategory = getParameterByName('cat'); // ex. outer
+	    renderSubCategories(currentCategory);
+	  });
 	</script>
 
 </body>

@@ -13,15 +13,21 @@
 <body>
 
 	<%@ include file="includes/header.jsp"%>
+	
+	<%
+	String category = request.getParameter("category");
+	if (category == null) category = "all"; // 기본값
+	%>
 
-	<!-- 하위 네비 -->
+	<!-- 대분류 카테고리 -->
 	<nav class="sub-nav">
 		<ul>
-			<li><a href="splitTest2.jsp" class="active">ALL</a></li>
-			<li><a href="splitTest3(outerEx).jsp">OUTER</a></li>
-			<li><a href="#">TOP</a></li>
-			<li><a href="#">BOTTOM</a></li>
-			<li><a href="#">ACC</a></li>
+			<li><a href="splitTest2.jsp?cat=all">ALL</a></li>
+			<li><a href="splitTest2.jsp?cat=outer">OUTER</a></li>
+			<li><a href="splitTest2.jsp?cat=top">TOP</a></li>
+			<li><a href="splitTest2.jsp?cat=bottom">BOTTOM</a></li>
+			<li><a href="splitTest2.jsp?cat=acc">ACC</a></li>
+			<li><a href="splitTest2.jsp?cat=etc">ETC</a></li>
 		</ul>
 	</nav>
 
