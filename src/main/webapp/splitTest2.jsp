@@ -1,16 +1,18 @@
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html;charset=UTF-8" language="java"%>
 <%
 // 카테고리 파라미터 처리
-String category = request.getParameter("cat");
-if (category == null) {
-	category = "all";
+String categoryParam = request.getParameter("cat");
+if (categoryParam == null) {
+	categoryParam = "all";
 }
 
-String subCategory = request.getParameter("subCat");
-if (subCategory == null) {
-	subCategory = "all";
+String subCategoryParam = request.getParameter("subCat");
+if (subCategoryParam == null) {
+	subCategoryParam = "all";
 }
 
 // 임시 상품 데이터
@@ -50,7 +52,7 @@ allProducts.add(new Product("115", "기본 티셔츠", 19000, "images/main-cloth
 // 필터링
 List<Product> filteredProducts = new ArrayList<>();
 for (Product p : allProducts) {
-	if (category.equals("all") || p.category.equals(category)) {
+	if (categoryParam.equals("all") || p.category.equals(categoryParam)) {
 		filteredProducts.add(p);
 	}
 }
@@ -71,25 +73,47 @@ for (Product p : allProducts) {
 	<nav class="sub-nav">
 		<ul>
 			<li><a href="splitTest2.jsp?cat=all"
-				class="<%=category.equals("all") ? "active" : ""%>">ALL</a></li>
+				class="<%=categoryParam.equals("all") ? "active" : ""%>">ALL</a></li>
 			<li><a href="splitTest2.jsp?cat=outer"
-				class="<%=category.equals("outer") ? "active" : ""%>">OUTER</a></li>
+				class="<%=categoryParam.equals("outer") ? "active" : ""%>">OUTER</a></li>
 			<li><a href="splitTest2.jsp?cat=top"
-				class="<%=category.equals("top") ? "active" : ""%>">TOP</a></li>
+				class="<%=categoryParam.equals("top") ? "active" : ""%>">TOP</a></li>
 			<li><a href="splitTest2.jsp?cat=bottom"
-				class="<%=category.equals("bottom") ? "active" : ""%>">BOTTOM</a></li>
+				class="<%=categoryParam.equals("bottom") ? "active" : ""%>">BOTTOM</a></li>
 			<li><a href="splitTest2.jsp?cat=acc"
-				class="<%=category.equals("acc") ? "active" : ""%>">ACC</a></li>
+				class="<%=categoryParam.equals("acc") ? "active" : ""%>">ACC</a></li>
 			<li><a href="splitTest2.jsp?cat=etc"
-				class="<%=category.equals("etc") ? "active" : ""%>">ETC</a></li>
+				class="<%=categoryParam.equals("etc") ? "active" : ""%>">ETC</a></li>
 		</ul>
 	</nav>
 
-	<!-- 중분류 카테고리 -->
-	<nav class="sub-nav2" id="subCategoryNav"
-		style="<%=category.equals("all") ? "display:none;" : "display:block;"%>">
+	<%-- 중분류 카테고리 렌더링 --%>
+	<%
+	String[] subCats = null;
+
+	switch (categoryParam) {
+		case "outer" :
+			subCats = new String[]{"HEAVY OUTER", "HOODED ZIP-UP", "JACKET", "JUMPER", "VEST", "WIND BREAKER"};
+			break;
+		case "top" :
+			subCats = new String[]{"HOODIE", "KNIT/CARDIGAN", "LONG SLEEVE", "SHIRT", "SLEEVESS", "SWEAT SHIRT", "T-SHIRT"};
+			break;
+		case "bottom" :
+			subCats = new String[]{"DENIM", "PANTS", "SHORTS", "TRAINING PANTS"};
+			break;
+		case "acc" :
+			subCats = new String[]{"BAG", "ETC", "HEADGEAR", "KEYRING"};
+			break;
+		default :
+			subCats = new String[0];
+	}
+	%>
+
+	<!-- 중분류 카테고리 - JavaScript가 동적으로 그릴 영역 -->
+	<nav class="sub-nav2" id="subCategoryNav" style="display: none;">
 		<ul id="subCategoryList"></ul>
 	</nav>
+
 
 	<!-- <nav class="items">
 		<ul>
@@ -99,8 +123,8 @@ for (Product p : allProducts) {
 
 	<!-- 정렬 옵션 -->
 	<div class="sort-options">
-		<label for="sort-select" class="label-bold">ITEMS() </label>
-		<select id="sort-select">
+		<label for="sort-select" class="label-bold">ITEMS() </label> <select
+			id="sort-select">
 			<option value="" disabled selected hidden>SORT BY</option>
 			<option value="new">NEW</option>
 			<option value="popular">POPULAR</option>
@@ -112,7 +136,7 @@ for (Product p : allProducts) {
 	<div class="container">
 		<div class="product-list" id="productList">
 			<%
-			if (category != null && category.equals("all")) {
+			if (categoryParam != null && categoryParam.equals("all")) {
 			%>
 			<div class="product" onclick="openDetail()">
 				<img src="images/main-cloth1.png">
@@ -158,7 +182,7 @@ for (Product p : allProducts) {
 			}
 			%>
 			<%
-			if (category != null && category.equals("outer")) {
+			if (categoryParam != null && categoryParam.equals("outer")) {
 			%>
 			<div class="product" onclick="openDetail()">
 				<img src="images/main-cloth2.png">
@@ -204,7 +228,7 @@ for (Product p : allProducts) {
 			}
 			%>
 			<%
-			if (category != null && category.equals("top")) {
+			if (categoryParam != null && categoryParam.equals("top")) {
 			%>
 			<div class="product" onclick="openDetail()">
 				<img src="images/main-cloth3.png">
@@ -250,7 +274,7 @@ for (Product p : allProducts) {
 			}
 			%>
 			<%
-			if (category != null && category.equals("bottom")) {
+			if (categoryParam != null && categoryParam.equals("bottom")) {
 			%>
 			<div class="product" onclick="openDetail()">
 				<img src="images/main-cloth4.png">
@@ -296,7 +320,7 @@ for (Product p : allProducts) {
 			}
 			%>
 			<%
-			if (category != null && category.equals("acc")) {
+			if (categoryParam != null && categoryParam.equals("acc")) {
 			%>
 			<div class="product" onclick="openDetail()">
 				<img src="images/main-cloth5.png">
@@ -342,45 +366,45 @@ for (Product p : allProducts) {
 			}
 			%>
 			<%
-			if (category != null && category.equals("etc")) {
+			if (categoryParam != null && categoryParam.equals("etc")) {
 			%>
 			<div class="product" onclick="openDetail()">
-				<img src="images/ex1.png">
+				<img src="images/orderHistory.jpg">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
 			<div class="product" onclick="openDetail()">
-				<img src="images/ex1.png">
+				<img src="images/orderHistory.jpg">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
 			<div class="product" onclick="openDetail()">
-				<img src="images/ex1.png">
+				<img src="images/orderHistory.jpg">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
 			<div class="product" onclick="openDetail()">
-				<img src="images/ex1.png">
+				<img src="images/orderHistory.jpg">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
 			<div class="product" onclick="openDetail()">
-				<img src="images/ex1.png">
+				<img src="images/orderHistory.jpg">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
 			<div class="product" onclick="openDetail()">
-				<img src="images/ex1.png">
+				<img src="images/orderHistory.jpg">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
 			<div class="product" onclick="openDetail()">
-				<img src="images/ex1.png">
+				<img src="images/orderHistory.jpg">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
 			<div class="product" onclick="openDetail()">
-				<img src="images/ex1.png">
+				<img src="images/orderHistory.jpg">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
@@ -432,6 +456,7 @@ for (Product p : allProducts) {
 					<div class="buy-buttons">
 						<button class="btn outline">ADD TO BAG</button>
 						<button class="btn filled">BUY NOW</button>
+						<button class="btn wishlist-btn" id="wishlistBtn">🤍</button>
 					</div>
 
 					<div class="section">
@@ -579,65 +604,101 @@ for (Product p : allProducts) {
 	</script>
 
 	<script>
-  	const subCategories = {
-	    outer: ["HEAVY OUTER", "HOODED ZIP-UP", "JACKET", "JUMPER", "VEST", "WIND BREAKER"],
-	    top: ["HOODIE", "KNIT/CARDIGAN", "LONG SLEEVE", "SHIRT", "SLEEVESS", "SWEAT SHIRT", "T-SHIRT"],
-	    bottom: ["DENIM", "PANTS", "SHORTS", "TRAINING PANTS"],
-	    acc: ["BAG", "ETC", "HEADGEAR", "KEYRING", "MUFFLER"],
-	    etc: ["BELT/NECKLACE", "GLOVES/SOCKS", "OTHERS"]
-	  };
+  // ✅ 대분류 클릭 시 중분류 토글 + active 처리
+  document.querySelectorAll('.sub-nav ul li a').forEach(item => {
+    item.addEventListener('click', function (e) {
+      // e.preventDefault(); // ❌ 제거: 파라미터 이동을 위해 필요 없음
 
-	  // 파라미터 읽는 함수
-	  function getParameterByName(name) {
-	    const url = window.location.href;
-	    name = name.replace(/[\\[\\]]/g, '\\$&');
-	    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-	      results = regex.exec(url);
-	    if (!results) return null;
-	    if (!results[2]) return '';
-	    return decodeURIComponent(results[2].replace(/\+/g, ' '));
-  	}
+      const selectedText = this.textContent.trim().toLowerCase();
+      const subNav = document.getElementById('subCategoryNav');
 
-	  function renderSubCategories(category) {
-	    const subNav = document.getElementById('subCategoryNav');
-	    const subList = document.getElementById('subCategoryList');
-	
-	    if (!category || category === 'all') {
-	      subNav.style.display = 'none';
-	      subList.innerHTML = '';
-	      return;
-	    }
+      if (selectedText === 'all') {
+        subNav.style.display = 'none';
+      } else {
+        subNav.style.display = 'block';
+      }
 
-	    const subs = subCategories[category];
-	    if (subs && subs.length > 0) {
-	      subList.innerHTML = '';
-	      subs.forEach(sub => {
-	        const li = document.createElement('li');
-	        const a = document.createElement('a');
-	        a.href = "#";
-	        a.textContent = sub;
-	
-	        a.addEventListener('click', function (e) {
-	          e.preventDefault();
-	          document.querySelectorAll('#subCategoryList a').forEach(a => a.classList.remove('active'));
-	          this.classList.add('active');
-	        });
-	
-	        li.appendChild(a);
-	        subList.appendChild(li);
-	      });
-	      subNav.style.display = 'block';
-	    } else {
-	      subList.innerHTML = '';
-	      subNav.style.display = 'none';
-	    }
-	  }
-	
-	  // 페이지 로드되자마자 실행
-	  document.addEventListener("DOMContentLoaded", function () {
-	    const currentCategory = getParameterByName('cat'); // ex. outer
-	    renderSubCategories(currentCategory);
-	  });
+      // active 토글
+      document.querySelectorAll('.sub-nav ul li a').forEach(a => a.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
+
+	<script>
+  // ✅ 카테고리별 중분류 정의
+  const subCategories = {
+    outer: ["HEAVY OUTER", "HOODED ZIP-UP", "JACKET", "JUMPER", "VEST", "WIND BREAKER"],
+    top: ["HOODIE", "KNIT/CARDIGAN", "LONG SLEEVE", "SHIRT", "SLEEVESS", "SWEAT SHIRT", "T-SHIRT"],
+    bottom: ["DENIM", "PANTS", "SHORTS", "TRAINING PANTS"],
+    acc: ["BAG", "ETC", "HEADGEAR", "KEYRING", "MUFFLER"],
+    etc: ["BELT/NECKLACE", "GLOVES/SOCKS", "OTHERS"]
+  };
+
+  // ✅ 파라미터 가져오는 함수
+  function getParameterByName(name) {
+    const url = window.location.href;
+    name = name.replace(/[\\[\\]]/g, '\\$&');
+    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+    const results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  }
+
+  // ✅ 중분류 렌더링
+  function renderSubCategories(category) {
+    const subNav = document.getElementById('subCategoryNav');
+    const subList = document.getElementById('subCategoryList');
+    const currentSub = getParameterByName('subCat'); // 현재 선택된 subCat
+
+    if (!category || category === 'all') {
+      subNav.style.display = 'none';
+      subList.innerHTML = '';
+      return;
+    }
+
+    const subs = subCategories[category];
+    if (subs && subs.length > 0) {
+      subList.innerHTML = '';
+      subs.forEach(sub => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = "splitTest2.jsp?cat=" + category + "&subCat=" + encodeURIComponent(sub);
+        a.textContent = sub;
+
+        // ✅ 현재 파라미터 subCat과 일치하면 active
+        if (sub === currentSub) {
+          a.classList.add('active');
+        }
+
+        li.appendChild(a);
+        subList.appendChild(li);
+      });
+      subNav.style.display = 'block';
+    } else {
+      subList.innerHTML = '';
+      subNav.style.display = 'none';
+    }
+  }
+
+  // ✅ 페이지 로드시 렌더링 실행
+  document.addEventListener("DOMContentLoaded", function () {
+    const currentCategory = getParameterByName('cat');
+    renderSubCategories(currentCategory);
+  });
+</script>
+
+
+	<script>
+ 		document.addEventListener("DOMContentLoaded", () => {
+    	const wishlistBtn = document.getElementById("wishlistBtn");
+
+    	wishlistBtn.addEventListener("click", () => {
+      	wishlistBtn.classList.toggle("active");
+      	wishlistBtn.textContent = wishlistBtn.classList.contains("active") ? "❤️" : "🤍";
+    	});
+  	});
 	</script>
 
 </body>
