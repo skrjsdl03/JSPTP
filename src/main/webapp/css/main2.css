@@ -4,7 +4,7 @@ body {
 	padding-top: 120px;
 }
 
-/* 하위 네비 */
+/* 대분류 카테고리 */
 .sub-nav ul {
 	display: flex;
 	justify-content: center;

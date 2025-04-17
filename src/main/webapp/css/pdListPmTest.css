@@ -1,0 +1,63 @@
+body {
+	font-family: 'Malgun Gothic', sans-serif;
+	padding-top: 120px;
+	height: 100vh;
+}
+
+/* 하위 네비 */
+.sub-nav ul {
+	display: flex;
+	justify-content: center;
+	gap: 40px; /* 항목 간 간격 */
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.sub-nav ul li a {
+	text-decoration: none;
+	color: black;
+	font-size: 14px;
+	font-family: 'Malgun Gothic', sans-serif;
+	font-weight: bold;
+}
+
+.sub-nav ul li a:hover {
+	color: #015FC1;
+}
+
+.sub-nav ul li a.active {
+	color: #015FC1; /* 호버와 동일한 색상 */
+}
+
+.category-nav a {
+	margin: 0 10px;
+	text-decoration: none;
+	color: #333;
+	font-weight: bold;
+}
+
+.product-list {
+	display: grid;
+	gap: 50px;
+	padding: 40px;
+	grid-template-columns: repeat(5, 320px);
+	justify-content: center;
+}
+
+.product-card {
+	width: 320px;
+	text-align: center;
+}
+
+.product-card img {
+	width: 100%;
+	height: auto;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
