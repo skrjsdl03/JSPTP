@@ -12,6 +12,7 @@
 <jsp:useBean id="uDao" class="DAO.UserDAO"/>
 <jsp:useBean id="pDao" class="DAO.ProductDAO"/>
 <jsp:useBean id="fDao" class="DAO.FavoriteDAO"/>
+<jsp:useBean id="cDao" class="DAO.CouponDAO"/>
 <%
 	String userId = (String)session.getAttribute("id");
 	String userType = (String)session.getAttribute("userType");
@@ -361,11 +362,17 @@
 	  <input type="hidden" name="PAddress3" id="PAddress3"> <!-- 주소별칭 -->
 	  <input type="hidden" name="PPhone" id="PPhone"> <!-- 전화번호 -->
 	  <input type="hidden" name="PEmail" id="PEmail"> <!-- 이메일 -->
+	  <input type="hidden" name="psm" id="PSm"> <!-- 적립금 -->	  
+	  <input type="hidden" name="pdPrice" id="pdPrice"> <!-- 상품 가격의 합 -->	  
+	  <input type="hidden" name="deliFee" id="deliFee"> <!-- 배송비 -->	  
+	  <input type="hidden" name="dc" id="dc"> <!-- 배송비 -->	  
+
 	  <%
 	  		if(selectedFIds != null && selectedFIds.length != 0){ 
 	  			for(int i = 0;i<selectedFIds.length; i++){
   				FavoriteDTO fDto = fDao.getOneFavorite(Integer.parseInt(selectedFIds[i]));
-	  %>
+	  %>  	
+	  	<input type="hidden" name="f_ids" value="<%=selectedFIds[i]%>">
 	  	<input type="hidden" name="PQty" value="<%=fDto.getF_quantity()%>">
 	  	<input type="hidden" name="PPd_id" value="<%=fDto.getPd_id()%>">
 	  <%} 
@@ -402,6 +409,12 @@ function fnPay(){
 		}
 	<%}%>
 	
+	  const pdPrice = document.getElementById("product-price").textContent;
+	  const deliFee = document.getElementById("delivery-fee").textContent;
+	  
+	  document.getElementById("pdPrice").value = pdPrice;
+	  document.getElementById("deliFee").value = deliFee;
+	
 	const priceStr = document.getElementById("final-total").textContent; // "109,000 원"
 	const price = parseInt(priceStr.replace(/[^\d]/g, ""), 10); // 109000
 	
@@ -415,14 +428,18 @@ function fnPay(){
     document.getElementById("PZipcode").value = zipcode;
     document.getElementById("PAddress1").value = address1;
     document.getElementById("PAddress2").value = address2;
-    if(!alias)
+    if(alias)
     	document.getElementById("PAddress3").value = alias;
     
     const email = document.getElementById("email").value;
-    document.getElementById("PEmail").value = email;
+    document.getElementById("PEmail").value = email
     <%if(userId != null && !userId.equals("")){%>
+    const sm = document.getElementById("product-point").textContent;
+    const discount = document.getElementById("discount").textContent;
     document.getElementById("PName").value = "<%=userDto.getUser_name()%>";
     document.getElementById("PPhone").value = "<%=userDto.getUser_phone()%>";
+    document.getElementById("PSm").value = sm;
+    document.getElementById("dc").value = discount;
     <%}%>
 	
 	<%if(userId == null || userId.equals("")){%>
@@ -436,6 +453,9 @@ function fnPay(){
 	document.getElementById("payProc").submit();
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+	// DOM이 다 로딩된 후 필요한 초기화가 있다면 여기서 실행
+});
 </script>
 
 <script>
@@ -536,23 +556,21 @@ function allUse(){
 
 <script>
   // 배송지 별칭 → 주소 자동입력
-  const addressMap = {
   // 📌 배송지 별칭 → 주소 자동입력
 /*   const addressMap = {
     "회사": ["06234", "서울 강남구 테헤란로 231", "OO타워 10층"],
     "학교": ["47340", "부산 부산진구 엄광로 176", "동의대학교"],
     "우리집": ["12345", "서울 마포구 월드컵북로 396", "XX아파트 101동 202호"]
   }; */
-  <%if(userId != null && !userId.equals("")){%>
   const addressMap = {
-		  <%
-		    for (int i = 0; i < addrList.size(); i++) {
-		      UserAddrDTO addr = addrList.get(i);
-		  %>
+		  <% if (userId != null && !userId.equals("")) {
+		       for (int i = 0; i < addrList.size(); i++) {
+		         UserAddrDTO addr = addrList.get(i); %>
 		    "<%=addr.getAddr_label()%>": ["<%=addr.getAddr_zipcode()%>", "<%=addr.getAddr_road()%>", "<%=addr.getAddr_detail()%>"]<%= (i < addrList.size() - 1) ? "," : "" %>
-		  <% } %>
-		  };
-  <%}%>
+		  <%   }
+		     } %>
+		};
+
   
 
   function fillAddressByAlias(alias) {

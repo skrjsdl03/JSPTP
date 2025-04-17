@@ -8,10 +8,10 @@
 <%
   String id = (String)session.getAttribute("id");
 if(id == null || id.equals(""))
-	id = "비회원";
+	id = null;
 String userType = (String)session.getAttribute("userType");
 if(userType == null || userType.equals(""))
-	userType = "비회원";
+	userType = null;
 
 String imp_uid = request.getParameter("imp_uid");
 String apply_num = request.getParameter("apply_num");
@@ -40,14 +40,14 @@ if(pDao.insertPay(id, userType, imp_uid, apply_num, URLDecoder.decode(card_name,
 				userType, 
 				Integer.parseInt(pd_ids[i]), 
 				o_num, 
-				(id.equals("비회원") ? "N" : "Y"), 
+				(id == null ? "N" : "Y"), 
 				URLDecoder.decode(o_name, "UTF-8"), 
 				o_phone, 
 				Integer.parseInt(quantities[i]), 
 				pdDao.getOnePdPrice(Integer.parseInt(pd_ids[i])) * Integer.parseInt(quantities[i]), 
 				pDao.getPay_id(id, userType, imp_uid));
 		if(o_id != -1){
-			dDao.insertDelivery(o_id, alias, URLDecoder.decode(o_name, "UTF-8"), o_phone, zipcode, URLDecoder.decode(address1, "UTF-8"), URLDecoder.decode(address2, "UTF-8"), prefix);
+			dDao.insertDelivery(o_id, URLDecoder.decode(alias, "UTP-8"), URLDecoder.decode(o_name, "UTF-8"), o_phone, zipcode, URLDecoder.decode(address1, "UTF-8"), URLDecoder.decode(address2, "UTF-8"), prefix);
 		}
 	}
 	out.print("{\"result\":\"success\"}");

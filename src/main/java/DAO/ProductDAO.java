@@ -1278,5 +1278,29 @@ public class ProductDAO {
 		}
 		return price;
     }
+    
+    //한 pd_id로 한 detail 출력
+    public ProductDetailDTO getOnePdDetail(int pd_id) {
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		ProductDetailDTO pdDetail = null;
+		try {
+			con = pool.getConnection();
+			sql = "select * from product_detail where pd_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, pd_id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				pdDetail = new ProductDetailDTO(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getInt(4));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return pdDetail;
+    }
 
 }

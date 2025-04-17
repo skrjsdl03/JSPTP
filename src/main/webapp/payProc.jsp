@@ -17,6 +17,11 @@
 			pAlias = pAddress1;
 		String pPhone = request.getParameter("PPhone");
 		String pEmail = request.getParameter("PEmail");
+		String mileage = request.getParameter("psm");
+		String pdPrice = request.getParameter("pdPrice");
+		String deliFee = request.getParameter("deliFee");
+		String dc = request.getParameter("dc");
+		String[] fIds = request.getParameterValues("f_ids");
 /* 		String[] quantities = request.getParameterValues("PQty");
 		String[] pd_ids = request.getParameterValues("PPd_id"); */
 %>
@@ -68,11 +73,9 @@
                         msg += '카드 승인번호 : ' + rsp.apply_num;
                         alert(msg);
                         
-                        location.href="<%=P_NEXT_URL%>";
                     } else {
                         //[3] 아직 제대로 결제가 되지 않았습니다.
                         //[4] 결제된 금액이 요청한 금액과 달라 결제를 자동취소처리하였습니다.
-                        alert("아직 제대로 결제 X");
                     }
                 });
                 //성공시 이동할 페이지
@@ -117,10 +120,45 @@
 		        .then(data => {
 		            if (data.result === "success") {
 		                // 성공 처리
-		            	location.href="<%=P_NEXT_URL%>";
+		            	let url = "<%=P_NEXT_URL%>?zipcode=" + encodeURIComponent("<%=pZipcode%>") + 
+		                "&address1=" + encodeURIComponent("<%=pAddress1%>") + 
+		                "&address2=" + encodeURIComponent("<%=pAddress2%>") + 
+		                "&o_name=" + encodeURIComponent("<%=pName%>") +
+		                "&o_phone=" + encodeURIComponent("<%=pPhone%>") + 
+		                "&o_email=" + encodeURIComponent("<%=pEmail%>") + 
+		                "&price=" + encodeURIComponent("<%=price%>") + 
+		                "&o_num=" + encodeURIComponent("<%=ONum%>") + 
+		                "&pdPrice=" + encodeURIComponent("<%=pdPrice%>") + 
+		                "&deliFee=" + encodeURIComponent("<%=deliFee%>");
+
+		            if ("<%=mileage != null && !mileage.equals("")%>" === "true") {
+		                url += "&mileage=" + encodeURIComponent("<%=mileage%>");
+		            }
+		            
+		            if ("<%=dc != null && !dc.equals("")%>" === "true") {
+		                url += "&dc=" + encodeURIComponent("<%=dc%>");
+		            }
+		            
+		            if("<%=fIds.length != 0%>" === "true"){
+		            	for (let i = 0; i < fIds.length; i++) {
+			            	url += "&f_id=" + encodeURIComponent(fIds[i]);
+			            }
+		            }
+		            
+		            for (let i = 0; i < pd_ids.length; i++) {
+		            	url += "&pd_id=" + encodeURIComponent(pd_ids[i]);
+		            	url += "&quantity=" + encodeURIComponent(quantities[i]);
+		            }
+		            console.log("결제 완료 이동 URL:", url);
+		            location.href = url;
+		            	
 		            } else {
 		                // 실패 처리
-		            	location.href="<%=request.getContextPath()%>/pay.jsp";
+       	                if (document.referrer) {
+		                    window.location.href = document.referrer;
+		                } else {
+		                    window.history.back();
+		                }
 		            }
 		        });
                <%-- location.href="<%=P_NEXT_URL%>"; --%>
@@ -129,7 +167,12 @@
                 msg += '에러내용 : ' + rsp.error_msg;
                 alert(msg);
                 //실패시 이동할 페이지
-                location.href="<%=request.getContextPath()%>/pay.jsp";
+                if (document.referrer) {
+                    window.location.href = document.referrer;
+                } else {
+                    window.history.back();
+                }
+
             }
         });
     });

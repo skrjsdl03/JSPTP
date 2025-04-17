@@ -1,3 +1,4 @@
+<%@page import="DTO.ProductDetailDTO"%>
 <%@page import="DTO.ProductDTO"%>
 <%@page import="DTO.FavoriteDTO"%>
 <%@page import="java.util.Vector"%>
@@ -90,11 +91,11 @@ Vector<FavoriteDTO> flist = fDao.getUserCart(userId, userType);
 							String size = pDao.getOnePdSizeForCart(fDto.getPd_id());
 							pDto = pDao.getOnePdForCart(fDto.getPd_id());
 							Vector<String> urllist = pDao.getOnePdImgForCart(fDto.getPd_id());
-							
+							ProductDetailDTO pdDetail = pDao.getOnePdDetail(fDto.getPd_id());
 			%>
 				<!-- 상품 -->
-				<div class="order-row">
-					<input type="checkbox"class="item-checkbox" data-fid="<%=fDto.getF_id()%>" name="f_ids" value="<%=fDto.getF_id()%>" onchange="updateTotalPrice()" checked> 
+				<div class="<%=pdDetail.getPd_stock() != 0 ? "order-row" : "order-row soldout"%>">
+					<input type="checkbox"class="item-checkbox" data-fid="<%=fDto.getF_id()%>" name="f_ids" value="<%=fDto.getF_id()%>" onchange="updateTotalPrice()" <%=pdDetail.getPd_stock() != 0 ? "checked" : ""%>> 
 					<img src="<%=urllist.get(0)%>" alt="<%=pDto.getP_name()%>">
 					<div class="order-info">
 						<p class="item-name"><%=pDto.getP_name()%></p>
@@ -136,6 +137,28 @@ Vector<FavoriteDTO> flist = fDao.getUserCart(userId, userType);
 			</div>
 		</section>
 	</div>
+	
+<script>
+function pay() {
+	  const checkedItems = document.querySelectorAll(".item-checkbox:checked");
+	  
+	  if (checkedItems.length === 0) {
+	    alert("주문할 상품을 선택해주세요.");
+	    return;
+	  }
+	  
+	  // 품절 상품이 선택되어 있는지 검사
+	  for (let checkbox of checkedItems) {
+	    const orderRow = checkbox.closest(".order-row");
+	    if (orderRow && orderRow.classList.contains("soldout")) {
+	      alert("품절 상품은 주문할 수 없습니다.");
+	      return;
+	    }
+	  }
+
+	  document.getElementById("payForm").submit();
+	}
+</script>
 
 <script>/* 체크박스 script */
   // 전체 선택 체크박스 클릭 시
@@ -144,6 +167,7 @@ Vector<FavoriteDTO> flist = fDao.getUserCart(userId, userType);
     document.querySelectorAll(".item-checkbox").forEach(cb => {
       cb.checked = isChecked;
     });
+    updateTotalPrice();
   });
 
   // 하위 체크박스 변경 시 → 전체선택 체크박스 상태 자동 반영
@@ -278,6 +302,24 @@ window.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <script>
+window.addEventListener("DOMContentLoaded", () => {
+	  updateTotalPrice(); // 기존 총합 계산
+
+	  // 전체 선택 체크박스 상태 자동 조정
+	  const itemCheckboxes = document.querySelectorAll(".item-checkbox");
+	  const checkedCheckboxes = document.querySelectorAll(".item-checkbox:checked");
+
+	  const selectAll = document.getElementById("select-all");
+
+	  if (itemCheckboxes.length !== checkedCheckboxes.length) {
+	    selectAll.checked = false;
+	  } else {
+	    selectAll.checked = true;
+	  }
+	});
+
+</script>
+<!-- <script>
 // 페이지 로드 후 특정 상품을 품절 처리
 window.addEventListener("DOMContentLoaded", () => {
   const orderRows = document.querySelectorAll(".order-row");
@@ -288,7 +330,7 @@ window.addEventListener("DOMContentLoaded", () => {
     orderRows[soldOutIndex].classList.add("soldout");
   }
 });
-</script>
+</script> -->
 
 </body>
 </html>

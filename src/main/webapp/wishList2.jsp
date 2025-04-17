@@ -1,4 +1,37 @@
+<%@page import="DTO.ProductDetailDTO"%>
+<%@page import="DTO.ProductDTO"%>
+<%@page import="DTO.FavoriteDTO"%>
+<%@page import="java.util.Vector"%>
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="DTO.UserDTO"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<jsp:useBean id="uDao" class="DAO.UserDAO"/>
+<jsp:useBean id="fDao" class="DAO.FavoriteDAO"/>
+<jsp:useBean id="pDao" class="DAO.ProductDAO"/>
+<%
+		String userId = (String)session.getAttribute("id");
+		String userType = (String)session.getAttribute("userType");
+		
+		// 현재 페이지 경로를 얻기 위한 코드
+		String fullUrl2 = request.getRequestURI();
+		String queryString2 = request.getQueryString();
+		if (queryString2 != null) {
+			fullUrl2 += "?" + queryString2;
+		}
+		if(userId == null || userId == ""){
+			response.sendRedirect("login.jsp?redirect=" + java.net.URLEncoder.encode(fullUrl2, "UTF-8"));
+			return;
+		}
+		
+		UserDTO uDto = uDao.getOneUser(userId, userType);
+		int couponCnt = uDao.showOneUserCoupon(userId, userType);
+		
+        DecimalFormat formatter = new DecimalFormat("#,###");
+
+        String point = formatter.format(uDto.getUser_point());
+        
+        Vector<FavoriteDTO> wlist = fDao.getUserWish(userId, userType);
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -17,12 +50,12 @@
 
 	<div class="container">
 		<div class="user-box">
-			<p class="username">정시영 님</p>
+			<p class="username"><%=uDto.getUser_name()%> 님</p>
 			<div class="user-info">
 				<div class="label">적립금</div>
-				<div class="value">25,000 ￦</div>
+				<div class="value"><%=point%> ￦</div>
 				<div class="label"><a href="coupon.jsp">쿠폰</a></div>
-				<div class="value">2 개</div>
+				<div class="value"><%=couponCnt%> 개</div>
 			</div>
 		</div>
 
@@ -42,46 +75,41 @@
 			<!-- 찜 목록 본문 -->
 			<div class="wishlist-content">
 
-				<!-- 상품 1 -->
-				<div class="wishlist-item">
-					<img src="images/wishList1.jpg" alt="바지">
+				<%
+					ProductDTO pDto = new ProductDTO();
+					if(!wlist.isEmpty() && wlist != null){
+						for(int i = 0; i<wlist.size(); i++){
+							FavoriteDTO fDto = wlist.get(i);
+							String size = pDao.getOnePdSizeForCart(fDto.getPd_id());
+							pDto = pDao.getOnePdForCart(fDto.getPd_id());
+							Vector<String> urllist = pDao.getOnePdImgForCart(fDto.getPd_id());
+							ProductDetailDTO pdDetail = pDao.getOnePdDetail(fDto.getPd_id());
+				%>
+				<div class="<%=pdDetail.getPd_stock() != 0 ? "wishlist-item" : "wishlist-item soldout"%>">
+					<img src="<%=urllist.get(0)%>" alt="<%=pDto.getP_name()%>">
 					<div class="wishlist-info">
-						<p class="wishlist-name">B.C.L DENIM PANTS</p>
-						<p class="wishlist-price">89,000 원</p>
+						<p class="wishlist-name"><%=pDto.getP_name()%><br><%=size%> SIZE</p>
+						<p class="wishlist-price"><%=formatter.format(pDto.getP_price())%> 원</p>
 					</div>
-					<div class="wishlist-cart" onclick="addToCart(this)">🛒</div>
-					<div class="wishlist-heart active" onclick="toggleWishlistHeart(this)">❤️</div>
+					<div class="wishlist-cart" onclick="addToCart(this, '<%=fDto.getPd_id()%>')">🛒</div>
+					<div class="wishlist-heart active" onclick="toggleWishlistHeart(this, '<%=fDto.getF_id()%>')">❤️</div>
 				</div>
+				<%
+						}
+				} else{
+				%>
+				<div style="text-align: center; margin-top: 200px;">
+					<span style="color: #CCCCCC">찜이 비어 있습니다</span>
+				</div>
+				<%} %>
 				
-				<!-- 상품 3 -->
-				<div class="wishlist-item">
-					<img src="images/wishList2.jpg" alt="아우터">
-					<div class="wishlist-info">
-						<p class="wishlist-name">SYMBOL LOGO HOODED ZIP-UP </p>
-						<p class="wishlist-price">109,000 원</p>
-					</div>
-					<div class="wishlist-cart" onclick="addToCart(this)">🛒</div>
-					<div class="wishlist-heart active" onclick="toggleWishlistHeart(this)">❤️</div>
-				</div>
-
-				<!-- 상품 2 (품절) -->
-				<div class="wishlist-item soldout">
-					<img src="images/wishList3.jpg" alt="양말">
-					<div class="wishlist-info">
-						<p class="wishlist-name">NM TRIBAL SOCKS</p>
-						<p class="wishlist-price">9,000 원</p>
-					</div>
-					<div class="wishlist-heart-group">
-					  <div class="wishlist-cart" onclick="addToCart(this)">🛒</div>
-					  <div class="wishlist-heart active" onclick="toggleWishlistHeart(this)">❤️</div>
-					</div>
-				</div>
+			</div>
 		</section>
 	</div>
 </body>
 <script>
 
-function addToCart(el) {
+function addToCart(el, pd_id) {
 	  const item = el.closest(".wishlist-item");
 
 	  // 혹시라도 JS 쪽에서 한 번 더 체크하고 싶다면 (선택사항)
@@ -91,12 +119,19 @@ function addToCart(el) {
 	  }
 
 	  const itemName = item.querySelector(".wishlist-name").innerText;
-	  alert(`'${itemName}' 상품을 장바구니에 담았습니다.`);
 
-	  // TODO: 장바구니에 실제 추가하는 로직
+     fetch("addToCart.jsp?pd_id=" + encodeURIComponent(pd_id))
+     .then(res => res.json())
+     .then(data => {
+       if (data.result === "success") {
+    	   alert("해당 상품을 장바구니에 담았습니다.");
+       } else {
+ 		alert("장바구니에 담을 수 없습니다.");
+       }
+     });
 	}
   
-  function toggleWishlistHeart(el) {
+  function toggleWishlistHeart(el, f_id) {
     const item = el.closest(".wishlist-item");
     const isActive = el.classList.contains("active");
 
@@ -115,7 +150,15 @@ function addToCart(el) {
       // 다시 찜하기 기능은 여기에 필요 시 추가
     }
 
-    // TODO: 서버에 찜 상태 변경 요청 (AJAX 등)
+    fetch("deleteWish.jsp?f_id=" + encodeURIComponent(f_id))
+    .then(res => res.json())
+    .then(data => {
+      if (data.result === "success") {
+   	   /* alert("해제되었습니다."); */
+      } else {
+		alert("해제할 수 없습니다.");
+      }
+    });
   }
 </script>
 
