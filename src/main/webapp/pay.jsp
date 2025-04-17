@@ -181,7 +181,7 @@
 	  <button type="button" class="addr-btn" onclick="execDaumPostcode()">주소 검색</button>
 		<!-- 별칭 입력란 -->
 		<div id="alias-input-row" class="address-combined">
-		  <input type="text" class="alias" placeholder="배송지 별칭 입력" onfocus="clearPlaceholder(this)" onblur="restorePlaceholder(this)">
+		  <input type="text" class="alias" id="alias" placeholder="배송지 별칭 입력" onfocus="clearPlaceholder(this)" onblur="restorePlaceholder(this)">
 		</div>
 	</div>
 	
@@ -333,7 +333,6 @@
 	
 	<form id="payProc" method="post" action="payProc.jsp">
 	  <input type="hidden" name="P_INI_PAYMENT" value="card"> <!-- 결제수단 -->
-<!-- 	  <input type="hidden" name="P_MID" value="INIpayTest">    테스트 상점 ID -->
 	  <input type="hidden" name="ONum" value="<%=ONUM%>">   <!-- 주문번호 -->
 	  <input type="hidden" name="Price" id="Price">        <!-- 결제금액 -->
 	  <input type="hidden" name="Products" value="<%=products%>"> <!-- 상품명 -->
@@ -343,9 +342,24 @@
 	  <input type="hidden" name="PZipcode" id="PZipcode"> <!-- 주소1 -->
 	  <input type="hidden" name="PAddress1" id="PAddress1"> <!-- 주소2 -->
 	  <input type="hidden" name="PAddress2" id="PAddress2"> <!-- 주소3 -->
+	  <input type="hidden" name="PAddress3" id="PAddress3"> <!-- 주소별칭 -->
 	  <input type="hidden" name="PPhone" id="PPhone"> <!-- 전화번호 -->
 	  <input type="hidden" name="PEmail" id="PEmail"> <!-- 이메일 -->
-	</form>
+	  <%
+	  		if(selectedFIds != null && selectedFIds.length != 0){ 
+	  			for(int i = 0;i<selectedFIds.length; i++){
+  				FavoriteDTO fDto = fDao.getOneFavorite(Integer.parseInt(selectedFIds[i]));
+	  %>
+	  	<input type="hidden" name="PQty" value="<%=fDto.getF_quantity()%>">
+	  	<input type="hidden" name="PPd_id" value="<%=fDto.getPd_id()%>">
+	  <%} 
+	  	}
+	  if(req_pd_id != 0){
+	  %>
+	  <input type="hidden" name="PQty" value="<%=req_qty%>">
+	  	<input type="hidden" name="PPd_id" value="<%=req_pd_id%>">
+	  <%} %>
+  </form>
 		
 	<!-- 푸터 -->
 	<footer class="footer"> 2025©everyWEAR</footer>
@@ -362,29 +376,37 @@ function fnPay(){
 			alert("이름을 입력하시오.");
 			return;
 		}
-		if(document.getElementById("name").value == null || document.getElementById("name").value == ""){
-			alert("이름을 입력하시오.");
+		if(document.getElementById("phone2").value == null || document.getElementById("phone2").value == ""){
+			alert("전화번호를 입력하시오.");
+			return;
+		}
+		if(document.getElementById("address1").value == null || document.getElementById("address1").value == ""){
+			alert("주소를 입력하시오.");
 			return;
 		}
 	<%}%>
 	
-	const price = document.getElementById("final-total").textContent;
+	const priceStr = document.getElementById("final-total").textContent; // "109,000 원"
+	const price = parseInt(priceStr.replace(/[^\d]/g, ""), 10); // 109000
 	
 	document.getElementById("Price").value = price;
 	
     const zipcode = document.getElementById("zipcode").value;
     const address1 = document.getElementById("address1").value;
     const address2 = document.getElementById("address2").value;
+    const alias = document.getElementById("alias").value;
     
     document.getElementById("PZipcode").value = zipcode;
     document.getElementById("PAddress1").value = address1;
     document.getElementById("PAddress2").value = address2;
+    if(!alias)
+    	document.getElementById("PAddress3").value = alias;
     
     const email = document.getElementById("email").value;
     document.getElementById("PEmail").value = email;
     <%if(userId != null && !userId.equals("")){%>
-    document.getElementById("PName").value = <%=userDto.getUser_name()%>;
-    document.getElementById("PPhone").value = <%=userDto.getUser_phone()%>;
+    document.getElementById("PName").value = "<%=userDto.getUser_name()%>";
+    document.getElementById("PPhone").value = "<%=userDto.getUser_phone()%>";
     <%}%>
 	
 	<%if(userId == null || userId.equals("")){%>

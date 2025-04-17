@@ -1245,5 +1245,38 @@ public class ProductDAO {
 		}
 		return pd_id;
     }
+    
+    //한 상품의 pd_id의 상품 가격 출력
+    public int getOnePdPrice(int pd_id) {
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		int p_id = 0;
+		int price = 0;
+		try {
+			con = pool.getConnection();
+			sql = "select p_id from product_detail where pd_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, pd_id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				p_id = rs.getInt(1);
+			pstmt.close();
+			rs.close();
+			
+			sql = "select p_price from product where p_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, p_id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				price = rs.getInt(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return price;
+    }
 
 }
