@@ -62,25 +62,25 @@ if (end > totalData)
 
     
        <!-- 🔻 페이징 처리 -->
-<div class="pagination" id="pagination">
-  <% if (currentPage > 1) { %>
-    <a href="FAQ.jsp?page=<%= currentPage - 1 %>">Prev</a>
-  <% } else { %>
-    <span class="invisible-button">Prev</span>
-  <% } %>
-
-  <% for (int i = 1; i <= totalPage; i++) { %>
-    <a href="FAQ.jsp?page=<%= i %>" class="<%= (i == currentPage ? "active" : "") %>">
-      <%= i %>
-    </a>
-  <% } %>
-
-  <% if (currentPage < totalPage) { %>
-    <a href="FAQ.jsp?page=<%= currentPage + 1 %>">Next</a>
-  <% } else { %>
-    <span class="invisible-button">Next</span>
-  <% } %>
-</div>
+	<div class="pagination" id="pagination">
+	  <% if (currentPage > 1) { %>
+	    <a href="FAQ.jsp?page=<%= currentPage - 1 %>">Prev</a>
+	  <% } else { %>
+	    <span class="invisible-button">Prev</span>
+	  <% } %>
+	
+	  <% for (int i = 1; i <= totalPage; i++) { %>
+	    <a href="FAQ.jsp?page=<%= i %>" class="<%= (i == currentPage ? "active" : "") %>">
+	      <%= i %>
+	    </a>
+	  <% } %>
+	
+	  <% if (currentPage < totalPage) { %>
+	    <a href="FAQ.jsp?page=<%= currentPage + 1 %>">Next</a>
+	  <% } else { %>
+	    <span class="invisible-button">Next</span>
+	  <% } %>
+	</div>
 
 			<div class="footer-bottom">
 				<p>2025&copy;everyWEAR</p>

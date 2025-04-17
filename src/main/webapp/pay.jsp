@@ -115,10 +115,26 @@
 	<section class="info-section">
 	  <p class="section-title">쿠폰</p>
 	  <div class="inline-group">
-	    <input type="text" value="사용가능한 쿠폰이 없습니다." readonly>
-	    <button type="button" class="gray-btn">쿠폰 선택</button>
+	    <input type="text" value="사용가능한 쿠폰이 있습니다." readonly>
+	    <button type="button" class="gray-btn" onclick="openCouponModal()">쿠폰 선택</button>
 	  </div>
 	</section>
+	
+	<!-- 쿠폰 선택 모달창 -->
+	<div id="coupon-modal" class="modal-overlay" style="display:none;">
+	  <div class="modal-content">
+	    <h4>쿠폰 선택</h4>
+	    <form id="coupon-form">
+	      <label><input type="radio" name="coupon" value="10"> 10% 할인 쿠폰</label>
+	      <label><input type="radio" name="coupon" value="7"> 7% GOLD 회원 전용 쿠폰</label>
+	      <label><input type="radio" name="coupon" value="5000"> 5,000원 할인 쿠폰</label>
+	    </form>
+	    <div class="modal-btn-group">
+	      <button onclick="applyCoupon()">적용</button>
+	      <button onclick="closeCouponModal()">닫기</button>
+	    </div>
+	  </div>
+	</div>
 	
 	<!-- 적립금 -->
 	<section class="info-section">
@@ -134,10 +150,10 @@
 	<section class="info-section payment-section">
 	  <p class="section-title">결제 정보</p>
 	  <div class="payment-info">
-	    <div><span>주문상품</span><span>199,000 원</span></div>
-	    <div><span>배송비</span><span>+3,000 원</span></div>
-	    <div><span>할인/부가결제</span><span>-0 원</span></div>
-	  </div>
+		  <div><span>주문상품</span><span id="order-amount">199,000 원</span></div>
+		  <div><span>배송비</span><span id="shipping-fee">+3,000 원</span></div>
+		  <div><span>할인/부가결제</span><span id="discount-amount">-0 원</span></div>
+		</div>
 	
 	  <p class="section-title" style="margin-top: 30px;">적립</p>
 	  <div class="payment-info">
@@ -146,9 +162,9 @@
 	  </div>
 	
 	  <div class="final-price">
-	    <span>최종 결제 금액</span>
-	    <span>202,000 원</span>
-	  </div>
+		  <span>최종 결제 금액</span>
+		  <span id="final-price">202,000 원</span> <!-- id 추가 -->
+		</div>
 	  
 	  <!-- 추천 상품 섹션 -->
 		<section class="recommend-section">
@@ -201,7 +217,7 @@
 <script src="https://stdpay.inicis.com/stdjs/INIStdPay.js"></script>
 
 <script>
-  // 📌 배송지 별칭 → 주소 자동입력
+  // 배송지 별칭 → 주소 자동입력
   const addressMap = {
     "회사": ["06234", "서울 강남구 테헤란로 231", "OO타워 10층"],
     "학교": ["47340", "부산 부산진구 엄광로 176", "동의대학교"],
@@ -219,7 +235,7 @@
     document.querySelector(".alias").value = alias;
   }
 
-  // 📌 주소 검색
+  // 주소 검색
   function execDaumPostcode() {
     new daum.Postcode({
       oncomplete: function(data) {
@@ -231,7 +247,7 @@
     }).open();
   }
 
-  // 📌 배송지 UI 전환
+  // 배송지 UI 전환
   function toggleDeliveryUI(show) {
     const aliasList = document.getElementById("alias-list");
     const aliasInputRow = document.getElementById("alias-input-row");
@@ -250,7 +266,7 @@
     }
   }
 
-  // 📌 주문자 정보 복사
+  // 주문자 정보 복사
   function copyOrdererAddress() {
     document.getElementById("zipcode").value = "47340";
     document.getElementById("address1").value = "부산광역시 부산진구 엄광로 176";
@@ -258,7 +274,7 @@
     document.getElementById("address2").readOnly = true;
   }
 
-  // 📌 별칭 삭제
+  // 별칭 삭제
   function deleteAlias(event, el) {
     event.stopPropagation();
     if (confirm("정말 삭제할까요?")) {
@@ -267,7 +283,7 @@
     }
   }
 
-  // 📌 별칭 추가
+  // 별칭 추가
   function addAlias() {
     const input = document.querySelector(".alias");
     const value = input.value.trim();
@@ -292,7 +308,7 @@
     input.value = "";
   }
 
-  // 📌 placeholder 관련
+  // placeholder 관련
   function clearPlaceholder(el) {
     el.dataset.placeholder = el.placeholder;
     el.placeholder = '';
@@ -304,7 +320,7 @@
     }
   }
 
-  // 📌 페이지 로드 시 처리
+  // 페이지 로드 시 처리
   window.addEventListener("DOMContentLoaded", () => {
     copyOrdererAddress(); // 기본 주소 세팅
 
@@ -331,6 +347,56 @@
       });
     });
   });
+  
+  function openCouponModal() {
+	    document.getElementById("coupon-modal").style.display = "flex";
+	  }
+
+	  function closeCouponModal() {
+	    document.getElementById("coupon-modal").style.display = "none";
+	  }
+
+	  function applyCoupon() {
+	    const selected = document.querySelector('input[name="coupon"]:checked');
+	    if (!selected) {
+	      alert("쿠폰을 선택해주세요.");
+	      return;
+	    }
+
+	    // 실제 금액 계산용 숫자
+	    const orderAmount = 199000;
+	    const shippingFee = 3000;
+	    let discount = 0;
+	    let couponName = "";
+
+	    switch (selected.value) {
+	      case "10":
+	        discount = Math.floor(orderAmount * 0.10);
+	        couponName = "10% 할인 쿠폰";
+	        break;
+	      case "7":
+	        discount = Math.floor(orderAmount * 0.07);
+	        couponName = "7% GOLD 회원 전용 쿠폰";
+	        break;
+	      case "5000":
+	        discount = 5000;
+	        couponName = "5,000원 할인 쿠폰";
+	        break;
+	    }
+
+	    const finalPrice = orderAmount + shippingFee - discount;
+
+	    // 화면에 반영
+	    document.getElementById("discount-amount").textContent = `-${discount.toLocaleString()} 원`;
+	    document.getElementById("final-price").textContent = `${finalPrice.toLocaleString()} 원`;
+	    document.querySelector(".inline-group input[type='text']").value = couponName;
+
+	    // 결제 폼에 반영
+	    document.querySelector("input[name='P_AMT']").value = finalPrice;
+
+	    // 모달 닫기
+	    closeCouponModal();
+	  }
 </script>
 
 </body>
