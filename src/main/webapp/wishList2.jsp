@@ -44,10 +44,10 @@
 
 				<!-- 상품 1 -->
 				<div class="wishlist-item">
-					<img src="images/fav-icon.png" alt="신발">
+					<img src="images/wishList1.jpg" alt="바지">
 					<div class="wishlist-info">
-						<p class="wishlist-name">Onitsuka Tiger Tokuten Gray</p>
-						<p class="wishlist-price">199,000 원</p>
+						<p class="wishlist-name">B.C.L DENIM PANTS</p>
+						<p class="wishlist-price">89,000 원</p>
 					</div>
 					<div class="wishlist-cart" onclick="addToCart(this)">🛒</div>
 					<div class="wishlist-heart active" onclick="toggleWishlistHeart(this)">❤️</div>
@@ -55,10 +55,10 @@
 				
 				<!-- 상품 3 -->
 				<div class="wishlist-item">
-					<img src="images/fav-icon.png" alt="백팩">
+					<img src="images/wishList2.jpg" alt="아우터">
 					<div class="wishlist-info">
-						<p class="wishlist-name">Arc'teryx Konseal 15 Backpack Black</p>
-						<p class="wishlist-price">140,000 원</p>
+						<p class="wishlist-name">SYMBOL LOGO HOODED ZIP-UP </p>
+						<p class="wishlist-price">109,000 원</p>
 					</div>
 					<div class="wishlist-cart" onclick="addToCart(this)">🛒</div>
 					<div class="wishlist-heart active" onclick="toggleWishlistHeart(this)">❤️</div>
@@ -66,11 +66,10 @@
 
 				<!-- 상품 2 (품절) -->
 				<div class="wishlist-item soldout">
-					<img src="images/fav-icon.png" alt="가방">
+					<img src="images/wishList3.jpg" alt="양말">
 					<div class="wishlist-info">
-						<p class="wishlist-name">Montbell Poketable Light Pack 18
-							Black</p>
-						<p class="wishlist-price">140,000 원</p>
+						<p class="wishlist-name">NM TRIBAL SOCKS</p>
+						<p class="wishlist-price">9,000 원</p>
 					</div>
 					<div class="wishlist-heart-group">
 					  <div class="wishlist-cart" onclick="addToCart(this)">🛒</div>

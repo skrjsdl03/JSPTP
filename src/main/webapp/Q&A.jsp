@@ -41,7 +41,7 @@
 <body>
 
 	<%@ include file="includes/header.jsp"%>
-
+	
 	<section class="content2">
 	<h3>Q&A</h3> 
 	</section>
@@ -59,12 +59,14 @@
 		<section class="content">
 			<table class="notice-table" id="notice-table">
 				<tbody>
-					<tr class="qna-header">
-					  <td class="title">No. 제목</td>
-					  <td class="status">답변 현황</td>
-					  <td class="date">작성 일시</td>
-					  <td class="type">작성자</td>
-					</tr>
+					<thead>
+					    <tr class="qna-header">
+					      <th class="title">No. 제목</th>
+					      <th class="status">답변 현황</th>
+					      <th class="date">작성 일시</th>
+					      <th class="type">작성자</th>
+					    </tr>
+					  </thead>
 
 				<%for(int i = start;i<end;i++){ 
 						InquiryDTO qna = qlist.get(i);
