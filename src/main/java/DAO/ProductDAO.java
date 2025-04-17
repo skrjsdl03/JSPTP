@@ -1222,5 +1222,28 @@ public class ProductDAO {
 		}
 		return urllist;
     }
+    
+    //주문서 작성 시 주문할 상품 정보
+    public int getPdWhenOrder(int f_id) {
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		int pd_id = 0;
+		try {
+			con = pool.getConnection();
+			sql = "select pd_id from favorite where f_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, f_id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				pd_id = rs.getInt(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return pd_id;
+    }
 
 }

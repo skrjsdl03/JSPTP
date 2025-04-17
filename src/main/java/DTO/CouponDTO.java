@@ -9,12 +9,12 @@ public class CouponDTO {
 	private String cp_end;
 	private String cp_usable_state;
 	private int cp_min_price;
-	private int cp_user_rank;
+	private String cp_user_rank;
 	
 	public CouponDTO() {}
 
 	public CouponDTO(int cp_id, String cp_name, String cp_type, int cp_price, String cp_start, String cp_end,
-			String cp_usable_state, int cp_min_price, int cp_user_rank) {
+			String cp_usable_state, int cp_min_price, String cp_user_rank) {
 		super();
 		this.cp_id = cp_id;
 		this.cp_name = cp_name;
@@ -91,13 +91,15 @@ public class CouponDTO {
 		this.cp_min_price = cp_min_price;
 	}
 
-	public int getCp_user_rank() {
+	public String getCp_user_rank() {
 		return cp_user_rank;
 	}
 
-	public void setCp_user_rank(int cp_user_rank) {
+	public void setCp_user_rank(String cp_user_rank) {
 		this.cp_user_rank = cp_user_rank;
 	}
+
+	
 	
 	
 }

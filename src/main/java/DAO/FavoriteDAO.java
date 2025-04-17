@@ -79,4 +79,48 @@ public class FavoriteDAO {
 		return flag;
 	}
 	
+	//장바구니 삭제
+	public boolean deleteCart(int f_id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "delete from favorite where f_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, f_id);
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
+	
+	//한 장바구니 출력
+	public FavoriteDTO getOneFavorite(int f_id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		FavoriteDTO f = null;
+		try {
+			con = pool.getConnection();
+			sql = "select * from favorite where f_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, f_id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				f = new FavoriteDTO(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getString(5), rs.getInt(6), SDF_DATE.format(rs.getDate(7)));
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return f;
+	}
+	
 }

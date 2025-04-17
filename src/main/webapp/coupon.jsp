@@ -1,4 +1,33 @@
+<%@page import="DTO.CouponDTO"%>
+<%@page import="DTO.UserCouponDTO"%>
+<%@page import="java.util.Vector"%>
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="DTO.UserDTO"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<jsp:useBean id="uDao" class="DAO.UserDAO"/>
+<jsp:useBean id="cDao" class="DAO.CouponDAO"/>
+<%
+		String userId = (String) session.getAttribute("id");
+		String userType = (String) session.getAttribute("userType");
+		if(userId == null || userId == ""){
+			// 현재 페이지 경로를 얻기 위한 코드
+			String fullUrl = request.getRequestURI();
+			String queryString = request.getQueryString();
+			if (queryString != null) {
+				fullUrl += "?" + queryString;
+			}
+			response.sendRedirect("login.jsp?redirect=" + java.net.URLEncoder.encode(fullUrl, "UTF-8"));
+			return;
+		}
+		UserDTO userDto = uDao.getOneUser(userId, userType);
+		int couponCnt = uDao.showOneUserCoupon(userId, userType);
+		
+		 DecimalFormat formatter = new DecimalFormat("#,###");
+
+	       String point = formatter.format(userDto.getUser_point());
+	       
+	       Vector<UserCouponDTO> uclist = cDao.getUserAllCoupon(userId, userType);
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -17,12 +46,12 @@
 
 	<div class="container">
 		<div class="user-box">
-			<p class="username">정시영 님</p>
+			<p class="username"><%=userDto.getUser_name()%> 님</p>
 			<div class="user-info">
 				<div class="label">적립금</div>
-				<div class="value">25,000 ￦</div>
+				<div class="value"><%=point%> ￦</div>
 				<div class="label"><a href="coupon.jsp">쿠폰</a></div>
-				<div class="value">2 개</div>
+				<div class="value"><%=couponCnt%> 개</div>
 			</div>
 		</div>
 
@@ -58,19 +87,33 @@
 			<div class="coupon-content">
 
 				<!-- 사용 가능한 쿠폰 -->
+				<%if(uclist != null && !uclist.isEmpty()){
+						for(int i = 0; i<uclist.size(); i++){ 
+							UserCouponDTO ucDto = uclist.get(i);
+							CouponDTO uDto = cDao.getCouponInfo(ucDto.getCp_id());
+				%>
 					<div class="coupon-item"
 					     data-expire="${coupon.endDate}"
 					     data-discount="${coupon.price}">
      					<img src="images/fav-icon.png" alt="10% 할인 쿠폰">
 					<div class="coupon-info">
-						<p class="coupon-name">10% 할인 쿠폰</p>
+						<p class="coupon-name"><%=uDto.getCp_name()%></p>
 						<p class="coupon-detail">
-				      사용기한 | 2025-04-14 ~ 2025-04-14<br>
-				      최소주문금액: 30,000원<br>
+						할인금액 | <%=uDto.getCp_type().equals("정률") ? uDto.getCp_price() + "%" : formatter.format(uDto.getCp_price()) + "원" %><br>
+				      사용기한 | <%=uDto.getCp_start()%> ~ <%=uDto.getCp_end()%><br>
+				      최소주문금액 | <%=formatter.format(uDto.getCp_min_price())%>원<br>
 				    	</p>					
 				    </div>
 					  <button class="coupon-button" onclick="useCoupon(this)">적용상품</button>
 				</div>
+				<%
+						}
+					} else{
+				%>
+				<div style="text-align: center; margin-top: 200px;">
+					<span style="color: #CCCCCC">쿠폰함이 비어 있습니다</span>
+				</div>
+				<%} %>
 				
 					<div class="coupon-item"
 					     data-expire="${coupon.endDate}"
