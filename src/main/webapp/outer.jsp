@@ -1,8 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%
-	String category = request.getParameter("cat");
-	if (category == null) category = "default";
-%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -15,55 +11,6 @@
 
 	<%@ include file="includes/header.jsp"%>
 
-	<!-- 대분류 카테고리 -->
-	<nav class="sub-nav">
-		<ul>
-			<li><a href="splitTest2.jsp?cat=all" class="active">ALL</a></li>
-			<li><a href="splitTest2.jsp?cat=outer">OUTER</a></li>
-			<li><a href="splitTest2.jsp?cat=top">TOP</a></li>
-			<li><a href="splitTest2.jsp?cat=bottom">BOTTOM</a></li>
-			<li><a href="splitTest2.jsp?cat=acc">ACC</a></li>
-		</ul>
-	</nav>
-
-	<!-- 중분류 카테고리 -->
-	<nav class="sub-nav2">
-		<ul>
-			<li><a href="#" class="active">HEAVY OUTER</a></li>
-			<li><a href="#">HOODED ZIP-UP</a></li>
-			<li><a href="#">JACKET</a></li>
-			<li><a href="#">JUMPER</a></li>
-			<li><a href="#">VEST</a></li>
-			<li><a href="#">WIND BREAKER</a></li>
-		</ul>
-	</nav>
-
-	<div class="main-content">
-		<%
-		switch (category) {
-		case "outer" :
-		%><jsp:include page="outer.jsp" />
-		<%
-		break;
-		case "top" :
-		%><jsp:include page="outer.jsp" />
-		<%
-		break;
-		case "bottom" :
-		%><jsp:include page="outer.jsp" />
-		<%
-		break;
-		case "acc" :
-		%><jsp:include page="outer.jsp" />
-		<%
-		break;
-		default :
-		%>
-		<%
-		}
-		%>
-	</div>
-	
 	<nav class="items">
 		<ul>
 			<li><a>ITEMS()</a></li>
@@ -83,7 +30,7 @@
 	<div class="container">
 		<div class="product-list" id="productList">
 			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth2.png">
+				<img src="images/main-cloth1.png">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>

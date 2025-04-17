@@ -390,6 +390,7 @@ input[readonly] {
 .delete-text {
   font-size: 13px;
   color: #333;
+  cursor: pointer;
 }
 
 .delete-icon {

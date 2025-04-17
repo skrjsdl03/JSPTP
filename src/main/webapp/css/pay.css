@@ -148,7 +148,7 @@ h3 {
 .qty-wrapper {
   display: flex;
   align-items: center;  /* 수직 정렬 맞춤 */
-  gap: 12px;            /* 라벨과 컨트롤 사이 간격 */
+  /* gap: 12px;  */           /* 라벨과 컨트롤 사이 간격 */
   margin-top: 6px;
 }
 

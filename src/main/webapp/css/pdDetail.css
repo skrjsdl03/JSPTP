@@ -11,13 +11,13 @@ body {
 	gap: 40px; /* 항목 간 간격 */
 	list-style: none;
 	padding: 0;
-	margin: 0 0 50px 0;
+	margin: 0 0 30px 0;
 }
 
 .sub-nav ul li a {
 	text-decoration: none;
 	color: black;
-	font-size: 14px;
+	font-size: 15px;
 	font-family: 'Malgun Gothic', sans-serif;
 	font-weight: bold;
 }
@@ -28,6 +28,46 @@ body {
 
 .sub-nav ul li a.active {
 	color: #015FC1; /* 호버와 동일한 색상 */
+}
+
+.sub-nav2 ul {
+	display: flex;
+	justify-content: center;
+	gap: 40px; /* 항목 간 간격 */
+	list-style: none;
+	padding: 0;
+	margin: 0 0 50px 0;
+}
+
+.sub-nav2 ul li a {
+	text-decoration: none;
+	color: black;
+	font-size: 12px;
+	font-family: 'Malgun Gothic', sans-serif;
+	font-weight: bold;
+}
+
+.sub-nav2 ul li a:hover {
+	color: #015FC1;
+}
+
+.sub-nav2 ul li a.active {
+	color: #015FC1; /* 호버와 동일한 색상 */
+}
+
+.items ul {
+	display: flex;
+	justify-content: left;
+	list-style: none;
+	padding: 0;
+	margin: 0 20px;
+}
+
+.items ul li a {
+	color: black;
+	font-size: 14px;
+	font-family: 'Malgun Gothic', sans-serif;
+	font-weight: bold;
 }
 
 .container {
@@ -253,21 +293,238 @@ body {
 	margin: 20px 0;
 }
 
+.section2 {
+	margin: 20px 0;
+}
+
 .guide-title {
 	font-size: 15px;
 	font-weight: bold;
 	margin-top: 20px;
 }
 
-.info-note {
-	font-size: 12px;
-	margin-top: 20px;
-	color: #444;
-	line-height: 1.6;
-}
-
 .left-panel img, .right-panel img {
 	max-width: 100%;
 	height: auto;
 	display: flex;
+}
+
+.guide-toggle {
+	display: block;
+	padding: 10px 0;
+	font-size: 16px;
+	font-weight: bold;
+	border: none;
+	cursor: pointer;
+	text-align: left;
+	font-family: 'Malgun Gothic', sans-serif;
+	background-color: #FFFFFF;
+}
+
+/* .guide-toggle::after {
+	content: "▼";
+	float: right;
+	transition: transform 0.3s;
+} */
+
+.guide-toggle.active::after {
+	transform: rotate(20deg);
+}
+
+.guide-content {
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.4s ease;
+}
+
+.guide-content.open {
+	max-height: 1000px; /* 충분히 크게 */
+}
+
+.buy-with-section {
+	padding: 100px 20px;
+	background: #fff;
+}
+
+.buy-with-section h3 {
+	font-size: 20px;
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+
+.buy-with-slider {
+	position: relative;
+	overflow: hidden;
+	max-width: 2000px; /* 너비 제한 */
+	margin: 0 auto;
+	padding: 0 40px;
+}
+
+.slider-track {
+	display: flex;
+	transition: transform 0.4s ease;
+	gap: 60px;
+}
+
+.slider-item {
+	min-width: 300px;
+	flex-shrink: 0;
+	text-align: center;
+}
+
+.slider-item img {
+	width: 100%;
+	max-width: 300px;
+	margin-bottom: 10px;
+}
+
+.item-name {
+	font-weight: bold;
+	font-size: 14px;
+	margin-bottom: 5px;
+}
+
+.item-price {
+	font-size: 13px;
+	color: #000;
+	margin-bottom: 5px;
+}
+
+.item-price del {
+	color: #888;
+	margin-right: 6px;
+}
+
+.slider-btn {
+	position: absolute;
+	top: 40%;
+	transform: translateY(-50%);
+	background: none;
+	border: none;
+	font-size: 32px;
+	cursor: pointer;
+	z-index: 10;
+	padding: 10px;
+}
+
+.slider-btn.prev {
+	left: 0;
+}
+
+.slider-btn.next {
+	right: 0;
+}
+
+/* Swiper용 커스터마이징 */
+.buy-with-slider .swiper-wrapper {
+	display: flex;
+}
+
+.buy-with-slider .swiper-slide {
+	width: auto; /* 슬라이드 크기를 콘텐츠에 맞게 */
+}
+
+/* 리뷰 영역 */
+.review-section {
+	width: 1000px;
+	padding: 50px 20px;
+	/* border-top: 1px solid #ccc; */
+	font-family: 'Malgun Gothic', sans-serif;
+	margin: 0 auto;
+}
+
+.review-summary {
+	display: flex;
+	justify-content: space-between;
+	gap: 40px;
+}
+
+.rating-box {
+	flex: 1;
+}
+
+.rating-box .star-score {
+	font-size: 32px;
+	font-weight: bold;
+}
+
+.write-review-btn {
+	margin-top: 10px;
+	padding: 10px 20px;
+	background-color: #000;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+}
+
+.rating-bars {
+	flex: 2;
+}
+
+.rating-bars p {
+	margin: 5px 0;
+}
+
+.bar {
+	display: inline-block;
+	width: 200px;
+	height: 6px;
+	background: #eee;
+	margin: 0 10px;
+	vertical-align: middle;
+	border-radius: 3px;
+}
+
+.fill {
+	display: inline-block;
+	height: 100%;
+	background: #000;
+	border-radius: 3px;
+}
+
+.review-filters {
+	margin-top: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.filter-box button {
+	margin-right: 8px;
+	padding: 6px 12px;
+}
+
+.review-list {
+	margin-top: 30px;
+}
+
+.review-item {
+	border-top: 1px solid #ccc;
+	padding: 20px 0;
+}
+
+.review-text {
+	margin-bottom: 10px;
+}
+
+.review-meta {
+	color: #777;
+}
+
+.review-sub {
+	font-weight: bold;
+}
+
+.sort-options {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	margin: 0 0 20px 0;
+	font-size: 14px;
+}
+
+.sort-options select {
+	margin-left: 8px;
+	padding: 4px 8px;
+	font-size: 14px;
 }
