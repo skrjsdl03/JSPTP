@@ -55,8 +55,13 @@ h3 {
 }
 
 .content {
-	flex: 1;
-	padding: 0 30px;
+  flex: 1;
+  padding: 0 30px;
+  margin: 70px auto 0 auto;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 h2 {
@@ -95,33 +100,36 @@ h2 {
 }
 
 .pagination {
-	display: flex;
-	justify-content: center; /* 중앙 정렬 */
-	align-items: center;
-	gap: 5px; /* 요소 간 여백 */
-	margin: 30px 0;
-		width: 400px; 
-	margin-left: auto;
-	margin-right: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin: 30px 0;
 }
 
-.pagination .invisible-button {
+.invisible-button {
   visibility: hidden;
   display: inline-block;
-  width: 40px; /* Prev/Next와 같은 너비로 */
+  width: 40px;   /* Prev/Next와 동일한 너비로 고정! */
   text-align: center;
 }
 
-.pagination a {
+.pagination a,
+.pagination .invisible-button {
 	display: inline-block;
-	margin: 0 5px;
+	width: 40px;            /* ✅ 고정된 너비로 중앙 유지 */
+	text-align: center;
 	cursor: pointer;
 	font-size: 13px;
 	color: #888;
-	padding: 6px 12px;
+	padding: 6px 0;         /* ✅ 양옆 패딩 제거, 높이만 확보 */
 	border-radius: 5px;
 	text-decoration: none;
 	transition: background 0.2s;
+}
+
+.pagination .invisible-button {
+	visibility: hidden;
 }
 
 .pagination a:hover {
@@ -145,16 +153,28 @@ h2 {
 /* FAQ 아이템 전체는 block 배치 */
 .faq-item {
   border-bottom: 1px solid #ccc;
-  /* padding: 10px 0; */
+}
+
+.faq-list {
+  min-height: 420px; /* 항목이 부족해도 기본 공간 확보 */
 }
 
 /* 질문 줄에만 flex 적용 */
 .question {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: 20px 20px;
   cursor: pointer;
   font-weight: bold;
-  padding: 20px 5px;
+  font-size: 15px;
+  color: #333;
+  transition: background 0.3s;
+}
+
+.question:hover {
+  background-color: #f5faff;  /* 살짝 푸른 배경 */
+  color: #015FC1;             /* 글자 파란색으로 */
 }
 
 /* 답변 내용 */
@@ -174,49 +194,3 @@ h2 {
 .faq-item.active .arrow {
   transform: rotate(180deg);
 }
-
-
-/* .faq-item {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 20px 10px;
-	cursor: pointer;
-	font-weight: bold;
-	border-bottom: 1px solid #ddd;
-	font-size: 14px;
-}
-
-.faq-item .arrow {
-	transition: transform 0.3s ease;
-	font-size: 14px;
-	color: #888;
-}
-
-.faq-item.active .arrow {
-	transform: rotate(180deg); 아래 → 위
-}
-
-.faq-content {
-  display: none;
-  padding: 15px;
-  background-color: #f9f9f9;
-  font-size: 14px;
-}
-
-.arrow {
-  float: right;
-  transition: transform 0.3s ease;
-}
-
-.faq-item.active .arrow {
-  transform: rotate(180deg);
-} */
-
-
-/* .faq-item.active+.faq-content {
-	display: block;
-	
-} */
-
-

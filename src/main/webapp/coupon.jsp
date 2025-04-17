@@ -120,7 +120,7 @@
 					     data-discount="${coupon.price}">				  
 					     <img src="images/fav-icon.png" alt="회원전용 쿠폰">
 				  <div class="coupon-info">
-				    <p class="coupon-name">7% 쿠폰 GOLD 회원 전용</p>
+				    <p class="coupon-name">7% GOLD 회원 전용 쿠폰</p>
 				    <p class="coupon-detail">
 				      사용기한 | 2025-04-01 ~ 2025-05-01<br>
 				      최소주문금액: 20,000원<br>

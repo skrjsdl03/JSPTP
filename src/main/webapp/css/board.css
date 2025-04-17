@@ -59,89 +59,168 @@ h3 {
 	padding: 0 30px;
 }
 
-.notice-table td.views {
-	text-align: right;
-	white-space: nowrap;
-}
-
-.notice-table td.date {
-	width: 150px;
-	text-align: right;
-}
-
-.notice-table td.title {
-	width: 600px;
-}
-
-.notice-table {
-	border-collapse: collapse;
-	width: 1000px;
-	margin: 70px auto 0 auto;
-}
-
-.notice-table .important {
-	background-color: #f0f8ff; /* 원하는 색상으로 변경 가능 */
-	font-weight: bold;
-	color: red;
-}
-
-.notice-table .important td.title a {
-	color: red;
-}
-
-.notice-table tr {
-	border-bottom: 1px solid #BBBBBB;
-	border-top: 1px solid #BBBBBB;
-}
-
-.notice-table td {
-	padding: 14px 10px;
-	font-size: 14px;
-}
-
-.notice-table td a {
-	text-decoration: none;
-	color: black;
-}
-
 .notice-content {
 	padding: 20px;
 	border-top: 1px solid #ddd;
 }
 
-.notice-body p {
-	margin: 0 0 10px;
-	line-height: 1.6;
+.notice-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 20px;
 }
 
+/* 헤더 */
+.notice-table thead tr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 10px;
+  border-bottom: 2px solid #bbb;
+  background-color: transparent;
+}
+
+.notice-table thead th.title {
+  flex: 4;
+  text-align: left;
+  padding-left: 10px;
+}
+
+.notice-table thead th.date {
+  flex: 1.2;
+  text-align: left;
+  padding-left: 10px;
+}
+
+.notice-table thead th.views {
+  flex: 1;
+  text-align: right;
+  padding-right: 10px;
+}
+
+/* 본문 행 */
+.notice-table tbody tr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 10px;
+  border-bottom: 1px solid #ddd;
+  background-color: white;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+/* ✅ 목록 페이지에서만 hover 효과 적용 */
+.board-list .notice-table tbody tr:hover {
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* 셀 공통 */
+.notice-table td {
+  flex: 1;
+  padding: 6px 10px;
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 열 너비 설정 */
+.notice-table td.title {
+  flex: 4;
+  font-weight: bold;
+  color: #111;
+}
+
+.notice-table td.title a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.notice-table td.title a:hover {
+  color: #015FC1;
+}
+
+.notice-table td.date {
+  flex: 1.2;
+  color: #555;
+  font-size: 13px;
+}
+
+.notice-table td.views {
+  flex: 1;
+  color: #888;
+  font-size: 13px;
+  text-align: right;
+}
+
+/* 중요 공지 */
+.notice-table .important {
+  background-color: #f0f8ff;
+}
+
+.notice-table .important td.title a {
+  color: red;
+}
+
+
+/* 페이지네이션 그대로 유지 */
 .pagination {
-	display: flex;
-	justify-content: center; /* 중앙 정렬 */
-	align-items: center;
-	gap: 5px; /* 요소 간 여백 */
-	margin: 30px 0;
-	width: 400px;
-	margin-left: auto;
-	margin-right: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin: 30px 0;
+}
+
+.pagination a {
+  display: inline-block;
+  margin: 0 5px;
+  font-size: 13px;
+  color: #888;
+  padding: 6px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.pagination a:hover {
+  background-color: #f0f0f0;
+}
+
+.pagination .active {
+  font-weight: bold;
+  color: black;
+  border-color: black;
+}
+
+.invisible-button {
+  visibility: hidden;
+  display: inline-block;
+  width: 40px;
+  text-align: center;
+}
+
+.pagination a,
+.pagination .invisible-button {
+	display: inline-block;
+	width: 40px;            /* ✅ 고정된 너비로 중앙 유지 */
+	text-align: center;
+	cursor: pointer;
+	font-size: 13px;
+	color: #888;
+	padding: 6px 0;         /* ✅ 양옆 패딩 제거, 높이만 확보 */
+	border-radius: 5px;
+	text-decoration: none;
+	transition: background 0.2s;
 }
 
 .pagination .invisible-button {
 	visibility: hidden;
-	display: inline-block;
-	width: 40px; /* Prev/Next와 같은 너비로 */
-	text-align: center;
-}
-
-.pagination a {
-	display: inline-block;
-	margin: 0 5px;
-	cursor: pointer;
-	font-size: 13px;
-	color: #888;
-	padding: 6px 12px;
-	border-radius: 5px;
-	text-decoration: none;
-	transition: background 0.2s;
 }
 
 .pagination a:hover {
@@ -198,4 +277,11 @@ h3 {
 	border-radius: 4px;
 	cursor: pointer;
 	transition: background-color 0.3s;
+}
+
+.footer-bottom {
+	text-align: center;
+	margin-top: 20px;
+	font-size: 12px;
+	color: #FFFFFF;
 }
