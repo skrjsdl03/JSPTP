@@ -12,8 +12,13 @@
 		String pZipcode = request.getParameter("PZipcode");
 		String pAddress1 = request.getParameter("PAddress1");
 		String pAddress2 = request.getParameter("PAddress2");
+		String pAlias = request.getParameter("PAddress3");
+		if(pAlias == null || pAlias.equals(""))
+			pAlias = pAddress1;
 		String pPhone = request.getParameter("PPhone");
 		String pEmail = request.getParameter("PEmail");
+/* 		String[] quantities = request.getParameterValues("PQty");
+		String[] pd_ids = request.getParameterValues("PPd_id"); */
 %>
 <!DOCTYPE html>
 <html>
@@ -62,13 +67,63 @@
                         msg += '\결제 금액 : ' + rsp.paid_amount;
                         msg += '카드 승인번호 : ' + rsp.apply_num;
                         alert(msg);
+                        
+                        location.href="<%=P_NEXT_URL%>";
                     } else {
                         //[3] 아직 제대로 결제가 되지 않았습니다.
                         //[4] 결제된 금액이 요청한 금액과 달라 결제를 자동취소처리하였습니다.
+                        alert("아직 제대로 결제 X");
                     }
                 });
                 //성공시 이동할 페이지
-               location.href='<%=request.getContextPath()%>/paymentProc.jsp?apply_num='+rsp.apply_num+'&paid_amount='+rsp.paid_amount;
+			   // JSP에서 받은 배열을 JavaScript 배열로 출력 (서버에서 출력해주는 방식)
+			    const pd_ids = [<% 
+			        String[] pd_ids = request.getParameterValues("PPd_id");
+			        for(int i = 0; i < pd_ids.length; i++) {
+			            out.print("'" + pd_ids[i] + "'");
+			            if (i < pd_ids.length - 1) out.print(",");
+			        }
+			    %>];
+			
+			    const quantities = [<% 
+			        String[] quantities = request.getParameterValues("PQty");
+			        for(int i = 0; i < quantities.length; i++) {
+			            out.print("'" + quantities[i] + "'");
+			            if (i < quantities.length - 1) out.print(",");
+			        }
+			    %>];
+						
+			    let params = new URLSearchParams();
+			    params.append("imp_uid", encodeURIComponent(rsp.imp_uid));
+			    params.append("apply_num", encodeURIComponent(rsp.apply_num));
+			    params.append("card_name", encodeURIComponent(rsp.card_name));
+			    params.append("o_num", encodeURIComponent("<%=ONum%>"));
+			    params.append("o_name", encodeURIComponent("<%=pName%>"));
+			    params.append("o_phone", encodeURIComponent("<%=pPhone%>"));
+			    params.append("paid_amount", encodeURIComponent(rsp.paid_amount));
+			    params.append("zipcode", encodeURIComponent("<%=pZipcode%>"));
+			    params.append("address1", encodeURIComponent("<%=pAddress1%>"));
+			    params.append("address2", encodeURIComponent("<%=pAddress2%>"));
+			    params.append("alias", encodeURIComponent("<%=pAlias%>"));
+			    
+			    // 배열로 pd_id[] 와 quantity[] 추가
+			    for (let i = 0; i < pd_ids.length; i++) {
+			        params.append("pd_id[]", encodeURIComponent(pd_ids[i]));
+			        params.append("quantity[]", encodeURIComponent(quantities[i]));
+			    }
+			    
+			    fetch("payInsert.jsp?" + params.toString())
+		        .then(res => res.json())
+		        .then(data => {
+		            if (data.result === "success") {
+		                // 성공 처리
+		            	location.href="<%=P_NEXT_URL%>";
+		            } else {
+		                // 실패 처리
+		            	location.href="<%=request.getContextPath()%>/pay.jsp";
+		            }
+		        });
+               <%-- location.href="<%=P_NEXT_URL%>"; --%>
             } else {
                 msg = '결제에 실패하였습니다.';
                 msg += '에러내용 : ' + rsp.error_msg;
