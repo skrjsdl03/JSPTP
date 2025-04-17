@@ -48,7 +48,14 @@ if (end > totalData)
 
 		<section class="content">
 			<table class="notice-table" id="notice-table">
-				<tbody>
+			<thead>
+				  <tr>
+				    <th class="title">제목</th>
+				    <th class="date">작성일</th>
+				    <th class="views">조회수</th>
+				  </tr>
+				</thead>
+				<tbody>			
 					<%-- 중요 공지사항은 항상 출력 --%>
 					<%
 					for (int i = 0; i < nIlist.size(); i++) {
@@ -58,7 +65,7 @@ if (end > totalData)
 						<td class="title"><a
 							href="noticeRead.jsp?noti_id=<%=notice.getNoti_id()%>"> ※ <%=notice.getNoti_title()%></a></td>
 						<td class="date"><%=notice.getCreated_at()%></td>
-						<td class="views">조회수: <%=notice.getNoti_views()%></td>
+						<td class="views"><%=notice.getNoti_views()%></td>
 					</tr>
 					<%
 					}
@@ -73,7 +80,7 @@ if (end > totalData)
 						<td class="title"><a
 							href="noticeRead.jsp?noti_id=<%=notice.getNoti_id()%>"><%=notice.getNoti_title()%></a></td>
 						<td class="date"><%=notice.getCreated_at()%></td>
-						<td class="views">조회수: <%=notice.getNoti_views()%></td>
+						<td class="views"><%=notice.getNoti_views()%></td>
 					</tr>
 					<%
 					}
