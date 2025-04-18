@@ -21,7 +21,7 @@
 			<div class="user-info">
 				<div class="label">적립금</div>
 				<div class="value">25,000 ￦</div>
-				<div class="label">쿠폰</div>
+				<div class="label"><a href="coupon.jsp">쿠폰</a></div>
 				<div class="value">2 개</div>
 			</div>
 		</div>
@@ -57,10 +57,10 @@
 
 					<!-- 주문 항목 -->
 					<div class="order-row shipping">
-						<img src="images/fav-icon.png" alt="상품 이미지">
+						<img src="images/orderHistory2.jpg" alt="상품 이미지">
 						<div class="order-info">
-							<p class="item-name">Onitsuka Tiger Tokuten Gray</p>
-							<p class="item-option">220</p>
+							<p class="item-name">S.S PRINT T-SHIRT</p>
+							<p class="item-option">L</p>
 							<p class="item-count">수량: 1개</p>
 						</div>
 						<div class="order-meta">
@@ -72,9 +72,9 @@
 					</div>
 
 					<div class="order-row cancel">
-						<img src="images/fav-icon.png" alt="상품 이미지">
+						<img src="images/orderHistory.jpg" alt="상품 이미지">
 						<div class="order-info">
-							<p class="item-name">Montbell Poketable Light Pack 18 Black</p>
+							<p class="item-name">2P GYM SACK</p>
 							<p class="item-option">one size</p>
 							<p class="item-count">수량: 1개</p>
 						</div>
@@ -87,9 +87,9 @@
 					</div>
 
 					<div class="order-row done">
-						<img src="images/fav-icon.png" alt="상품 이미지">
+						<img src="images/orderHistory3.jpg" alt="상품 이미지">
 						<div class="order-info">
-							<p class="item-name">Arc'teryx Konseal 15 Backpack Black</p>
+							<p class="item-name">AETHER NYLON JACKET</p>
 							<p class="item-option">one size</p>
 							<p class="item-count">수량: 1개</p>
 						</div>

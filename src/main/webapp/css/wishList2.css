@@ -135,6 +135,12 @@ h3 {
   opacity: 0.8;
 }
 
+.wishlist-item.soldout .wishlist-name,
+.wishlist-item.soldout .wishlist-price {
+  color: #888; /* 회색으로 변경 */
+  text-decoration: line-through; /* 취소선 추가 */
+}
+
 .wishlist-item img {
   width: 60px;
   height: 60px;
@@ -162,6 +168,29 @@ h3 {
   font-size: 20px;
   color: red;
   cursor: pointer;
+}
+
+.wishlist-heart:hover {
+  transform: scale(1.1);
+  color: #015FC1;
+}
+
+.wishlist-heart-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.wishlist-cart {
+  font-size: 20px;
+  cursor: pointer;
+  color: #333;
+  transition: transform 0.2s;
+}
+
+.wishlist-cart:hover {
+  transform: scale(1.1);
+  color: #015FC1;
 }
 
 .wishlist-heart.soldout {

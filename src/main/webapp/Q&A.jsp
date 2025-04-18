@@ -36,12 +36,12 @@
 <meta charset="UTF-8">
 <title>에브리웨어 | everyWEAR</title>
 <link rel="icon" type="image/png" href="images/fav-icon.png">
-<link rel="stylesheet" type="text/css" href="css/Q&A.css?v=354">
+<link rel="stylesheet" type="text/css" href="css/Q&A2.css?v=354">
 </head>
 <body>
 
 	<%@ include file="includes/header.jsp"%>
-
+	
 	<section class="content2">
 	<h3>Q&A</h3> 
 	</section>
@@ -52,19 +52,21 @@
 				<li><a href="board.jsp">BOARD</a></li>
 				<li><a href="FAQ.jsp">FAQ</a></li>
 				<li><a href="Q&A.jsp">Q&A</a></li>
-				<li><a href="review.jsp">REVIEW</a></li>
 			</ul>
 		</aside>
 
 		<section class="content">
 			<table class="notice-table" id="notice-table">
 				<tbody>
-					<tr style="border-bottom: 2px solid #BBBBBB;">
-						<td class="title">제목</td>
-						<td>답변 현황</td>
-						<td class="date">작성 일시</td>
-						<td class="type">작성자</td>
-					</tr>
+					<thead>
+					    <tr class="qna-header">
+					      <th class="title">No. 제목</th>
+					      <th class="status">답변 현황</th>
+					      <th class="date">작성 일시</th>
+					      <th class="type">작성자</th>
+					    </tr>
+					  </thead>
+
 				<%for(int i = start;i<end;i++){ 
 						InquiryDTO qna = qlist.get(i);
 						InquiryReplyDTO qnaReply = qDao.showOneQnaReply(qna.getI_id());

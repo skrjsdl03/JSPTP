@@ -4,23 +4,28 @@
 <head>
 <meta charset="UTF-8">
 <title>에브리웨어 | everyWEAR</title>
-<link rel="stylesheet" type="text/css" href="css/splitTest.css">
+<link rel="stylesheet" type="text/css" href="css/splitTest2.css">
 <link rel="icon" type="image/png" href="images/fav-icon.png">
 </head>
 <body>
 
 	<%@ include file="includes/header.jsp"%>
 
-	<!-- 하위 네비 -->
-	<nav class="sub-nav">
+	<nav class="items">
 		<ul>
-			<li><a href="splitTest.jsp" class="active">ALL</a></li>
-			<li><a href="#">OUTER</a></li>
-			<li><a href="#">TOP</a></li>
-			<li><a href="#">BOTTOM</a></li>
-			<li><a href="#">ACC</a></li>
+			<li><a>ITEMS()</a></li>
 		</ul>
 	</nav>
+
+	<!-- 정렬 옵션 -->
+	<div class="sort-options">
+		<label for="sort-select">정렬 :</label> <select id="sort-select">
+			<option value="popular">인기순</option>
+			<option value="new">신상품순</option>
+			<option value="low">낮은 가격순</option>
+			<option value="high">높은 가격순</option>
+		</select>
+	</div>
 
 	<div class="container">
 		<div class="product-list" id="productList">
@@ -35,17 +40,7 @@
 				<p class="product-price">KRW 88,000</p>
 			</div>
 			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth3.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth4.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth5.png">
+				<img src="images/main-cloth1.png">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
@@ -55,22 +50,7 @@
 				<p class="product-price">KRW 88,000</p>
 			</div>
 			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth2.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth3.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth4.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth5.png">
+				<img src="images/main-cloth1.png">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
@@ -80,22 +60,7 @@
 				<p class="product-price">KRW 88,000</p>
 			</div>
 			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth2.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth3.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth4.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth5.png">
+				<img src="images/main-cloth1.png">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
@@ -105,47 +70,7 @@
 				<p class="product-price">KRW 88,000</p>
 			</div>
 			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth2.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth3.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth4.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth5.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
 				<img src="images/main-cloth1.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth2.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth3.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth4.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth5.png">
 				<p class="product-name">I ♥ JDJ</p>
 				<p class="product-price">KRW 88,000</p>
 			</div>
@@ -157,7 +82,7 @@
 			<span class="close-btn" id="closeBtn" onclick="closeDetail()">×</span>
 			<span class="expand-btn" id="expandBtn" onclick="toggleFullView()">🔳</span>
 
-			<div class="inner-panel left-panel">
+			<div class="left-panel">
 				<div class="product-detail-wrapper">
 					<img src="images/main-cloth1.png" alt="SLASH ZIPPER JACKET"
 						class="product-image" />
@@ -221,7 +146,8 @@
 						사유가 아니라는 것을 알려드립니다.<br> * The slip agent on dark clothes is
 						not defective.
 					</div>
-					<div class="inner-panel right-panel" style="display: none;" id="abc">
+					<div class="inner-panel right-panel" style="display: none;"
+						id="abc">
 						<!-- 텍스트 설명, 옵션, 버튼 등 -->
 						<img src="images/main-cloth1.png"> <img
 							src="images/main-cloth1.png"> <img
@@ -230,13 +156,11 @@
 				</div>
 			</div>
 			<div class="inner-panel right-panel">
-				<div class="image-wrapper">
-					<img src="images/main-cloth1.png"> <img
-						src="images/main-cloth1.png"> <img
-						src="images/main-cloth1.png">
-				</div>
+				<!-- 텍스트 설명, 옵션, 버튼 등 -->
+				<img src="images/main-cloth1.png"> <img
+					src="images/main-cloth1.png"> <img
+					src="images/main-cloth1.png">
 			</div>
-
 		</div>
 
 	</div>
@@ -257,21 +181,21 @@
   	});
 
   	function resize(e) {
-
-  	  if (isResizing) {
-  	    const newWidth = window.innerWidth - e.clientX;
-
-  	    if (newWidth > 300 && newWidth < window.innerWidth * 0.9) {
-  	      detailPanel.style.width = newWidth + 'px';
-
-  	      // ✅ 너비가 좁으면 vertical 전환
-  	      if (newWidth < 600) {
-          detailPanel.style.flexDirection = 'column'; // ← ✅ 핵심 변경
-        } else {
-          detailPanel.style.flexDirection = 'row'; // ← 원래대로 복귀
-        }
-  	    }
-  	  }
+    	if (isResizing) {
+      	const newWidth = window.innerWidth - e.clientX;
+      	if (newWidth > 500 && newWidth < window.innerWidth * 1) {
+        	detailPanel.style.width = newWidth + 'px';
+        	
+         	// ✅ 너비 기준으로 column-layout 클래스 추가/제거
+          if (newWidth < 600) {
+          	detailPanel.classList.add('column-layout');
+          	document.getElementById("abc").style.display = "";
+          } else {
+            detailPanel.classList.remove('column-layout');
+            document.getElementById("abc").style.display = "none";
+          }
+     		}
+    	}
   	}
 
   	function stopResize() {
@@ -292,12 +216,6 @@
   	  } else {
   	    detailPanel.style.width = currentWidth; // ✅ 현재 너비 유지
   	  }
-  	  
-  	if (parseInt(detailPanel.style.width) < 600) {
-        detailPanel.style.flexDirection = 'column';
-      } else {
-        detailPanel.style.flexDirection = 'row';
-      }
   	}
 
   	function closeDetail() {
@@ -306,6 +224,20 @@
   	
   	let isFullView = false;
 
+  	function toggleFullView() {
+  	  const expandBtn = document.getElementById('expandBtn');
+
+  	  if (!isFullView) {
+  	    container.classList.add('fullscreen-mode');
+  	    expandBtn.textContent = '↩';       // ✅ 버튼 아이콘 바꾸기
+  	    isFullView = true;
+  	  } else {
+  	    container.classList.remove('fullscreen-mode');
+  	    expandBtn.textContent = '🔳';       // ✅ 원래 아이콘으로 복귀
+  	    isFullView = false;
+  	  }
+  	}
+  	
   	function toggleFullView() {
   		window.location.href = 'pdDetail.jsp';
   	}

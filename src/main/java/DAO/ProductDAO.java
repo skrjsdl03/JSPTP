@@ -1039,8 +1039,8 @@ public class ProductDAO {
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				pDto = new ProductDTO(rs.getInt(1), rs.getString(2), 
-						rs.getString(3), rs.getString(4), rs.getInt(5), rs.getInt(6), 
-						rs.getString(7), rs.getString(8), SDF_DATE.format(rs.getDate(9)));
+						rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getString(6), 
+						rs.getString(7), SDF_DATE.format(rs.getDate(8)));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1086,13 +1086,14 @@ public class ProductDAO {
     }
     
     //한 리뷰에 대한 상품 이미지 출력
-    public String getProductByReviewImg(int r_id) {
+    public Vector<String> getProductByReviewImg(int r_id) {
     	Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
 		int pd_id = 0;
-		String pd_size = "";
+		int p_id = 0;
+		Vector<String> pilist = new Vector<String>();
 		try {
 			con = pool.getConnection();
 			sql = "select pd_id from review where r_id = ?";
@@ -1109,7 +1110,17 @@ public class ProductDAO {
 			pstmt.setInt(1, pd_id);
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
-				pd_size = rs.getString(1);
+				p_id = rs.getInt(1);
+			}
+			pstmt.close();
+			rs.close();
+			
+			sql = "select pi_url from product_image where p_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, p_id);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				 pilist.add(rs.getString(1));
 			}
 			
 		} catch (Exception e) {
@@ -1117,6 +1128,952 @@ public class ProductDAO {
 		} finally {
 			pool.freeConnection(con, pstmt, rs);
 		}
-		return pd_size;
+		return pilist;
     }
+    
+    //한 장바구니에 대한 상품 정보(사이즈)
+    public String getOnePdSizeForCart(int pd_id) {
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		String size = "";
+		try {
+			con = pool.getConnection();
+			sql = "select pd_size from product_detail where pd_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, pd_id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				size = rs.getString(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return size;
+    }
+    
+    //한 장바구니에 대한 상품 정보
+    public ProductDTO getOnePdForCart(int pd_id) {
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		int p_id = 0;
+		ProductDTO pDto = null;
+		try {
+			con = pool.getConnection();
+			sql = "select p_id from product_detail where pd_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, pd_id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				p_id = rs.getInt(1);
+			pstmt.close();
+			rs.close();
+			
+			sql = "select * from product where p_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, p_id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				pDto = new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8)));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return pDto;
+    }
+    
+    //한 장바구니에 대한 상품 정보(이미지)
+    public Vector<String> getOnePdImgForCart(int pd_id){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		int p_id = 0;
+		Vector<String> urllist = new Vector<String>();
+		try {
+			con = pool.getConnection();
+			sql = "select p_id from product_detail where pd_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, pd_id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				p_id = rs.getInt(1);
+			pstmt.close();
+			rs.close();
+			
+			sql = "select pi_url from product_image where p_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, p_id);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				urllist.add(rs.getString(1));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return urllist;
+    }
+    
+    //주문서 작성 시 주문할 상품 정보
+    public int getPdWhenOrder(int f_id) {
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		int pd_id = 0;
+		try {
+			con = pool.getConnection();
+			sql = "select pd_id from favorite where f_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, f_id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				pd_id = rs.getInt(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return pd_id;
+    }
+    
+    //한 상품의 pd_id의 상품 가격 출력
+    public int getOnePdPrice(int pd_id) {
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		int p_id = 0;
+		int price = 0;
+		try {
+			con = pool.getConnection();
+			sql = "select p_id from product_detail where pd_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, pd_id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				p_id = rs.getInt(1);
+			pstmt.close();
+			rs.close();
+			
+			sql = "select p_price from product where p_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, p_id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				price = rs.getInt(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return price;
+    }
+    
+    //한 pd_id로 한 detail 출력
+    public ProductDetailDTO getOnePdDetail(int pd_id) {
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		ProductDetailDTO pdDetail = null;
+		try {
+			con = pool.getConnection();
+			sql = "select * from product_detail where pd_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, pd_id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				pdDetail = new ProductDetailDTO(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getInt(4));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return pdDetail;
+    }
+
+
+//ALL출력
+    public Vector<ProductDTO> getAllPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product order by rand()";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //OUTER 출력
+    public Vector<ProductDTO> getOUTERPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category in ('HEAVY OUTER', 'HOODED ZIP-UP', 'JACKET', 'JUMPER', 'VEST', 'WIND BREAKER') order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //HEAVY OUTER 출력
+    public Vector<ProductDTO> getHEAVY_OUTERPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'HEAVY OUTER' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //HOODED ZIP-UP 출력
+    public Vector<ProductDTO> getHOODED_ZIP_UPPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'HOODED ZIP-UP' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //JACKET 출력
+    public Vector<ProductDTO> getJACKETPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'JACKET' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //JUMPER 출력
+    public Vector<ProductDTO> getJUMPERPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'JUMPER' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //VEST 출력
+    public Vector<ProductDTO> getVESTPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'VEST' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //WIND BREAKER 출력
+    public Vector<ProductDTO> getWIND_BREAKERPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'WIND BREAKER' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //TOP 출력
+    public Vector<ProductDTO> getTOPPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category in ('HOODIE', 'KNIT/CARDIGAN', 'LONG SLEEVE', 'SHIRT', 'SLEEVESS', 'SWEAT SHIRT', 'T-SHIRT') order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //HOODIE 출력
+    public Vector<ProductDTO> getHOODIEPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'HOODIE' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //KNIT/CARDIGAN 출력
+    public Vector<ProductDTO> getKNIT_CARDIGANPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'KNIT/CARDIGAN' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //LONG SLEEVE 출력
+    public Vector<ProductDTO> getLONG_SLEEVEPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'LONG SLEEVE' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //SHIRT 출력
+    public Vector<ProductDTO> getSHIRTPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'SHIRT' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //SLEEVESS 출력
+    public Vector<ProductDTO> getSLEEVESSPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'SLEEVESS' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //SWEAT SHIRT 출력
+    public Vector<ProductDTO> getSWEAT_SHIRTPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'SWEAT SHIRT' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //T-SHIRT 출력
+    public Vector<ProductDTO> getT_SHIRTPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'T-SHIRT' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //BOTTOM 출력
+    public Vector<ProductDTO> getBOTTOMPd(){
+    	Connection con = null;
+    	PreparedStatement pstmt = null;
+    	ResultSet rs = null;
+    	String sql = null;
+    	Vector<ProductDTO> plist = new Vector<ProductDTO>();
+    	try {
+    		con = pool.getConnection();
+    		sql = "select * from product where p_category in ('DENIM', 'PANTS', 'SHORTS', 'TRAINING PANTS') order by created_at desc";
+    		pstmt = con.prepareStatement(sql);
+    		
+    		rs = pstmt.executeQuery();
+    		while(rs.next()) {
+    			plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+    					rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+    		}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	} finally {
+    		pool.freeConnection(con, pstmt, rs);
+    	}
+    	return plist;
+    }
+    
+    //DENIM 출력
+    public Vector<ProductDTO> getDENIMPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'DENIM' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //PANTS 출력
+    public Vector<ProductDTO> getPANTSPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'PANTS' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //SHORTS 출력
+    public Vector<ProductDTO> getSHORTSPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'SHORTS' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //TRAINING PANTS 출력
+    public Vector<ProductDTO> getTRAINING_PANTSPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'TRAINING PANTS' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //ACC 출력
+    public Vector<ProductDTO> getACCPd(){
+    	Connection con = null;
+    	PreparedStatement pstmt = null;
+    	ResultSet rs = null;
+    	String sql = null;
+    	Vector<ProductDTO> plist = new Vector<ProductDTO>();
+    	try {
+    		con = pool.getConnection();
+    		sql = "select * from product where p_category in ('BAG', 'HEADGEAR', 'KEYRING', 'MUFFLER') order by created_at desc";
+    		pstmt = con.prepareStatement(sql);
+    		
+    		rs = pstmt.executeQuery();
+    		while(rs.next()) {
+    			plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+    					rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+    		}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	} finally {
+    		pool.freeConnection(con, pstmt, rs);
+    	}
+    	return plist;
+    }
+    
+    //BAG 출력
+    public Vector<ProductDTO> getBAGPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'BAG' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //HEADGEAR 출력
+    public Vector<ProductDTO> getHEADGEARPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'HEADGEAR' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //KEYRING 출력
+    public Vector<ProductDTO> getKEYRINGPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'KEYRING' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //MUFFLER 출력
+    public Vector<ProductDTO> getMUFFLERPd(){
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDTO> plist = new Vector<ProductDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_category = 'MUFFLER' order by created_at desc";
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return plist;
+    }
+    
+    //ETC 출력
+    public Vector<ProductDTO> getETCPd(){
+    	Connection con = null;
+    	PreparedStatement pstmt = null;
+    	ResultSet rs = null;
+    	String sql = null;
+    	Vector<ProductDTO> plist = new Vector<ProductDTO>();
+    	try {
+    		con = pool.getConnection();
+    		sql = "select * from product where p_category = 'ETC' order by created_at desc";
+    		pstmt = con.prepareStatement(sql);
+    		
+    		rs = pstmt.executeQuery();
+    		while(rs.next()) {
+    			plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+    					rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+    		}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	} finally {
+    		pool.freeConnection(con, pstmt, rs);
+    	}
+    	return plist;
+    }
+    
+    //p_id로 이미지 가져오기
+    public Vector<String> getPdImg(int p_id) {
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<String> ilist = new Vector<String>();
+		try {
+			con = pool.getConnection();
+			sql = "select pi_url from product_image where p_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, p_id);
+			rs = pstmt.executeQuery();
+			while(rs.next())
+				ilist.add(rs.getString(1));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return ilist;
+    }
+    
+    //한 상품 가져오기
+    public ProductDTO getOnePd(int p_id) {
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		ProductDTO pDto = null;
+		try {
+			con = pool.getConnection();
+			sql = "select * from product where p_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, p_id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				pDto = new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+    					rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8)));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return pDto;
+    }
+    
+    //한 상품의 상세 가져오기
+    public Vector<ProductDetailDTO> getOneProductDetail(int p_id) {
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ProductDetailDTO> pdlist = new Vector<ProductDetailDTO>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from product_detail where p_id = ? order by pd_size desc";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, p_id);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				pdlist.add(new ProductDetailDTO(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getInt(4)));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return pdlist;
+    }
+    
+    //p_id와 사이즈로 pd_id 출력
+    public int getPd_id(int p_id, String size) {
+    	Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		int pd_id = 0;
+		try {
+			con = pool.getConnection();
+			sql = "select pd_id from product_detail where p_id = ? and pd_size = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, p_id);
+			pstmt.setString(2, size);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				pd_id = rs.getInt(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return pd_id;
+    }
+
 }

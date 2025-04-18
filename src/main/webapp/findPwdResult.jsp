@@ -31,7 +31,7 @@
   <title>비밀번호 찾기 | everyWEAR</title>
   <link rel="stylesheet" href="css/login.css">
 <link rel="stylesheet" href="css/resetPwd.css">
-  <link rel="icon" type="image/png" href="images/logo-white.png">
+<link rel="icon" type="image/png" href="images/fav-icon.png">
 </head>
 <body>
 

@@ -1,3 +1,4 @@
+/*cart.css*/
 body {
 	font-family: 'Malgun Gothic', sans-serif;
 	padding-top: 120px;
@@ -124,6 +125,38 @@ h3 {
 	gap: 0;
 }
 
+.order-row.soldout {
+  background-color: #eee;
+  opacity: 1; /* 전체 흐림 제거 */
+  position: relative;
+}
+
+/* 기존 품절 텍스트 스타일 + 가격까지 */
+.order-row.soldout .item-name,
+.order-row.soldout .item-option,
+.order-row.soldout .qty-value,
+.order-row.soldout .order-meta strong {
+  color: #999;
+  text-decoration: line-through;
+}
+
+.order-row.soldout img {
+  filter: grayscale(100%);
+  opacity: 0.6;
+}
+
+/* 수량 조절 버튼 비활성화 */
+.order-row.soldout .qty-btn {
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* 옵션 변경 버튼 비활성화 */
+.order-row.soldout .option-button {
+  pointer-events: none;
+  opacity: 0.3;
+}
+
 /* 기본 체크박스 숨김 + 커스텀 디자인 */
 input[type="checkbox"] {
   appearance: none; /* 브라우저 기본 스타일 제거 */
@@ -146,8 +179,8 @@ input[type="checkbox"]:checked {
 input[type="checkbox"]:checked::after {
   content: '';
   position: absolute;
-  top: 2px;
-  left: 5px;
+  top: 1px;
+  left: 4px;
   width: 4px;
   height: 8px;
   border: solid #fff;
@@ -164,7 +197,9 @@ input[type="checkbox"]:checked::after {
 	border-radius: 8px;
 	background-color: #fff;
 	transition: background-color 0.3s ease;
-	border-bottom: 1px solid #ccc;}
+	border-bottom: 1px solid #ccc;
+	margin-bottom: 20px;
+}
 
 /* 이미지 스타일 */
 .order-row img {
@@ -190,7 +225,7 @@ input[type="checkbox"]:checked::after {
 }
 
 .option-button {
-  background-color: #f1f1f1;
+  background-color: #FFF;
   color: #000;
   text-decoration: none;
   border: none;
@@ -205,7 +240,7 @@ input[type="checkbox"]:checked::after {
 }
 
 .option-button:hover {
-  background-color: #e3e3e3;
+  background-color: #f1f1f1;
 }
 
 /* 주문 정보 */
@@ -227,19 +262,32 @@ input[type="checkbox"]:checked::after {
 }
 
 .qty-control button {
-  width: 30px;
-  height: 30px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  cursor: pointer;
-  font-weight: bold;
-  border-radius: 4px;
+  background: none;
+  border: none;
   font-size: 16px;
-  transition: background-color 0.2s;
+  font-weight: bold;
+  color: #000;
+  cursor: pointer;
+  padding: 0 6px;
+  transition: color 0.2s;
 }
 
 .qty-control button:hover {
-  background-color: #f2f2f2;
+  color: #015FC1; /* hover 시 색상 변경 */
+}
+
+.qty-control {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.qty-value {
+  font-size: 14px;
+  font-weight: bold;
+  min-width: 20px;
+  text-align: center;
 }
 
 .qty-control input {

@@ -1,4 +1,34 @@
+<%@page import="DTO.ProductDetailDTO"%>
+<%@page import="DTO.ProductDTO"%>
+<%@page import="DTO.FavoriteDTO"%>
+<%@page import="java.util.Vector"%>
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="DTO.UserDTO"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<jsp:useBean id="uDao" class="DAO.UserDAO"/>
+<jsp:useBean id="pDao" class="DAO.ProductDAO"/>
+<jsp:useBean id="fDao" class="DAO.FavoriteDAO"/>
+<%
+String userId = (String) session.getAttribute("id");
+String userType = (String) session.getAttribute("userType");
+if(userId == null || userId == ""){
+	// 현재 페이지 경로를 얻기 위한 코드
+	String fullUrl = request.getRequestURI();
+	String queryString = request.getQueryString();
+	if (queryString != null) {
+		fullUrl += "?" + queryString;
+	}
+	response.sendRedirect("login.jsp?redirect=" + java.net.URLEncoder.encode(fullUrl, "UTF-8"));
+	return;
+}
+UserDTO user = uDao.getOneUser(userId, userType);
+int couponCnt = uDao.showOneUserCoupon(userId, userType);
+DecimalFormat formatter = new DecimalFormat("#,###");
+
+String point = formatter.format(user.getUser_point());
+
+Vector<FavoriteDTO> flist = fDao.getUserCart(userId, userType);
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -17,12 +47,12 @@
 
 	<div class="container">
 		<div class="user-box">
-			<p class="username">정시영 님</p>
+			<p class="username"><%=user.getUser_name()%> 님</p>
 			<div class="user-info">
 				<div class="label">적립금</div>
-				<div class="value">25,000 ￦</div>
-				<div class="label">쿠폰</div>
-				<div class="value">2 개</div>
+				<div class="value"><%=point%> ￦</div>
+				<div class="label"><a href="coupon.jsp">쿠폰</a></div>
+				<div class="value"><%=couponCnt%> 개</div>
 			</div>
 		</div>
 
@@ -39,82 +69,105 @@
 		</aside>
 
 		<section class="content">
-			<!-- 장바구니 본문 -->
+
 			<div class="order-content">
+			<%
+					ProductDTO pDto = new ProductDTO();
+					if(!flist.isEmpty()){
+			%>
+			<form action="pay.jsp" method="post" id="payForm">
+				<!-- 장바구니 본문 -->
 				<!-- 상단 선택/삭제 -->
 				<div class="order-row"
 					style="justify-content: space-between; border-bottom: 1px solid #ddd;">
-					<label><input type="checkbox" id="select-all" checked> 전체 선택</label>
+					<label><input type="checkbox" id="select-all" checked>전체 선택</label>
 					<div class="delete-box">
-					  <span class="delete-text">선택 삭제</span>
-					  <span class="delete-icon">&#10005;</span>
+					  <span class="delete-text" onclick="deleteSelectedItems()">선택 삭제 <span class="delete-icon">&#10005;</span></span>
 					</div>
 				</div>
-
-				<!-- 상품 1 -->
-				<div class="order-row">
-					<input type="checkbox"class="item-checkbox" checked> 
-					<img src="images/fav-icon.png" alt="신발">
+			<%
+						for(int i = 0; i<flist.size(); i++){ 
+							FavoriteDTO fDto = flist.get(i);
+							String size = pDao.getOnePdSizeForCart(fDto.getPd_id());
+							pDto = pDao.getOnePdForCart(fDto.getPd_id());
+							Vector<String> urllist = pDao.getOnePdImgForCart(fDto.getPd_id());
+							ProductDetailDTO pdDetail = pDao.getOnePdDetail(fDto.getPd_id());
+			%>
+				<!-- 상품 -->
+				<div class="<%=pdDetail.getPd_stock() != 0 ? "order-row" : "order-row soldout"%>">
+					<input type="checkbox"class="item-checkbox" data-fid="<%=fDto.getF_id()%>" name="f_ids" value="<%=fDto.getF_id()%>" onchange="updateTotalPrice()" <%=pdDetail.getPd_stock() != 0 ? "checked" : ""%>> 
+					<img src="<%=urllist.get(0)%>" alt="<%=pDto.getP_name()%>">
 					<div class="order-info">
-						<p class="item-name">Onitsuka Tiger Tokuten Gray</p>
-						<p class="item-option">220</p>
+						<p class="item-name"><%=pDto.getP_name()%></p>
+						<p class="item-option">SIZE  |  <%=size%><br>COLOR  |  <%=pDto.getP_color()%></p>
 						<div class="qty-control">
-							<button class="qty-btn" onclick="changeQty(this, -1)">-</button>
-							<span class="qty-value">1</span>
-							<button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+							<button type="button" class="qty-btn" onclick="minusQty('<%=i%>', '<%=fDto.getF_id()%>', '<%=fDto.getPd_id()%>', '<%=pDto.getP_price()%>')">-</button>
+							<span class="qty-value" id="quantity<%=i%>"><%=fDto.getF_quantity()%></span>
+							<button type="button" class="qty-btn" onclick="plusQty('<%=i%>', '<%=fDto.getF_id()%>', '<%=fDto.getPd_id()%>', '<%=pDto.getP_price()%>')">+</button>
 						</div>
 					</div>
 					<div class="order-meta">
 						<p style="text-align: right;">
-							<a href="#"
-								style="color: #999; font-size: 13px; text-decoration: none;">삭제</a>
+							<a href="javascript:deleteCart('<%=fDto.getF_id()%>')" style="color: #999; font-size: 13px; text-decoration: none;">삭제</a>
 							<br> <a href="#" class="option-button">옵션 변경</a> <br>
-							<strong style="font-size: 14px;">199,000 원</strong>
+							<strong style="font-size: 14px;" id="price<%=i%>"><%=formatter.format(pDto.getP_price() * fDto.getF_quantity())%> 원</strong>
 						</p>
 					</div>
 				</div>
-
-				<!-- 상품 2 -->
-				<div class="order-row">
-					<input type="checkbox" class="item-checkbox" checked> 
-					<img src="images/fav-icon.png" alt="가방">
-					<div class="order-info">
-						<p class="item-name">Montbell Poketable Light Pack 18 Black</p>
-						<p class="item-option">one size</p>
-						<div class="qty-control">
-							<button class="qty-btn" onclick="changeQty(this, -1)">-</button>
-							<span class="qty-value">1</span>
-							<button class="qty-btn" onclick="changeQty(this, 1)">+</button>
-						</div>
-					</div>
-					<div class="order-meta">
-						<p style="text-align: right;">
-							<a href="#"
-								style="color: #999; font-size: 13px; text-decoration: none;">삭제</a>
-							<br> <a href="#" class="option-button">옵션 변경</a> <br>
-							<strong style="font-size: 14px;">140,000 원</strong>
-						</p>
-					</div>
+				<%
+						}//--for
+				%>
+				<div style="text-align: right;">
+					<strong id="total-price">KRW 50000원</strong>
 				</div>
-
 				<!-- 주문하기 버튼 -->
-				<div
-					style="width: 100%; display: flex; justify-content: center; margin-top: 40px;">
-					<button
-						style="background: black; color: white; border: none; padding: 12px 40px; font-size: 14px; border-radius: 6px; cursor: pointer;">주문하기</button>
+				<div style="width: 100%; display: flex; justify-content: center; margin-top: 20px;">
+					<button type="button" style="background: black; color: white; border: none; padding: 12px 40px; font-size: 14px; border-radius: 6px; cursor: pointer;" onclick="pay()">주문하기</button>
 				</div>
+			</form>
+				<%
+					}else{
+				%>
+				<div style="text-align: center; margin-top: 200px;">
+					<span style="color: #CCCCCC">장바구니가 비어 있습니다</span>
+				</div>
+				<%} %>
+
+
 			</div>
 		</section>
 	</div>
-
-</body>
+	
 <script>
+function pay() {
+	  const checkedItems = document.querySelectorAll(".item-checkbox:checked");
+	  
+	  if (checkedItems.length === 0) {
+	    alert("주문할 상품을 선택해주세요.");
+	    return;
+	  }
+	  
+	  // 품절 상품이 선택되어 있는지 검사
+	  for (let checkbox of checkedItems) {
+	    const orderRow = checkbox.closest(".order-row");
+	    if (orderRow && orderRow.classList.contains("soldout")) {
+	      alert("품절 상품은 주문할 수 없습니다.");
+	      return;
+	    }
+	  }
+
+	  document.getElementById("payForm").submit();
+	}
+</script>
+
+<script>/* 체크박스 script */
   // 전체 선택 체크박스 클릭 시
   document.getElementById("select-all").addEventListener("change", function () {
     const isChecked = this.checked;
     document.querySelectorAll(".item-checkbox").forEach(cb => {
       cb.checked = isChecked;
     });
+    updateTotalPrice();
   });
 
   // 하위 체크박스 변경 시 → 전체선택 체크박스 상태 자동 반영
@@ -126,4 +179,158 @@
     });
   });
 </script>
+
+<script>/* 수량변경 script */
+function plusQty(i, f_id, pd_id, price){
+	const currentQty = parseInt(document.getElementById("quantity" + i).textContent);
+	
+	// 최소 수량 제한 (예: 1)
+	const newQty = Math.max(1, currentQty + 1);
+	
+     fetch("updateCart.jsp?f_id=" + encodeURIComponent(f_id) + "&quantity=" + encodeURIComponent(newQty) + "&pd_id=" + encodeURIComponent(pd_id))
+    .then(res => res.json())
+    .then(data => {
+      if (data.result === "success") {
+   		document.getElementById("quantity" + i).textContent = newQty;
+   		document.getElementById("price" + i).textContent = (newQty * price).toLocaleString() + " 원";
+   		updateTotalPrice();
+      } else {
+		alert("재고가 부족합니다.");
+      }
+    });
+}
+
+function minusQty(i, f_id, pd_id, price){
+	const currentQty = parseInt(document.getElementById("quantity" + i).textContent);
+	
+	// 최소 수량 제한 (예: 1)
+	const newQty = Math.max(1, currentQty - 1);
+	
+    fetch("updateCart.jsp?f_id=" + encodeURIComponent(f_id) + "&quantity=" + encodeURIComponent(newQty) + "&pd_id=" + encodeURIComponent(pd_id))
+    .then(res => res.json())
+    .then(data => {
+      if (data.result === "success") {
+   		document.getElementById("quantity" + i).textContent = newQty;
+   		document.getElementById("price" + i).textContent = (newQty * price).toLocaleString() + " 원";
+   		updateTotalPrice();
+      } else {
+		alert("재고가 부족합니다.");
+      }
+    });
+}
+</script>
+
+<script> /* 장바구니 삭제 */
+function deleteCart(f_id){
+    fetch("deleteCart.jsp?f_id=" + encodeURIComponent(f_id))
+    .then(res => res.json())
+    .then(data => {
+      if (data.result === "success") {
+   		alert("삭제되었습니다");
+   		location.reload();
+      } else {
+		alert("삭제에 실패하였습니다");
+      }
+    });
+}
+</script>
+
+<script> /* 선택 삭제 */
+function deleteSelectedItems() {
+  // 체크된 체크박스 전부 가져오기
+  const checkedItems = document.querySelectorAll('.item-checkbox:checked');
+
+  if (checkedItems.length === 0) {
+    alert("삭제할 항목을 선택해주세요.");
+    return;
+  }
+
+  // f_id 값을 수집
+  const idsToDelete = [];
+  checkedItems.forEach(item => {
+    const fId = item.getAttribute('data-fid');
+    if (fId) {
+      idsToDelete.push(fId);
+    }
+  });
+
+  // 서버로 삭제 요청 보내기
+  fetch('deleteCartItems.jsp', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ ids: idsToDelete })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.result === 'success') {
+      alert("선택한 상품이 삭제되었습니다.");
+      location.reload(); // 새로고침으로 반영
+    } else {
+      alert("삭제 중 오류가 발생했습니다.");
+    }
+  });
+}
+</script>
+
+<script> /* 총 가격 변경 */
+function updateTotalPrice() {
+	  const checkboxes = document.querySelectorAll('.item-checkbox');
+	  let total = 0;
+
+	  checkboxes.forEach((checkbox, index) => {
+	    if (checkbox.checked) {
+	      // price는 "price0", "price1", ... 형식으로 ID가 지정되어 있음
+	      const priceElement = document.getElementById("price" + index);
+	      if (priceElement) {
+	        const priceText = priceElement.textContent.replace(/[^\d]/g, ""); // 숫자만 추출
+	        const price = parseInt(priceText);
+	        if (!isNaN(price)) {
+	          total += price;
+	        }
+	      }
+	    }
+	  });
+
+	  document.getElementById("total-price").textContent = "KRW " + total.toLocaleString() + "원";
+	}
+	
+window.addEventListener("DOMContentLoaded", () => {
+	  updateTotalPrice(); // 페이지 로드 시 초기 총합 계산
+	});
+</script>
+
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+	  updateTotalPrice(); // 기존 총합 계산
+
+	  // 전체 선택 체크박스 상태 자동 조정
+	  const itemCheckboxes = document.querySelectorAll(".item-checkbox");
+	  const checkedCheckboxes = document.querySelectorAll(".item-checkbox:checked");
+
+	  const selectAll = document.getElementById("select-all");
+
+	  if (itemCheckboxes.length !== checkedCheckboxes.length) {
+	    selectAll.checked = false;
+	  } else {
+	    selectAll.checked = true;
+	  }
+	});
+
+</script>
+<!-- <script>
+// 페이지 로드 후 특정 상품을 품절 처리
+window.addEventListener("DOMContentLoaded", () => {
+  const orderRows = document.querySelectorAll(".order-row");
+  
+  // 예: 3번째 상품을 회색 처리하고 싶다면 (index는 0부터 시작)
+  const soldOutIndex = 2;
+  if (orderRows[soldOutIndex]) {
+    orderRows[soldOutIndex].classList.add("soldout");
+  }
+});
+</script> -->
+
+</body>
 </html>

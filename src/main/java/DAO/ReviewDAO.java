@@ -139,7 +139,7 @@ public class ReviewDAO {
 					rs.getInt("pd_id"),
 					rs.getString("r_content"),
 					rs.getInt("r_rating"),
-					rs.getString("created_at"),
+					SDF_DATE.format(rs.getDate("created_at")),
 					rs.getString("updated_at"),
 					rs.getInt("r_report_count"),
 					rs.getString("r_isHidden")

@@ -109,6 +109,48 @@ public class UserDAO {
 			pool.freeConnection(con, pstmt);
 		}
 	}
+	
+	//상품 구매 시 적립금 사용 
+	public void updatePointWhenOrder(int dc, String id, String type) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		try {
+			con = pool.getConnection();
+			sql = "update user set user_point = user_point - ? where user_id = ? and user_type = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, dc);
+			pstmt.setString(2, id);
+			pstmt.setString(3, type);
+			pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+	}
+	
+	//상품 구매 후 적립금 
+	public void updatePointForOrder(int mileage, String id, String type) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		try {
+			con = pool.getConnection();
+			sql = "update user set user_point = user_point + ? where user_id = ? and user_type = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, mileage);
+			pstmt.setString(2, id);
+			pstmt.setString(3, type);
+			pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+	}
 
 
 	// 아이디 중복 체크

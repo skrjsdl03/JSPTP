@@ -28,7 +28,7 @@ if (end > totalData)
 <link rel="icon" type="image/png" href="images/fav-icon.png">
 <link rel="stylesheet" type="text/css" href="css/board.css?v=654315">
 </head>
-<body>
+<body class="board-list">
 
 	<%@ include file="includes/header.jsp"%>
 
@@ -42,44 +42,48 @@ if (end > totalData)
 				<li><a href="board.jsp?">BOARD</a></li>
 				<li><a href="FAQ.jsp">FAQ</a></li>
 				<li><a href="Q&A.jsp">Q&A</a></li>
-				<li><a href="review.jsp">REVIEW</a></li>
 			</ul>
 		</aside>
 
 		<section class="content">
 			<table class="notice-table" id="notice-table">
-				<tbody>
-					<%-- 중요 공지사항은 항상 출력 --%>
-					<%
-					for (int i = 0; i < nIlist.size(); i++) {
-						NoticeDTO notice = nIlist.get(i);
-					%>
-					<tr class="important">
-						<td class="title"><a
-							href="noticeRead.jsp?noti_id=<%=notice.getNoti_id()%>"> ※ <%=notice.getNoti_title()%></a></td>
-						<td class="date"><%=notice.getCreated_at()%></td>
-						<td class="views">조회수: <%=notice.getNoti_views()%></td>
-					</tr>
-					<%
-					}
-					%>
+		<thead>
+			<tr>
+				<th class="title">제목</th>
+				<th class="date">작성일</th>
+				<th class="views">조회수</th>
+			</tr>
+		</thead>
+		<tbody>			
+			<%-- 중요 공지사항은 항상 출력 --%>
+			<%
+			for (int i = 0; i < nIlist.size(); i++) {
+				NoticeDTO notice = nIlist.get(i);
+			%>
+			<tr class="important">
+				<td class="title">
+					<a href="noticeRead.jsp?noti_id=<%=notice.getNoti_id()%>"> ※ <%=notice.getNoti_title()%></a>
+				</td>
+				<td class="date"><%=notice.getCreated_at()%></td>
+				<td class="views"><%=notice.getNoti_views()%></td>
+			</tr>
+			<% } %>
 
-					<%-- 일반 공지사항 페이징 출력 --%>
-					<%
-					for (int i = start; i < end; i++) {
-						NoticeDTO notice = nNIlist.get(i);
-					%>
-					<tr class="normal">
-						<td class="title"><a
-							href="noticeRead.jsp?noti_id=<%=notice.getNoti_id()%>"><%=notice.getNoti_title()%></a></td>
-						<td class="date"><%=notice.getCreated_at()%></td>
-						<td class="views">조회수: <%=notice.getNoti_views()%></td>
-					</tr>
-					<%
-					}
-					%>
-				</tbody>
-			</table>
+			<%-- 일반 공지사항 페이징 출력 --%>
+			<%
+			for (int i = start; i < end; i++) {
+				NoticeDTO notice = nNIlist.get(i);
+			%>
+			<tr class="normal">
+				<td class="title">
+					<a href="noticeRead.jsp?noti_id=<%=notice.getNoti_id()%>"><%=notice.getNoti_title()%></a>
+				</td>
+				<td class="date"><%=notice.getCreated_at()%></td>
+				<td class="views"><%=notice.getNoti_views()%></td>
+			</tr>
+			<% } %>
+		</tbody>
+	</table>
 
 			<%-- 페이징 영역 추가 --%>
 			<div class="pagination" id="pagination">

@@ -6,25 +6,23 @@ public class PaymentDTO {
 	private String user_type;
 	private String pay_status;
 	private String paid_at;
-	private String pay_trans_id;
-	private String pay_appr_code;
-	private String pay_card_com;
-	private String pay_req_id;
+	private String pay_imp_uid;
+	private String pay_apply_num;
+	private String pay_card_name;
 	
 	public PaymentDTO() {}
 
-	public PaymentDTO(int pay_id, String user_id, String user_type, String pay_status, String paid_at, String pay_trans_id,
-			String pay_appr_code, String pay_card_com, String pay_req_id) {
+	public PaymentDTO(int pay_id, String user_id, String user_type, String pay_status, String paid_at,
+			String pay_imp_uid, String pay_apply_num, String pay_card_name) {
 		super();
 		this.pay_id = pay_id;
 		this.user_id = user_id;
 		this.user_type = user_type;
 		this.pay_status = pay_status;
 		this.paid_at = paid_at;
-		this.pay_trans_id = pay_trans_id;
-		this.pay_appr_code = pay_appr_code;
-		this.pay_card_com = pay_card_com;
-		this.pay_req_id = pay_req_id;
+		this.pay_imp_uid = pay_imp_uid;
+		this.pay_apply_num = pay_apply_num;
+		this.pay_card_name = pay_card_name;
 	}
 
 	public int getPay_id() {
@@ -67,37 +65,32 @@ public class PaymentDTO {
 		this.paid_at = paid_at;
 	}
 
-	public String getPay_trans_id() {
-		return pay_trans_id;
+	public String getPay_imp_uid() {
+		return pay_imp_uid;
 	}
 
-	public void setPay_trans_id(String pay_trans_id) {
-		this.pay_trans_id = pay_trans_id;
+	public void setPay_imp_uid(String pay_imp_uid) {
+		this.pay_imp_uid = pay_imp_uid;
 	}
 
-	public String getPay_appr_code() {
-		return pay_appr_code;
+	public String getPay_apply_num() {
+		return pay_apply_num;
 	}
 
-	public void setPay_appr_code(String pay_appr_code) {
-		this.pay_appr_code = pay_appr_code;
+	public void setPay_apply_num(String pay_apply_num) {
+		this.pay_apply_num = pay_apply_num;
 	}
 
-	public String getPay_card_com() {
-		return pay_card_com;
+	public String getPay_card_name() {
+		return pay_card_name;
 	}
 
-	public void setPay_card_com(String pay_card_com) {
-		this.pay_card_com = pay_card_com;
+	public void setPay_card_name(String pay_card_name) {
+		this.pay_card_name = pay_card_name;
 	}
 
-	public String getPay_req_id() {
-		return pay_req_id;
-	}
 
-	public void setPay_req_id(String pay_req_id) {
-		this.pay_req_id = pay_req_id;
-	}
-	
+
+
 	
 }
