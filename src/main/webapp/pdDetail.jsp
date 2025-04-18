@@ -1,50 +1,24 @@
+<%@page import="DTO.InquiryDTO"%>
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="DTO.ProductDetailDTO"%>
+<%@page import="java.util.Vector"%>
+<%@page import="DTO.ProductDTO"%>
 <%@page import="java.util.Arrays"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<jsp:useBean id="pDao" class="DAO.ProductDAO"/>
+<jsp:useBean id="qDao" class="DAO.QnaDAO"/>
 <%
-// 1. 상품 ID 받기
-/* String id = request.getParameter("id");
-if (id == null)
-	id = "101"; */
+int p_id = Integer.parseInt(request.getParameter("p_id"));
 
-// 2. 가짜 상품 데이터 생성
-class Product {
-	String id, name, size, color;
-	int price;
-	String thumbnail; // 대표 이미지
-	List<String> detailImages; // 상세 이미지들
+ProductDTO pDto = pDao.getOnePd(p_id);
+Vector<String> ilist = pDao.getPdImg(p_id);
+Vector<ProductDetailDTO> pdlist = pDao.getOneProductDetail(p_id);
 
-	Product(String id, String name, int price, String size, String color, String thumbnail, List<String> detailImages) {
-		this.id = id;
-		this.name = name;
-		this.price = price;
-		this.size = size;
-		this.color = color;
-		this.thumbnail = thumbnail;
-		this.detailImages = detailImages;
-	}
-}
+Vector<InquiryDTO> qlist = qDao.getQnaForPd(p_id);
 
-List<Product> allProducts = new ArrayList<>();
-allProducts.add(new Product("101", "오버핏 자켓", 89000, "M / L", "Black", "images/main-cloth1.png",
-		Arrays.asList("images/main-cloth2.png", "images/main-cloth3.png")));
-allProducts.add(new Product("102", "데님 팬츠", 69000, "S / M / L", "Blue", "images/main-cloth1.png",
-		Arrays.asList("images/main-cloth2.png", "images/main-cloth3.png")));
-
-// 3. 상품 찾기
-/* Product selected = null;
-for (Product p : allProducts) {
-	if (p.id.equals(id)) {
-		selected = p;
-		break;
-	}
-} */
-
-/* if (selected == null) {
-	out.println("<h2>해당 상품을 찾을 수 없습니다.</h2>");
-	return;
-} */
+DecimalFormat formatter = new DecimalFormat("#,###");
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -74,7 +48,6 @@ for (Product p : allProducts) {
 			<li><a href="splitTest2.jsp?cat=top">TOP</a></li>
 			<li><a href="splitTest2.jsp?cat=bottom">BOTTOM</a></li>
 			<li><a href="splitTest2.jsp?cat=acc">ACC</a></li>
-			<li><a href="splitTest2.jsp?cat=etc">ETC</a></li>
 		</ul>
 	</nav>
 
@@ -84,10 +57,10 @@ for (Product p : allProducts) {
 
 			<div class="inner-panel left-panel">
 				<div class="product-detail-wrapper">
-					<img src="images/main-cloth4.png" alt="SLASH ZIPPER JACKET"
+					<img src="<%=ilist.get(0)%>" alt="<%=pDto.getP_name()%>"
 						class="product-image" />
-					<h2 class="product-name">SLASH ZIPPER JACKET - WASHED GRAY</h2>
-					<div class="price">KRW 199,500</div>
+					<h2 class="product-name"><%=pDto.getP_name()%></h2>
+					<div class="price" id="price">KRW <%=formatter.format(pDto.getP_price())%></div>
 
 					<div class="section">
 						<label class="section-title">COLOR</label>
@@ -100,56 +73,35 @@ for (Product p : allProducts) {
 					<div class="section">
 						<label class="section-title">SIZE</label>
 						<div class="size-options">
-							<button class="size-btn disabled">S [재입고 알림]</button>
-							<button class="size-btn">M</button>
-							<button class="size-btn">L</button>
+						<%for(int i = 0; i<pdlist.size(); i++){ 
+							ProductDetailDTO pd = pdlist.get(i);
+						%>
+							<button id="sizeCheckBtn" class="<%=pd.getPd_stock() != 0 ? "size-btn" : "size-btn disabled"%>" onclick="sizeCheck('<%=pDto.getP_name()%>', '<%=pd.getPd_size()%>')"><%=pd.getPd_size()%></button>
+						<%} %>
 						</div>
 					</div>
 
-					<div class="selection-preview">
-						SLASH ZIPPER JACKET - WASHED GRAY 옵션: S <span class="remove">X</span>
+					<div class="selection-preview" id="selectedSize">
+						<!-- SLASH ZIPPER JACKET - WASHED GRAY 옵션: S <span class="remove">X</span> -->
 					</div>
 
 					<div class="notify-btn">
 						<button>🔔 재입고 알림</button>
 					</div>
 
-					<div class="total-price">TOTAL: KRW 0 (0개)</div>
+					<div class="total-price" id="tprice">KRW 0</div>
 
 					<div class="buy-buttons">
-						<button class="btn outline">ADD TO CART</button>
-						<button class="btn filled">BUY NOW</button>
-						<button class="btn wishlist-btn" id="wishlistBtn">🤍</button>
+						<button class="btn outline" onclick="addToBag('<%=pDto.getP_id()%>')">ADD TO BAG</button>
+						<button class="btn filled" onclick="buyNow('<%=pDto.getP_id()%>')">BUY NOW</button>
+						<button class="btn wishlist-btn" id="wishlistBtn" onclick="addToWish('<%=pDto.getP_id()%>')">🤍</button>
 					</div>
 
 					<div class="section2">
 						<button class="guide-toggle" onclick="toggleGuide()">
 							SIZE(cm) / GUIDE</button>
 						<div class="guide-content" id="guideContent">
-							<p>
-								S (WOMAN) - Length 52 / Shoulder 36.5 / Chest 46 / Arm 17<br>
-								M - Length 71 / Shoulder 53.5 / Chest 58 / Arm 23.5<br> L -
-								Length 74 / Shoulder 56 / Chest 60.5 / Arm 24.5<br> XL -
-								Length 77 / Shoulder 58.5 / Chest 63 / Arm 25.5
-							</p>
-							<p>
-								MODEL<br> MAN : 175CM(L SIZE)
-							</p>
-							<p>
-								COTTON 65%<br> NYLON 35%
-							</p>
-							<p>
-								WAIST SNAP<br> 2WAY ZIPPER (YKK社)
-							</p>
-							<p>
-								* 워싱 제품 특성상 개체 차이가 존재 합니다.<br> * Object differences exist
-								due to the nature of the washed product.
-							</p>
-							<p>
-								* 두꼬운 포리벡 특성상 옷에 슬립제가 무다나올 수 있습니다.<br> * 어두운 색 계열의 상품 구매 시
-								보이는 슬립제는 불량의 사유가 아니라는 것을 알려드립니다.<br> * The slip agent on
-								dark clothes is not defective.
-							</p>
+							<%=pDto.getP_text()%>
 						</div>
 					</div>
 
@@ -194,9 +146,9 @@ for (Product p : allProducts) {
 
 			<div class="inner-panel right-panel">
 				<div class="image-wrapper">
-					<img src="images/main-cloth1.png"> <img
-						src="images/main-cloth1.png"> <img
-						src="images/main-cloth1.png">
+					<%for(int i = 1; i<ilist.size(); i++){ %>
+					<img src="<%=ilist.get(i)%>"> 
+				<%} %>
 				</div>
 			</div>
 		</div>
@@ -207,85 +159,21 @@ for (Product p : allProducts) {
 
 		<div class="swiper buy-with-slider">
 			<div class="swiper-wrapper">
-				<div class="swiper-slide slider-item">
-					<img src="images/main-cloth1.png" alt="NM LEATHER BELT" />
-					<p class="item-name">NM LEATHER BELT - BLACK</p>
+			<%
+					for(int i = 0; i<10; i++){ 
+						ProductDTO pd = pDao.getAllPd().get(i);
+			%>
+				<div class="swiper-slide slider-item" onclick="goToDetail('<%=pd.getP_id()%>')">
+					<img src="<%=pDao.getPdImg(pd.getP_id()).get(0)%>" alt="<%=pd.getP_name()%>" width="300" height="300" />
+					<p class="item-name"><%=pd.getP_name()%></p>
 					<p class="item-price">
-						<del>KRW 69,000</del>
-						KRW 65,550
+						<del>KRW <%=formatter.format(pd.getP_price()) %></del>
+						KRW <%=formatter.format(pd.getP_price() *80 / 100) %>
 					</p>
-					<a href="#">ADD TO BAG</a>
+					<!-- <a>ADD TO BAG</a> -->
 				</div>
+			<%} %>
 
-				<div class="swiper-slide slider-item">
-					<img src="images/main-cloth2.png" alt="METAL SYMBOL BELT" />
-					<p class="item-name">METAL SYMBOL BELT - BLACK</p>
-					<p class="item-price">
-						<del>KRW 73,000</del>
-						KRW 69,350
-					</p>
-					<a href="#">ADD TO BAG</a>
-				</div>
-
-				<div class="swiper-slide slider-item">
-					<img src="images/main-cloth2.png" alt="METAL SYMBOL BELT" />
-					<p class="item-name">METAL SYMBOL BELT - BLACK</p>
-					<p class="item-price">
-						<del>KRW 73,000</del>
-						KRW 69,350
-					</p>
-					<a href="#">ADD TO BAG</a>
-				</div>
-
-				<div class="swiper-slide slider-item">
-					<img src="images/main-cloth2.png" alt="METAL SYMBOL BELT" />
-					<p class="item-name">METAL SYMBOL BELT - BLACK</p>
-					<p class="item-price">
-						<del>KRW 73,000</del>
-						KRW 69,350
-					</p>
-					<a href="#">ADD TO BAG</a>
-				</div>
-
-				<div class="swiper-slide slider-item">
-					<img src="images/main-cloth2.png" alt="METAL SYMBOL BELT" />
-					<p class="item-name">METAL SYMBOL BELT - BLACK</p>
-					<p class="item-price">
-						<del>KRW 73,000</del>
-						KRW 69,350
-					</p>
-					<a href="#">ADD TO BAG</a>
-				</div>
-
-				<div class="swiper-slide slider-item">
-					<img src="images/main-cloth2.png" alt="METAL SYMBOL BELT" />
-					<p class="item-name">METAL SYMBOL BELT - BLACK</p>
-					<p class="item-price">
-						<del>KRW 73,000</del>
-						KRW 69,350
-					</p>
-					<a href="#">ADD TO BAG</a>
-				</div>
-
-				<div class="swiper-slide slider-item">
-					<img src="images/main-cloth2.png" alt="METAL SYMBOL BELT" />
-					<p class="item-name">METAL SYMBOL BELT - BLACK</p>
-					<p class="item-price">
-						<del>KRW 73,000</del>
-						KRW 69,350
-					</p>
-					<a href="#">ADD TO BAG</a>
-				</div>
-
-				<div class="swiper-slide slider-item">
-					<img src="images/main-cloth2.png" alt="METAL SYMBOL BELT" />
-					<p class="item-name">METAL SYMBOL BELT - BLACK</p>
-					<p class="item-price">
-						<del>KRW 73,000</del>
-						KRW 69,350
-					</p>
-					<a href="#">ADD TO BAG</a>
-				</div>
 
 				<!-- 필요한 만큼 slide 복사 -->
 			</div>
@@ -294,7 +182,7 @@ for (Product p : allProducts) {
 
 	<!-- 리뷰 영역 -->
 	<section class="review-section">
-		<h3>REVIEW (0)</h3>
+		<h3>REVIEW (1)</h3>
 		<div class="review-summary">
 			<div class="rating-box">
 				<div class="star-score">★ 4.8</div>
@@ -422,44 +310,69 @@ for (Product p : allProducts) {
 
 	<!-- Q&A 영역 -->
 	<section class="qna-section">
-		<h2>Q&amp;A</h2>
+		<h2>Q&amp;A (<%=qlist.size()%>)</h2>
 		<hr class="qna-divider">
 
 		<div class="qna-list">
-			<div class="qna-item">
-				<span class="qna-lock">🔒</span> <span class="qna-title">배송관련
-					문의입니다.</span>
+		<%
+			if(qlist != null && !qlist.isEmpty()){
+				for(int i = 0; i<qlist.size(); i++){
+					InquiryDTO qDto = qlist.get(i);
+					
+					String onclick = "";
+					if(qDto.getI_isPrivate().equals("N")){
+						onclick = "location.href='qnaDetail.jsp?i_id=" + qDto.getI_id() + "'";
+					}else{
+						String uuid = (String)session.getAttribute("id");
+						if(uuid != null && !uuid.equals("")){
+							if(qDto.getUser_id().equals(id)){
+								onclick = "location.href='qnaDetail.jsp?i_id=" + qDto.getI_id() + "'";
+							}
+							
+						}
+					}
+		%>
+			<div class="qna-item" onclick="<%=onclick%>">
+				<span class="qna-lock"><%=qDto.getI_isPrivate().equals("Y") ? "🔒" : ""%></span> <span class="qna-title"><%=qDto.getI_title()%></span>
 				<div class="qna-meta">
-					<span class="qna-status">답변 예정</span> <span class="qna-date">2025-03-30</span>
-					<span class="qna-category">배송 문의</span>
+					<span class="qna-status"><%=qDto.getI_status().equals("답변대기") ? "답변대기" : "답변완료"%></span> <span class="qna-date"><%=qDto.getCreated_at()%></span>
+					<span class="qna-category"><%=qDto.getO_id() != 0 ? "배송 문의" : "상품 문의"%></span>
 				</div>
 			</div>
-
-			<div class="qna-item">
-				<span class="qna-lock">🔒</span> <span class="qna-title">제품
-					상세 문의입니다.</span>
-				<div class="qna-meta">
-					<span class="qna-status">답변 완료</span> <span class="qna-date">2025-03-30</span>
-					<span class="qna-category">제품 상세 문의</span>
+			<%
+				}
+			} else{
+			%>
+			<div style="text-align: center; margin-top: 100px; margin-bottom: 100px;">
+					<span style="color: #CCCCCC">Q&A가 없습니다.</span>
 				</div>
-			</div>
-
-			<div class="qna-item">
-				<span class="qna-lock">🔒</span> <span class="qna-title">배송관련
-					문의입니다.</span>
-				<div class="qna-meta">
-					<span class="qna-status">답변 완료</span> <span class="qna-date">2025-03-30</span>
-					<span class="qna-category">배송 문의</span>
-				</div>
-			</div>
+			<%} %>
 		</div>
 
 		<div class="qna-btn-wrapper">
-			<button class="qna-write-btn"
-			onclick="location.href='qnaForm.jsp'">작성하기</button>
+			<button class="qna-write-btn" onclick="writeQNA('<%=p_id%>')">작성하기</button>
 		</div>
 	</section>
+	
+	<form action="qnaForm.jsp" id="qnaFF">
+		<input type="hidden" name="p_id" id="hidPID">
+	</form>
 
+<script>
+function writeQNA(p_id){
+	<%
+		String uId = (String)session.getAttribute("id");
+		if(uId != null && !uId.equals("")){
+	%>
+	document.getElementById("hidPID").value = p_id;
+	document.getElementById("qnaFF").submit();
+	<%}else{%>
+	alert("회원만 Q&A를 작성하실 수 있습니다.");
+	return;
+	<%}%>
+	
+}
+</script>
 
 	<script>
   	document.querySelectorAll(".guide-toggle").forEach(button => {
@@ -485,14 +398,14 @@ for (Product p : allProducts) {
 	</script>
 
 	<script>
- 		document.addEventListener("DOMContentLoaded", () => {
+/*  		document.addEventListener("DOMContentLoaded", () => {
     	const wishlistBtn = document.getElementById("wishlistBtn");
 
     	wishlistBtn.addEventListener("click", () => {
       	wishlistBtn.classList.toggle("active");
       	wishlistBtn.textContent = wishlistBtn.classList.contains("active") ? "❤️" : "🤍";
     	});
-  	});
+  	}); */
 	</script>
 
 	<script>
@@ -529,6 +442,105 @@ for (Product p : allProducts) {
 	  });
 	});
 	</script>
+				<script>
+				 let selectedSize = null;
+				function addToBag(p_id){
+					<%
+					String user_id = (String)session.getAttribute("id");
+					if(user_id == null || user_id.equals("") ){
+					%>
+					alert("회원만 장바구니에 담을 수 있습니다.");
+					return;
+					<%}%>
+				    if (!selectedSize) {
+				        alert("사이즈를 선택해주세요.");
+				        return false;
+				      }
+				    
+				     fetch("addCart.jsp?p_id=" + encodeURIComponent(p_id) + "&size=" + encodeURIComponent(selectedSize))
+				     .then(res => res.json())
+				     .then(data => {
+				       if (data.result === "success") {
+				    	   alert("장바구니에 추가되었습니다!");
+				       } else {
+				 		alert("장바구니에 넣을 수 없습니다.");
+				       }
+				     });				
+				}
+				
+				function buyNow(p_id){
+				    if (!selectedSize) {
+				        alert("사이즈를 선택해주세요.");
+				        return false;
+				      }
+				    
+				    fetch('getPdId.jsp', {
+				        method: 'POST',
+				        headers: {
+				          'Content-Type': 'application/x-www-form-urlencoded'
+				        },
+				        body: "p_id=" + encodeURIComponent(p_id) + "&size=" + encodeURIComponent(selectedSize)
+				      })
+				      .then(response => response.json())
+				      .then(data => {
+				        const pd_id = data.pd_id;
+
+				        // 👉 여기서 페이지에 반영하거나, 다른 함수로 넘기기
+				        document.getElementById("hidden_pd_id").value = pd_id;
+				        document.getElementById("goPayForm").submit();
+				      })
+				      .catch(error => console.error('에러 발생:', error));
+				}
+				
+				function sizeCheck(name, size){
+					selectedSize = size;
+					document.getElementById("selectedSize").innerHTML = name + " 옵션 : " + size + "<span class='remove' onclick='deleteSelect()'> X</span>";
+					const price = document.getElementById("price").textContent;
+					document.getElementById("tprice").textContent = price;
+				}
+				
+				function deleteSelect(){
+					selectedSize = null;
+					document.getElementById("selectedSize").innerHTML = "";
+					document.getElementById("tprice").textContent = "KRW 0";
+				}
+				
+				function addToWish(p_id){
+					<%
+					String u_id = (String)session.getAttribute("id");
+					if(u_id == null || u_id.equals("") ){
+					%>
+					alert("회원만 찜할 수 있습니다.");
+					return;
+					<%}%>
+				    if (!selectedSize) {
+				        alert("사이즈를 선택해주세요.");
+				        return false;
+				      }
+				    
+				     fetch("addWish.jsp?p_id=" + encodeURIComponent(p_id) + "&size=" + encodeURIComponent(selectedSize))
+				     .then(res => res.json())
+				     .then(data => {
+				       if (data.result === "success") {
+				    	   alert("해당 상품이 찜되었습니다!");
+				    	   const wishlistBtn = document.getElementById("wishlistBtn");
+
+				    	   wishlistBtn.classList.toggle("active");
+				         	wishlistBtn.textContent = wishlistBtn.classList.contains("active") ? "❤️" : "🤍";
+/* 				       	wishlistBtn.addEventListener("click", () => {
+				         	wishlistBtn.classList.toggle("active");
+				         	wishlistBtn.textContent = wishlistBtn.classList.contains("active") ? "❤️" : "🤍";
+				       	}); */
+				       } else {
+				 		alert("찜할 수 없습니다.");
+				       }
+				     });	
+				}
+				
+				function goToDetail(p_id){
+					location.href = "pdDetail.jsp?p_id=" + p_id;
+				}
+			</script>
 
 </body>
 </html>

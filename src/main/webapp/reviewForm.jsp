@@ -21,7 +21,6 @@
       <li><a href="board.jsp">BOARD</a></li>
       <li><a href="FAQ.jsp">FAQ</a></li>
       <li><a href="Q&A.jsp">Q&A</a></li>
-      <li><a href="review.jsp">REVIEW</a></li>
     </ul>
   </aside>
 

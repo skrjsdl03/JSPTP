@@ -10,11 +10,11 @@ import org.json.JSONObject;
 
 import DAO.UserDAO;
 
-@WebServlet("/naverLoginServlet")
+@WebServlet("/NaverLoginServlet")
 public class NaverLoginServlet extends HttpServlet {
-	private final String clientId = "YOUR_CLIENT_ID";
-    private final String clientSecret = "YOUR_CLIENT_SECRET";
-    private final String redirectURI = "http://localhost:8080/naverCallback";
+	private final String clientId = System.getenv("NAVER_CLIENT_ID");
+    private final String clientSecret = System.getenv("NAVER_CLIENT_SECRET");
+    private final String redirectURI = "http://everywear.duckdns.org/JSPTP/NaverLoginServlet";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

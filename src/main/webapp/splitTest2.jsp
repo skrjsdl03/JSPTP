@@ -1,8 +1,13 @@
+<%@page import="DTO.ProductDetailDTO"%>
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="java.util.Vector"%>
+<%@page import="DTO.ProductDTO"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html;charset=UTF-8" language="java"%>
+<jsp:useBean id="pDao" class="DAO.ProductDAO"/>
 <%
 // 카테고리 파라미터 처리
 String categoryParam = request.getParameter("cat");
@@ -12,50 +17,13 @@ if (categoryParam == null) {
 
 String subCategoryParam = request.getParameter("subCat");
 if (subCategoryParam == null) {
-	subCategoryParam = "all";
+	subCategoryParam = "";
 }
 
-// 임시 상품 데이터
-class Product {
-	String id;
-	String name;
-	int price;
-	String image;
-	String category;
+DecimalFormat formatter = new DecimalFormat("#,###");
 
-	Product(String id, String name, int price, String image, String category) {
-		this.id = id;
-		this.name = name;
-		this.price = price;
-		this.image = image;
-		this.category = category;
-	}
-}
 
-List<Product> allProducts = new ArrayList<>();
-allProducts.add(new Product("101", "후리스 자켓", 59000, "images/main-cloth1.png", "outer"));
-allProducts.add(new Product("102", "셔츠 블라우스", 49000, "images/main-cloth2.png", "top"));
-allProducts.add(new Product("103", "데님 팬츠", 69000, "images/main-cloth3.png", "bottom"));
-allProducts.add(new Product("104", "롱코트", 129000, "images/main-cloth4.png", "acc"));
-allProducts.add(new Product("105", "기본 티셔츠", 19000, "images/main-cloth5.png", "outer"));
-allProducts.add(new Product("106", "후리스 자켓", 59000, "images/main-cloth1.png", "outer"));
-allProducts.add(new Product("107", "셔츠 블라우스", 49000, "images/main-cloth2.png", "top"));
-allProducts.add(new Product("108", "데님 팬츠", 69000, "images/main-cloth3.png", "bottom"));
-allProducts.add(new Product("109", "롱코트", 129000, "images/main-cloth4.png", "acc"));
-allProducts.add(new Product("110", "기본 티셔츠", 19000, "images/main-cloth5.png", "outer"));
-allProducts.add(new Product("111", "후리스 자켓", 59000, "images/main-cloth1.png", "outer"));
-allProducts.add(new Product("112", "셔츠 블라우스", 49000, "images/main-cloth2.png", "top"));
-allProducts.add(new Product("113", "데님 팬츠", 69000, "images/main-cloth3.png", "bottom"));
-allProducts.add(new Product("114", "롱코트", 129000, "images/main-cloth4.png", "acc"));
-allProducts.add(new Product("115", "기본 티셔츠", 19000, "images/main-cloth5.png", "outer"));
-
-// 필터링
-List<Product> filteredProducts = new ArrayList<>();
-for (Product p : allProducts) {
-	if (categoryParam.equals("all") || p.category.equals(categoryParam)) {
-		filteredProducts.add(p);
-	}
-}
+Vector<ProductDTO> plist = new Vector<ProductDTO>();
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -82,8 +50,6 @@ for (Product p : allProducts) {
 				class="<%=categoryParam.equals("bottom") ? "active" : ""%>">BOTTOM</a></li>
 			<li><a href="splitTest2.jsp?cat=acc"
 				class="<%=categoryParam.equals("acc") ? "active" : ""%>">ACC</a></li>
-			<li><a href="splitTest2.jsp?cat=etc"
-				class="<%=categoryParam.equals("etc") ? "active" : ""%>">ETC</a></li>
 		</ul>
 	</nav>
 
@@ -123,297 +89,423 @@ for (Product p : allProducts) {
 
 	<!-- 정렬 옵션 -->
 	<div class="sort-options">
-		<label for="sort-select" class="label-bold">ITEMS() </label> <select
-			id="sort-select">
+		<label for="sort-select" class="label-bold" id="itemCnt">ITEMS() </label> 
+		<!-- <select id="sort-select">
 			<option value="" disabled selected hidden>SORT BY</option>
 			<option value="new">NEW</option>
 			<option value="popular">POPULAR</option>
 			<option value="low">LOW PRICE</option>
 			<option value="high">HIGH PRICE</option>
-		</select>
+		</select> -->
 	</div>
 
 	<div class="container">
 		<div class="product-list" id="productList">
 			<%
 			if (categoryParam != null && categoryParam.equals("all")) {
+				plist = pDao.getAllPd();
+				Vector<String> ilist = null;
+				for(int i = 0; i<plist.size(); i++){
+					ProductDTO pDto = plist.get(i);
+					ilist = pDao.getPdImg(pDto.getP_id());
 			%>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth1.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth1.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth1.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth1.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth1.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth1.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth1.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth1.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
 			</div>
 			<%
+				}
 			}
 			%>
 			<%
-			if (categoryParam != null && categoryParam.equals("outer")) {
+			if (subCategoryParam == null || subCategoryParam.equals("")) {
+				if(categoryParam.equals("outer")){
+					plist = pDao.getOUTERPd();
+					Vector<String> ilist = null;
+					for(int i = 0; i<plist.size(); i++){
+						ProductDTO pDto = plist.get(i);
+						ilist = pDao.getPdImg(pDto.getP_id());
 			%>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth2.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth2.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth2.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth2.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth2.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth2.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth2.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth2.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
 			</div>
 			<%
-			}
+					}
+			} else if(categoryParam.equals("top")){
+				plist = pDao.getTOPPd();
+				Vector<String> ilist = null;
+				for(int i = 0; i<plist.size(); i++){
+					ProductDTO pDto = plist.get(i);
+					ilist = pDao.getPdImg(pDto.getP_id());
 			%>
-			<%
-			if (categoryParam != null && categoryParam.equals("top")) {
-			%>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth3.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth3.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth3.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth3.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth3.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth3.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth3.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth3.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
 			</div>
 			<%
-			}
+				}
+			} else if(categoryParam.equals("bottom")){
+				plist = pDao.getBOTTOMPd();
+				Vector<String> ilist = null;
+				for(int i = 0; i<plist.size(); i++){
+					ProductDTO pDto = plist.get(i);
+					ilist = pDao.getPdImg(pDto.getP_id());
 			%>
-			<%
-			if (categoryParam != null && categoryParam.equals("bottom")) {
-			%>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth4.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth4.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth4.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth4.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth4.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth4.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth4.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth4.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
 			</div>
 			<%
-			}
+				}
+			} else if(categoryParam.equals("acc")){
+				plist = pDao.getACCPd();
+				Vector<String> ilist = null;
+				for(int i = 0; i<plist.size(); i++){
+					ProductDTO pDto = plist.get(i);
+					ilist = pDao.getPdImg(pDto.getP_id());
 			%>
-			<%
-			if (categoryParam != null && categoryParam.equals("acc")) {
-			%>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth5.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth5.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth5.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth5.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth5.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth5.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth5.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/main-cloth5.png">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
 			</div>
 			<%
-			}
-			%>
-			<%
-			if (categoryParam != null && categoryParam.equals("etc")) {
-			%>
-			<div class="product" onclick="openDetail()">
-				<img src="images/orderHistory.jpg">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/orderHistory.jpg">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/orderHistory.jpg">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/orderHistory.jpg">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/orderHistory.jpg">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/orderHistory.jpg">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/orderHistory.jpg">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
-			</div>
-			<div class="product" onclick="openDetail()">
-				<img src="images/orderHistory.jpg">
-				<p class="product-name">I ♥ JDJ</p>
-				<p class="product-price">KRW 88,000</p>
+				}
+			} 
+		} else if(subCategoryParam != null && !subCategoryParam.equals("")){
+				if(subCategoryParam.equals("HEAVY OUTER")){
+					plist = pDao.getHEAVY_OUTERPd();
+					Vector<String> ilist = null;
+					for(int i = 0; i<plist.size(); i++){
+						ProductDTO pDto = plist.get(i);
+						ilist = pDao.getPdImg(pDto.getP_id());
+			%>	
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
 			</div>
 			<%
-			}
+					}
+				} else if(subCategoryParam.equals("HOODED ZIP-UP")){
+					plist = pDao.getHOODED_ZIP_UPPd();
+					Vector<String> ilist = null;
+					for(int i = 0; i<plist.size(); i++){
+						ProductDTO pDto = plist.get(i);
+						ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+					}
+				} else if(subCategoryParam.equals("JACKET")){
+					plist = pDao.getJACKETPd();
+					Vector<String> ilist = null;
+					for(int i = 0; i<plist.size(); i++){
+						ProductDTO pDto = plist.get(i);
+						ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+					}
+				} else if(subCategoryParam.equals("JUMPER")){
+					plist = pDao.getJUMPERPd();
+					Vector<String> ilist = null;
+					for(int i = 0; i<plist.size(); i++){
+						ProductDTO pDto = plist.get(i);
+						ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+					}
+				} else if(subCategoryParam.equals("VEST")){
+					plist = pDao.getVESTPd();
+					Vector<String> ilist = null;
+					for(int i = 0; i<plist.size(); i++){
+						ProductDTO pDto = plist.get(i);
+						ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+					}
+				} else if(subCategoryParam.equals("WIND BREAKER")){
+					plist = pDao.getWIND_BREAKERPd();
+					Vector<String> ilist = null;
+					for(int i = 0; i<plist.size(); i++){
+						ProductDTO pDto = plist.get(i);
+						ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+					}
+				}else if(subCategoryParam.equals("HOODIE")){
+					plist = pDao.getHOODIEPd();
+					Vector<String> ilist = null;
+					for(int i = 0; i<plist.size(); i++){
+						ProductDTO pDto = plist.get(i);
+						ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+				}
+			} else if(subCategoryParam.equals("KNIT/CARDIGAN")){
+				plist = pDao.getKNIT_CARDIGANPd();
+				Vector<String> ilist = null;
+				for(int i = 0; i<plist.size(); i++){
+					ProductDTO pDto = plist.get(i);
+					ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+				}
+			} else if(subCategoryParam.equals("LONG SLEEVE")){
+				plist = pDao.getLONG_SLEEVEPd();
+				Vector<String> ilist = null;
+				for(int i = 0; i<plist.size(); i++){
+					ProductDTO pDto = plist.get(i);
+					ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+				}
+			} else if(subCategoryParam.equals("SHIRT")){
+				plist = pDao.getSHIRTPd();
+				Vector<String> ilist = null;
+				for(int i = 0; i<plist.size(); i++){
+					ProductDTO pDto = plist.get(i);
+					ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+				}
+			} else if(subCategoryParam.equals("SLEEVESS")){
+				plist = pDao.getSLEEVESSPd();
+				Vector<String> ilist = null;
+				for(int i = 0; i<plist.size(); i++){
+					ProductDTO pDto = plist.get(i);
+					ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+				}
+			} else if(subCategoryParam.equals("SWEAT SHIRT")){
+				plist = pDao.getSWEAT_SHIRTPd();
+				Vector<String> ilist = null;
+				for(int i = 0; i<plist.size(); i++){
+					ProductDTO pDto = plist.get(i);
+					ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+				}
+			} else if(subCategoryParam.equals("T-SHIRT")){
+				plist = pDao.getT_SHIRTPd();
+				Vector<String> ilist = null;
+				for(int i = 0; i<plist.size(); i++){
+					ProductDTO pDto = plist.get(i);
+					ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+				}
+			} else if(subCategoryParam.equals("DENIM")){
+				plist = pDao.getDENIMPd();
+				Vector<String> ilist = null;
+				for(int i = 0; i<plist.size(); i++){
+					ProductDTO pDto = plist.get(i);
+					ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+				}
+			} else if(subCategoryParam.equals("PANTS")){
+				plist = pDao.getPANTSPd();
+				Vector<String> ilist = null;
+				for(int i = 0; i<plist.size(); i++){
+					ProductDTO pDto = plist.get(i);
+					ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+				}
+			} else if(subCategoryParam.equals("SHORTS")){
+				plist = pDao.getSHORTSPd();
+				Vector<String> ilist = null;
+				for(int i = 0; i<plist.size(); i++){
+					ProductDTO pDto = plist.get(i);
+					ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+				}
+			} else if(subCategoryParam.equals("TRAINING PANTS")){
+				plist = pDao.getTRAINING_PANTSPd();
+				Vector<String> ilist = null;
+				for(int i = 0; i<plist.size(); i++){
+					ProductDTO pDto = plist.get(i);
+					ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+				}
+			} else if(subCategoryParam.equals("BAG")){
+				plist = pDao.getBAGPd();
+				Vector<String> ilist = null;
+				for(int i = 0; i<plist.size(); i++){
+					ProductDTO pDto = plist.get(i);
+					ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+				}
+			} else if(subCategoryParam.equals("ETC")){
+				plist = pDao.getETCPd();
+				Vector<String> ilist = null;
+				for(int i = 0; i<plist.size(); i++){
+					ProductDTO pDto = plist.get(i);
+					ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+				}
+			} else if(subCategoryParam.equals("HEADGEAR")){
+				plist = pDao.getHEADGEARPd();
+				Vector<String> ilist = null;
+				for(int i = 0; i<plist.size(); i++){
+					ProductDTO pDto = plist.get(i);
+					ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+				}
+			} else if(subCategoryParam.equals("KEYRING")){
+				plist = pDao.getKEYRINGPd();
+				Vector<String> ilist = null;
+				for(int i = 0; i<plist.size(); i++){
+					ProductDTO pDto = plist.get(i);
+					ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+				}
+			} else if(subCategoryParam.equals("MUFFLER")){
+				plist = pDao.getMUFFLERPd();
+				Vector<String> ilist = null;
+				for(int i = 0; i<plist.size(); i++){
+					ProductDTO pDto = plist.get(i);
+					ilist = pDao.getPdImg(pDto.getP_id());
+			%>
+			<div class="product" onclick="openDetail('<%=pDto.getP_id()%>')">
+				<img src="<%=ilist.get(0)%>">
+				<p class="product-name"><%=pDto.getP_name()%></p>
+				<p class="product-price">KRW <%=formatter.format(pDto.getP_price())%></p>
+			</div>
+			<%
+					}
+				}
+			}//--서브 카테고리가 있는 경우
 			%>
 		</div>
 
 		<div class="resizer" id="resizer"></div>
+<%-- 		<%
+			int p_id = 0;
+			Vector<String> ilist = null;
+			ProductDTO pDto = null;
+			Vector<ProductDetailDTO> pdlist = null;
+			if(request.getParameter("p_id") == null || request.getParameter("p_id").equals("")){
+				p_id = 0;
+			} else if(request.getParameter("p_id") != null && !request.getParameter("p_id").equals("")){
+				p_id = Integer.parseInt(request.getParameter("p_id"));
+				ilist = pDao.getPdImg(p_id);
+				pDto = pDao.getOnePd(p_id);
+				pdlist = pDao.getOneProductDetail(p_id);
+			}
+		%> --%>
 
 		<div class="detail-panel" id="detailPanel">
 			<span class="close-btn" id="closeBtn" onclick="closeDetail()">×</span>
@@ -421,10 +513,10 @@ for (Product p : allProducts) {
 
 			<div class="left-panel">
 				<div class="product-detail-wrapper">
-					<img src="images/main-cloth1.png" alt="SLASH ZIPPER JACKET"
+					<img src="" alt="SLASH ZIPPER JACKET"
 						class="product-image" />
-					<h2 class="product-name">SLASH ZIPPER JACKET - WASHED GRAY</h2>
-					<div class="price">KRW 199,500</div>
+					<h2 class="product-name"></h2>
+					<div class="price"></div>
 
 					<div class="section">
 						<label class="section-title">COLOR</label>
@@ -437,25 +529,25 @@ for (Product p : allProducts) {
 					<div class="section">
 						<label class="section-title">SIZE</label>
 						<div class="size-options">
-							<button class="size-btn disabled">S [재입고 알림]</button>
-							<button class="size-btn">M</button>
-							<button class="size-btn">L</button>
+							<button class="size-btn disabled"></button>
+							<button class="size-btn"></button>
+							<button class="size-btn"></button>
 						</div>
 					</div>
 
 					<div class="selection-preview">
-						SLASH ZIPPER JACKET - WASHED GRAY 옵션: S <span class="remove">X</span>
+						
 					</div>
 
 					<div class="notify-btn">
-						<button>🔔 재입고 알림</button>
+						<button></button>
 					</div>
 
-					<div class="total-price">TOTAL: KRW 0 (0개)</div>
+					<div class="total-price"></div>
 
 					<div class="buy-buttons">
-						<button class="btn outline">ADD TO BAG</button>
-						<button class="btn filled">BUY NOW</button>
+						<button class="btn outline"></button>
+						<button class="btn filled"></button>
 						<button class="btn wishlist-btn" id="wishlistBtn">🤍</button>
 					</div>
 
@@ -486,7 +578,7 @@ for (Product p : allProducts) {
 					</div>
 					<div class="inner-panel right-panel" style="display: none;"
 						id="abc">
-						<!-- 텍스트 설명, 옵션, 버튼 등 -->
+						
 						<img src="images/main-cloth1.png"> <img
 							src="images/main-cloth1.png"> <img
 							src="images/main-cloth1.png">
@@ -494,14 +586,21 @@ for (Product p : allProducts) {
 				</div>
 			</div>
 			<div class="inner-panel right-panel">
-				<!-- 텍스트 설명, 옵션, 버튼 등 -->
-				<img src="images/main-cloth1.png"> <img
-					src="images/main-cloth1.png"> <img
-					src="images/main-cloth1.png">
+				
+				
 			</div>
 		</div>
 
 	</div>
+	
+	<form action="pay.jsp" method="post" id="goPayForm">
+		<input type="hidden" id="hidden_pd_id" name="pd_id">
+		<input type="hidden" name="quantity" value="1">
+	</form>
+	
+	<form action="pdDetail.jsp" method="get" id="goPdDetail">
+		<input type="hidden" id="hiddenPID" name="p_id">
+	</form>
 
 	<script>
   	const resizer = document.getElementById('resizer');
@@ -543,18 +642,27 @@ for (Product p : allProducts) {
     	document.removeEventListener('mouseup', stopResize);
   	}
 
-  	function openDetail() {
+  	
+  	function openDetail(p_id) {
+  	  // 주소창만 바꾸기 (새로고침 안 함)
+  	  const currentUrl = new URL(window.location);
+  	  currentUrl.searchParams.set("p_id", p_id);
+  	  history.pushState({}, '', currentUrl); // 새로고침 안 일어남
+
+  	  // 패널 열기
+  	  const container = document.querySelector('.container');
+  	  const detailPanel = document.getElementById('detailPanel');
   	  container.classList.add('detail-open');
 
-  	  // 현재 너비를 기억해서 유지 (또는 최소값 보장)
-  	  const currentWidth = detailPanel.style.width;
-
-  	  if (!currentWidth || parseInt(currentWidth) < 300) {
-  	    detailPanel.style.width = '2000px'; // ✅ 최소 너비 적용
-  	  } else {
-  	    detailPanel.style.width = currentWidth; // ✅ 현재 너비 유지
-  	  }
+  	  // Ajax로 상세정보 받아오기
+  	  fetch("/JSPTP/getProductDetail.jsp?p_id=" + p_id)
+  	    .then(res => res.text())
+  	    .then(html => {
+  	      detailPanel.innerHTML = html;
+  	    });
   	}
+
+
 
   	function closeDetail() {
     	container.classList.remove('detail-open');      // ✅ 클래스 제거로 상세창 숨김
@@ -562,7 +670,7 @@ for (Product p : allProducts) {
   	
   	let isFullView = false;
 
-  	function toggleFullView() {
+/*   	function toggleFullView() {
   	  const expandBtn = document.getElementById('expandBtn');
 
   	  if (!isFullView) {
@@ -574,10 +682,11 @@ for (Product p : allProducts) {
   	    expandBtn.textContent = '🔳';       // ✅ 원래 아이콘으로 복귀
   	    isFullView = false;
   	  }
-  	}
+  	} */
   	
-  	function toggleFullView() {
-  		window.location.href = 'pdDetail.jsp';
+  	function toggleFullView(p_id) {
+  		document.getElementById("hiddenPID").value = p_id;
+  		document.getElementById("goPdDetail").submit();
   	}
 
 	</script>
@@ -686,20 +795,112 @@ for (Product p : allProducts) {
   document.addEventListener("DOMContentLoaded", function () {
     const currentCategory = getParameterByName('cat');
     renderSubCategories(currentCategory);
+    document.getElementById("itemCnt").textContent = "ITEMS(" + <%=plist.size()%> + ")";
   });
 </script>
 
 
 	<script>
- 		document.addEventListener("DOMContentLoaded", () => {
+/*  		document.addEventListener("DOMContentLoaded", () => {
     	const wishlistBtn = document.getElementById("wishlistBtn");
 
     	wishlistBtn.addEventListener("click", () => {
       	wishlistBtn.classList.toggle("active");
-      	wishlistBtn.textContent = wishlistBtn.classList.contains("active") ? "❤️" : "🤍";
+      	wishlistBtn.textContent = wishlistBtn.classList.contains("active") ? "❤" : "🤍";
     	});
-  	});
+  	}); */
 	</script>
+				<script>
+				 let selectedSize = null;
+				function addToBag(p_id){
+					<%
+					String user_id = (String)session.getAttribute("id");
+					if(user_id == null || user_id.equals("") ){
+					%>
+					alert("회원만 장바구니에 담을 수 있습니다.");
+					return;
+					<%}%>
+				    if (!selectedSize) {
+				        alert("사이즈를 선택해주세요.");
+				        return false;
+				      }
+				    
+				     fetch("addCart.jsp?p_id=" + encodeURIComponent(p_id) + "&size=" + encodeURIComponent(selectedSize))
+				     .then(res => res.json())
+				     .then(data => {
+				       if (data.result === "success") {
+				    	   alert("장바구니에 추가되었습니다!");
+				       } else {
+				 		alert("장바구니에 넣을 수 없습니다.");
+				       }
+				     });				
+				}
+				
+				function buyNow(p_id){
+				    if (!selectedSize) {
+				        alert("사이즈를 선택해주세요.");
+				        return false;
+				      }
+				    
+				    fetch('getPdId.jsp', {
+				        method: 'POST',
+				        headers: {
+				          'Content-Type': 'application/x-www-form-urlencoded'
+				        },
+				        body: "p_id=" + encodeURIComponent(p_id) + "&size=" + encodeURIComponent(selectedSize)
+				      })
+				      .then(response => response.json())
+				      .then(data => {
+				        const pd_id = data.pd_id;
+
+				        // 👉 여기서 페이지에 반영하거나, 다른 함수로 넘기기
+				        document.getElementById("hidden_pd_id").value = pd_id;
+				        document.getElementById("goPayForm").submit();
+				      })
+				      .catch(error => console.error('에러 발생:', error));
+				}
+				
+				function sizeCheck(name, size){
+					selectedSize = size;
+					document.getElementById("selectedSize").innerHTML = name + " 옵션 : " + size + "<span class='remove' onclick='deleteSelect()'> X</span>";
+					const price = document.getElementById("price").textContent;
+					document.getElementById("tprice").textContent = price;
+
+				}
+				
+				function deleteSelect(){
+					selectedSize = null;
+					document.getElementById("selectedSize").innerHTML = "";
+					document.getElementById("tprice").textContent = "KRW 0";
+				}
+				
+				function addToWish(p_id){
+					<%
+					String u_id = (String)session.getAttribute("id");
+					if(u_id == null || u_id.equals("") ){
+					%>
+					alert("회원만 찜할 수 있습니다.");
+					return;
+					<%}%>
+				    if (!selectedSize) {
+				        alert("사이즈를 선택해주세요.");
+				        return false;
+				      }
+				    
+				     fetch("addWish.jsp?p_id=" + encodeURIComponent(p_id) + "&size=" + encodeURIComponent(selectedSize))
+				     .then(res => res.json())
+				     .then(data => {
+				       if (data.result === "success") {
+				    	   alert("해당 상품이 찜되었습니다!");
+				    		const wishlistBtn = document.getElementById("wishlistBtn");
+				          	wishlistBtn.classList.toggle("active");
+				          	wishlistBtn.textContent = wishlistBtn.classList.contains("active") ? "❤" : "🤍";
+				       } else {
+				 		alert("찜할 수 없습니다.");
+				       }
+				     });	
+				}
+			</script>
 
 </body>
 </html>

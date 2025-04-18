@@ -356,4 +356,92 @@ public class QnaDAO {
 			return qlist;
 		}
 		
+		//한 상품의 Q&A 가져오기
+		public Vector<InquiryDTO> getQnaForPd(int p_id){
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			String sql = null;
+			Vector<InquiryDTO> qlist = new Vector<InquiryDTO>();
+			try {
+				con = pool.getConnection();
+				sql = "select * from inquiry where p_id = ?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setInt(1, p_id);
+				rs = pstmt.executeQuery();
+				while(rs.next()) {
+					qlist.add(new InquiryDTO(rs.getInt(1), rs.getString(2), 
+							rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getString(6), 
+							rs.getString(7), SDF_DATE.format(rs.getDate(8)), rs.getString(9), rs.getString(10)));
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				pool.freeConnection(con, pstmt, rs);
+			}
+			return qlist;
+		}
+		
+		//상품 Q&A 등록
+		public void insertQna2(String id, String type, HttpServletRequest req) {
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			String sql = null;
+			MultipartRequest multi = null;
+			int i_id = 0;
+			try {
+				File file = new File(SAVEFOLDER);
+				if (!file.exists())
+					file.mkdirs();
+				
+				multi = new MultipartRequest(req, SAVEFOLDER,MAXSIZE, ENCTYPE,
+						new DefaultFileRenamePolicy());
+				
+				String image = multi.getFilesystemName("file");
+				
+				String isPrivate = multi.getParameter("private");
+				String i_isPrivate = "N"; // 기본값
+
+				if (isPrivate != null && isPrivate.equals("on")) {
+				    i_isPrivate = "Y"; // 체크되었으면 비공개로 설정
+				}
+				
+				con = pool.getConnection();
+				sql = "insert into inquiry (user_id, user_type, p_id, i_title, i_content,  created_at, i_isPrivate) values (?, ?, ?, ?, ?, now(), ?)";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, id);
+				pstmt.setString(2, type);
+				pstmt.setString(3, multi.getParameter("p_id"));
+				pstmt.setString(4, multi.getParameter("title"));
+				pstmt.setString(5, multi.getParameter("content"));
+				pstmt.setString(6, i_isPrivate);
+				pstmt.executeUpdate();
+				pstmt.close();
+				
+				sql = "select max(i_id) from inquiry";
+				pstmt = con.prepareStatement(sql);
+				rs = pstmt.executeQuery();
+				if(rs.next()){
+					i_id = rs.getInt(1);
+				}
+				
+				if(image != null && !image.equals("")) {
+					pstmt.close();
+					rs.close();
+					sql = "insert into inquiry_image (i_id, ii_url) values (?, ?)";
+					pstmt = con.prepareStatement(sql);
+					pstmt.setInt(1, i_id);
+					pstmt.setString(2, image);
+					pstmt.executeUpdate();
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+			    try { if (rs != null) rs.close(); } catch (Exception e) {}
+			    try { if (pstmt != null) pstmt.close(); } catch (Exception e) {}
+				pool.freeConnection(con, pstmt, rs);
+			}
+		}
 }

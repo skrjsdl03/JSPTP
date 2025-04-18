@@ -27,7 +27,6 @@
 			<li><a href="splitTest2.jsp?cat=top">TOP</a></li>
 			<li><a href="splitTest2.jsp?cat=bottom">BOTTOM</a></li>
 			<li><a href="splitTest2.jsp?cat=acc">ACC</a></li>
-			<li><a href="splitTest2.jsp?cat=etc">ETC</a></li>
 		</ul>
 	</nav>
 

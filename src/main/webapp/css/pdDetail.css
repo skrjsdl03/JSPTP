@@ -77,7 +77,7 @@ body {
 
 .detail-panel {
 	display: flex;
-	width: 2000px;
+/* 	width: 2000px; */
 	min-width: 500px;
 	min-height: 100vh;
 	padding: 20px;

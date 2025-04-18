@@ -52,13 +52,13 @@ if (queryString != null) {
 
 		<!-- 사이드바 메뉴 -->
 		<div id="sidebar" class="sidebar">
-			<a href="#">NEW</a>
-			<a href="#">BEST</a>
-			<a href="#" class="group-gap">ALL</a>
-			<a href="#">OUTER</a>
-			<a href="#">TOP</a>
-			<a href="#">BOTTOM</a>
-			<a href="#">ACC</a>
+			<a href="splitTest3.jsp">NEW</a>
+			<a href="splitTest4.jsp">BEST</a>
+			<a href="splitTest2.jsp?cat=all" class="group-gap">ALL</a>
+			<a href="splitTest2.jsp?cat=outer">OUTER</a>
+			<a href="splitTest2.jsp?cat=top">TOP</a>
+			<a href="splitTest2.jsp?cat=bottom">BOTTOM</a>
+			<a href="splitTest2.jsp?cat=acc">ACC</a>
 			<a href="#">SALE</a>
 			<a href="myPage.jsp" class="group-gap">MY PAGE</a>
 			<a href="board.jsp">BOARD</a>

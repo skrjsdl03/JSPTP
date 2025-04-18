@@ -213,4 +213,52 @@ public class FavoriteDAO {
 		}
 		return flag;
 	}
+	
+	//장바구니 추가
+	public boolean addCart(String id, String type, int pd_id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert favorite values (null, ?, ?, ?, '장바구니', 1, now())";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, type);
+			pstmt.setInt(3, pd_id);
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
+	
+	//찜 추가
+	public boolean addWish(String id, String type, int pd_id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert favorite values (null, ?, ?, ?, '찜', 1, now())";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, type);
+			pstmt.setInt(3, pd_id);
+			if(pstmt.executeUpdate() == 1)
+				flag = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
 }
