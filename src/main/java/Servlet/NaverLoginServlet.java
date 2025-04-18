@@ -36,29 +36,42 @@ public class NaverLoginServlet extends HttpServlet {
                 + "&code=" + code
                 + "&state=" + state;
 
-        String tokenResponse = get(tokenURL);
-        JSONObject tokenObj = new JSONObject(tokenResponse);
-        String accessToken = tokenObj.getString("access_token");
-
-        // 2. 사용자 정보 요청
-        String userInfoURL = "https://openapi.naver.com/v1/nid/me";
-        String userInfoResponse = get(userInfoURL, "Bearer " + accessToken);
-
-        JSONObject userObj = new JSONObject(userInfoResponse);
-        JSONObject res = userObj.getJSONObject("response");
-
-        String id = res.getString("id");
-        String name = res.optString("name", ""); 
-        String email = res.optString("email", "");
-
-        // 3. 세션에 저장
-        HttpSession session = request.getSession();
-        session.setAttribute("naverId", id);
-        session.setAttribute("naverName", name);
-        session.setAttribute("naverEmail", email);
-
-        // 4. 로그인 완료 후 메인 페이지로 이동
-        response.sendRedirect("main2.jsp");
+        try {
+            String tokenResponse = get(tokenURL);
+            JSONObject tokenObj = new JSONObject(tokenResponse);
+            
+            if (!tokenObj.has("access_token")) {
+                System.out.println("access_token not found in response: " + tokenResponse);
+                response.getWriter().println("네이버 로그인 인증 중 문제가 발생했습니다.");
+                return;
+            }
+            
+            String accessToken = tokenObj.getString("access_token");
+    
+            // 2. 사용자 정보 요청
+            String userInfoURL = "https://openapi.naver.com/v1/nid/me";
+            String userInfoResponse = get(userInfoURL, "Bearer " + accessToken);
+    
+            JSONObject userObj = new JSONObject(userInfoResponse);
+            JSONObject res = userObj.getJSONObject("response");
+    
+            String id = res.getString("id");
+            String name = res.optString("name", ""); 
+            String email = res.optString("email", "");
+    
+            // 3. 세션에 저장
+            HttpSession session = request.getSession();
+            session.setAttribute("naverId", id);
+            session.setAttribute("naverName", name);
+            session.setAttribute("naverEmail", email);
+    
+            // 4. 로그인 완료 후 메인 페이지로 이동
+            response.sendRedirect("main2.jsp");
+        } catch (Exception e) {
+            System.out.println("Error during Naver login: " + e.getMessage());
+            e.printStackTrace();
+            response.getWriter().println("네이버 로그인 처리 중 오류가 발생했습니다: " + e.getMessage());
+        }
     }
 
     private String get(String apiURL) throws IOException {
@@ -73,13 +86,25 @@ public class NaverLoginServlet extends HttpServlet {
             con.setRequestProperty("Authorization", authHeader);
         }
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        int responseCode = con.getResponseCode();
+        
+        BufferedReader br;
+        if (responseCode == 200) { // 정상 호출
+            br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        } else {  // 에러 발생
+            br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+        }
+        
         String inputLine;
         StringBuilder responseBuffer = new StringBuilder();
         while ((inputLine = br.readLine()) != null) {
             responseBuffer.append(inputLine);
         }
         br.close();
-        return responseBuffer.toString();
+        
+        String responseContent = responseBuffer.toString();
+        System.out.println("API Response (" + apiURL + "): " + responseContent);
+        
+        return responseContent;
     }
 }

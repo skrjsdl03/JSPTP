@@ -98,7 +98,14 @@
 	<%
 	    String clientId_n = System.getenv("NAVER_CLIENT_ID");
 	    String redirectURI_n = java.net.URLEncoder.encode("http://everywear.duckdns.org/JSPTP/NaverLoginServlet", "UTF-8");
-	    String state = "RANDOM_STATE";  // 나중에 세션에 저장해도 좋아요
+	    
+	    // 랜덤 state 값 생성
+	    java.util.UUID uuid = java.util.UUID.randomUUID();
+	    String state = uuid.toString();
+	    
+	    // 세션에 state 값 저장
+	    session.setAttribute("state", state);
+	    
 	    String apiURL_n = "https://nid.naver.com/oauth2.0/authorize?response_type=code"
 	                  + "&client_id=" + clientId_n
 	                  + "&redirect_uri=" + redirectURI_n
