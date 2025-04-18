@@ -12,11 +12,11 @@
 		<div class="footer-col">
 			<h4>NAVIGATION</h4>
 			<ul>
-				<li>ALL</li>
-				<li>OUTER</li>
-				<li>TOP</li>
-				<li>BOTTOM</li>
-				<li>ACC</li>
+			<li><a href="splitTest2.jsp?cat=all">ALL</a></li>
+			<li><a href="splitTest2.jsp?cat=outer">OUTER</a></li>
+			<li><a href="splitTest2.jsp?cat=top">TOP</a></li>
+			<li><a href="splitTest2.jsp?cat=bottom">BOTTOM</a></li>
+			<li><a href="splitTest2.jsp?cat=acc">ACC</a></li>
 			</ul>
 		</div>
 		<div class="footer-col">
@@ -25,7 +25,6 @@
 				<li><a href="board.jsp">BOARD</a></li>
 				<li><a href="FAQ.jsp">FAQ</a></li>
 				<li><a href="Q&A.jsp">Q&A</a></li>
-				<li><a href="review.jsp">REVIEW</a></li>
 			</ul>
 		</div>
 		<div class="footer-col">

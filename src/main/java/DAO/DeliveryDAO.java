@@ -127,7 +127,6 @@ public class DeliveryDAO {
         
         return trackingNumber;
     }
-} 
 	
 	//배송 
 	public void insertDelivery(int o_id, String alias, String name, String phone, String zipcode, String address1, String address2, String tracking_num) {

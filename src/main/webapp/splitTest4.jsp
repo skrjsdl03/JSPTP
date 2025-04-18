@@ -52,9 +52,9 @@ Vector<ProductDTO> plist = new Vector<ProductDTO>();
 	<div class="container">
 		<div class="product-list" id="productList">
 			<%
-				plist = pDao.getOUTERPd();
+				plist = pDao.getBESTPd();
 				Vector<String> ilist = null;
-				for(int i = 0; i<plist.size(); i++){
+				for(int i = 0; i<20; i++){
 					ProductDTO pDto = plist.get(i);
 					ilist = pDao.getPdImg(pDto.getP_id());
 			%>
@@ -262,7 +262,7 @@ Vector<ProductDTO> plist = new Vector<ProductDTO>();
 
   // ✅ 페이지 로드시 렌더링 실행
   document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("itemCnt").innerHTML = "BEST<BR>ITEMS(" + <%=plist.size()%> + ")";
+    document.getElementById("itemCnt").innerHTML = "BEST<BR>ITEMS(20)";
   });
 </script>
 

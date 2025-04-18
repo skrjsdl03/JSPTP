@@ -299,21 +299,21 @@
 		  <div class="recommend-list">
 		
 		    <!-- 상품 1 -->
-		    <div class="recommend-item">
+		    <div class="recommend-item" onclick="goToDetail('393')" style="cursor: pointer;">
 		      <img src="images/main-cloth1.png" alt6="추천 상품 1">
 		      <p class="item-name">WL VARSITY JACKET</p>
-		      <p class="item-price">129,000 원</p>
+		      <p class="item-price">349,000 원</p>
 		    </div>
 		
 		    <!-- 상품 2 -->
-		    <div class="recommend-item">
+		    <div class="recommend-item" onclick="goToDetail('458')" style="cursor: pointer;">
 		      <img src="images/main-cloth2.png" alt="추천 상품 2">
 		      <p class="item-name">PPS HAIRY CARDIGANK</p>
 		      <p class="item-price">99,000 원</p>
 		    </div>
 		
 		    <!-- 상품 3 -->
-		    <div class="recommend-item">
+		    <div class="recommend-item" onclick="goToDetail('351')" style="cursor: pointer;">
 		      <img src="images/main-cloth3.png" alt="추천 상품 3">
 		      <p class="item-name">S.D LONG SLEEVE TEE</p>
 		      <p class="item-price">49,000 원</p>
@@ -324,7 +324,11 @@
 			  
 	<button type="button" class="pay-btn" onclick="fnPay()">결제하기</button>
 	</section>
-	
+	<script>
+	function goToDetail(p_id){
+		location.href = "pdDetail.jsp?p_id=" + p_id;
+	}
+	</script>
 	<%
     String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
 

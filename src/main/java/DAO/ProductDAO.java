@@ -2075,5 +2075,30 @@ public class ProductDAO {
 		}
 		return pd_id;
     }
+    
+    //BEST 출력
+    public Vector<ProductDTO> getBESTPd(){
+    	Connection con = null;
+    	PreparedStatement pstmt = null;
+    	ResultSet rs = null;
+    	String sql = null;
+    	Vector<ProductDTO> plist = new Vector<ProductDTO>();
+    	try {
+    		con = pool.getConnection();
+    		sql = "select * from product order by p_price desc";
+    		pstmt = con.prepareStatement(sql);
+    		
+    		rs = pstmt.executeQuery();
+    		while(rs.next()) {
+    			plist.add(new ProductDTO(rs.getInt(1), rs.getString(2), rs.getString(3), 
+    					rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7), SDF_DATE.format(rs.getDate(8))));
+    		}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	} finally {
+    		pool.freeConnection(con, pstmt, rs);
+    	}
+    	return plist;
+    }
 
 }

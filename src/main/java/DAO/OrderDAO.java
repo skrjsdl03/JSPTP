@@ -13,7 +13,7 @@ public class OrderDAO {
     }
     
     // 주문 정보 저장 메소드
-    public int insertOrder(String userId, String userType, int pdId, String orderNumber, 
+    public int insertOrder1(String userId, String userType, int pdId, String orderNumber, 
                            String isMember, String orderName, String orderPhone, 
                            int quantity, int totalAmount, int payId) {
         Connection con = null;
@@ -107,8 +107,7 @@ public class OrderDAO {
         }
         
         return exists;
-    }
-} 
+    } 
 
 	//주문 넣기
 	public int insertOrder(String id, String type, int pd_id, String o_num, String isMember, String name, String phone, int quantity, int price, int pay_id) {

@@ -17,6 +17,6 @@
 
   <div class="nav-right">
     <a href="logout.jsp">LOGOUT</a>
-    <a href="cart.jsp">CART</a>
+    <a href="cart2.jsp">CART</a>
   </div>
 </header>

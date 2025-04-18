@@ -38,19 +38,19 @@
 			<!-- Swiper 슬라이드 시작 -->
 			<div class="swiper">
 				<div class="swiper-wrapper">
-					<div class="swiper-slide">
+					<div class="swiper-slide" onclick="goToDetail('458')">
 						<img src="images/main-cloth2.png" alt="WL VARSITY JACKET">
 					</div>
-					<div class="swiper-slide">
+					<div class="swiper-slide" onclick="goToDetail('351')">
 						<img src="images/main-cloth3.png" alt="WL VARSITY JACKET 2">
 					</div>
-					<div class="swiper-slide">
+					<div class="swiper-slide" onclick="goToDetail('393')">
 						<img src="images/main-cloth1.png" alt="WL VARSITY JACKET 3">
 					</div>
-					<div class="swiper-slide">
+					<div class="swiper-slide" onclick="goToDetail('367')">
 						<img src="images/main-cloth4.png" alt="WL VARSITY JACKET">
 					</div>
-					<div class="swiper-slide">
+					<div class="swiper-slide" onclick="goToDetail('343')">
 						<img src="images/main-cloth5.png" alt="WL VARSITY JACKET">
 					</div>
 				</div>
@@ -69,6 +69,12 @@
 			</video>
 		</div>
 	</section>
+	
+	<script>
+	function goToDetail(p_id){
+		location.href = "pdDetail.jsp?p_id=" + p_id;
+	}
+	</script>
 
 	<!-- Swiper 스크립트 -->
 	<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
